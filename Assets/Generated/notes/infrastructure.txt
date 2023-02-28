@@ -1,0 +1,27 @@
+Infrastructure
+
+
+Every planet should have port capacities and refueling costs
+
+Ideally then orders placed between planets would then take the cheapest route. (Distance should take time). Like departing from earth to refuel on mars to fly Saturn.
+
+Show with arrows
+Show speed and cargo size 
+Show arrival date.
+
+Show destinations and arrivals
+
+Every month new orders are made. Only creating shipping lanes with cargo from last month.
+
+Level should increase log. So lvl 5 is at least 16 times more than lvl 1 
+
+
+
+Also maybe calculate if it is efficient to deliver some wares, and then return some wares.
+
+
+Shouldl work kinda liek real world shipping things.
+
+
+
+Game should also take tick every month on normal speed so 4 sec for a month 

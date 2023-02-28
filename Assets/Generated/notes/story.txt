@@ -1,0 +1,31 @@
+2 Modes
+
+Both start on earth campaign
+
+Or
+
+Both players get thrown into space
+
+
+Story: The arth is destroyed, but the two colony ships sent out to distant solar systems survives. They are midway on their journey gets notification and wakes up fleet crews..
+
+They realise that the earth is gone, but in the mean time earth has been transmitting information about their own progress in science .
+
+They find that FTL travel is possible and have sent the crews the mean to use it with their current trajectory.
+
+Earth was destroyed either by the use of the technology (Meaning that the crew has to settle the solar system and figure out the flaw before they travel), or something else.
+
+Now both crews proceed to their independent solar system using FTL tech, and play the game there. THey then scout the universe for the position of the other crew ships sent to settle.
+
+They now create their own new system with their fleet. And advanced tech (have lots of eggs, so growing is no problem in the beginning, and the tech to use it)
+   
+Tech is discovered that makes FTL communication possible, but connection has to be established. So they need a sat of their type in the system. // Possible multiple types of sattelites
+(kinda like diplomatic visibility in CIV,  so you have the default communication sattelite that only allows communication with other players [could be cool to add dynamic to disable or destroy others]
+Then you coould have other types of sattlelites such as market sattelites taht opens markets up for people, and warfare satteletites that open up for warfare flleets to go trhough. This is both ways)
+
+Once u have sat you can do stuff with each other, and FTL to the given system.
+
+
+Not many systems in the game. Should be crazy overall goal .
+
+Federations where both players can play together, but fight internally of the power of the UN Chair. Could add break apart option.

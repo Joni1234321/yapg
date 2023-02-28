@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="element-round" class="ptable-element clickable" style="flex-direction: row;">
+        <ui:Label tabindex="-1" text="MJ" display-tooltip-when-elided="true" name="label" class="ptable-element-icon" style="border-left-color: rgb(153, 153, 0); border-right-color: rgb(153, 153, 0); border-top-color: rgb(153, 153, 0); border-bottom-color: rgb(153, 153, 0); text-overflow: clip; font-size: 12px; -unity-font-style: bold; border-top-left-radius: 91px; border-bottom-left-radius: 91px; border-top-right-radius: 91px; border-bottom-right-radius: 91px;" />
+        <ui:Label tabindex="-1" text="100 K" display-tooltip-when-elided="true" name="value" class="ptable-element-value" />
+    </ui:VisualElement>
+</ui:UXML>

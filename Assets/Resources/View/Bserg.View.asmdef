@@ -1,0 +1,17 @@
+{
+    "name": "Bserg.View",
+    "rootNamespace": "Bserg",
+    "references": [
+        "GUID:482a53648a9f7114aa9e9b08616836f7",
+        "GUID:19e9c6a58d609714298741a783398edd"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

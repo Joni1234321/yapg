@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="trade-config" class="body" style="flex-direction: column;">
+        <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+            <ui:VisualElement name="from" class="button-small" style="width: 100px; height: 100px;">
+                <ui:Label tabindex="-1" text="Earth" display-tooltip-when-elided="true" />
+                <ui:VisualElement name="img" class="img" />
+            </ui:VisualElement>
+            <ui:VisualElement name="to" class="button-small" style="width: 100px; height: 100px;">
+                <ui:Label tabindex="-1" text="Venus" display-tooltip-when-elided="true" name="Label" />
+                <ui:VisualElement name="img" class="img" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); width: 200px; flex-direction: row; justify-content: flex-start; align-self: auto;">
+            <Bserg.View.Custom.Counter.CounterControl text="serial" value="1" min="1" max="1000" buttons-enabled="false" value-int="1" name="serial" style="flex-basis: 100px;" />
+            <Bserg.View.Custom.Counter.CounterControl text="parralel" value="1" buttons-enabled="false" text-string="parallel" max="1000" min="1" value-int="1" name="parallel" style="flex-basis: 100px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,30 @@
+How Should the resource system work 
+
+Something along the line of population generates something right?
+
+Maybe like victoria 3
+Where there is no storage just current production 
+
+Maybe also something like all things need electricity.
+
+
+Minerals ()  
+
+Becomes 
+
+Raw materials (H, Fe, Si, Al, C, O, Ice, Ti, Mg, Sc)
+
+Becomes
+
+Refined materials (Steel, Electronics, Water, Oxygen, Polymers)
+
+Which are used as fuel, pods, heavy machinery, military, medical instruments, transportation, housing, home-appliances
+
+http://marspedia.org/List_of_martian_products
+
+https://en.wikipedia.org/wiki/Basic_oxygen_steelmaking
+
+
+With energy u can do anything
+
+We also need to create basic building resources (Steel, whichc is created by Fe and O, )

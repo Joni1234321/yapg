@@ -1,0 +1,16 @@
+{
+    "name": "Bserg.Model.Space",
+    "rootNamespace": "Bserg",
+    "references": [
+        "GUID:19e9c6a58d609714298741a783398edd"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

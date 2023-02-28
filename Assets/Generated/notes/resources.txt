@@ -1,0 +1,13 @@
+RESOURCE SYSTEM
+
+STORAGE 
+MINING
+
+
+Mining 
+	Probe
+	Found
+	Level
+
+
+For every 10 surface mines u find, u find a surface mine (more stuff, but more machinery), for every 10 u find a very 

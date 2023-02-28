@@ -1,0 +1,6 @@
+.split {
+}
+
+.split > * {
+    margin-right: 8px;
+}

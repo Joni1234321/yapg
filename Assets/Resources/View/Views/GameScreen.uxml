@@ -1,0 +1,33 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="PlanetView" src="project://database/Assets/Resources/View/Base/Elements/planet-view.uxml?fileID=9197481963319205126&amp;guid=626464330ad2fd449a98625bb2e5fe75&amp;type=3#planet-view" />
+    <ui:Template name="PoliticalView" src="project://database/Assets/Resources/View/Political/PoliticalView.uxml?fileID=9197481963319205126&amp;guid=2a7115cb0b6834e4da9b9250607ee438&amp;type=3#PoliticalView" />
+    <ui:Template name="level-list" src="project://database/Assets/Resources/View/Base/Elements/level-list.uxml?fileID=9197481963319205126&amp;guid=2bb535d9d349c9b489dec699f8e376b0&amp;type=3#level-list" />
+    <ui:Template name="BuildItems" src="project://database/Assets/Resources/View/Base/Elements/BuildItems.uxml?fileID=9197481963319205126&amp;guid=40a84446d3780f643be361fb85f3f1e9&amp;type=3#BuildItems" />
+    <ui:Template name="migration-view" src="project://database/Assets/Resources/View/Base/Elements/migration-view.uxml?fileID=9197481963319205126&amp;guid=6154408350f40e64fad46db96c6e6495&amp;type=3#migration-view" />
+    <ui:Template name="Time" src="project://database/Assets/Resources/View/Base/Elements/time-view.uxml?fileID=9197481963319205126&amp;guid=f3b4d19b12502d041923b4077d5cf682&amp;type=3#time-view" />
+    <ui:Template name="transfer-view" src="project://database/Assets/Resources/View/Base/Elements/transfer-view.uxml?fileID=9197481963319205126&amp;guid=6f8912fd160d83b4281e0c206f676629&amp;type=3#transfer-view" />
+    <ui:Template name="trade-config" src="project://database/Assets/Resources/View/Base/Elements/trade-config.uxml?fileID=9197481963319205126&amp;guid=eeb2572d1c6fb104f8e35b1f7bcef4ff&amp;type=3#trade-config" />
+    <ui:Template name="trade-menu" src="project://database/Assets/Resources/View/Base/Elements/trade-menu.uxml?fileID=9197481963319205126&amp;guid=b1b97d26f5494b94d9eb156342623934&amp;type=3#trade-menu" />
+    <Style src="project://database/Assets/Resources/View/USS/View.uss?fileID=7433441132597879392&amp;guid=f9b843377bcdf0a4583b2a0edd411d33&amp;type=3#View" />
+    <ui:VisualElement name="screen" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+        <ui:VisualElement name="bot-left" class="split" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; position: absolute; left: 8px; right: auto; bottom: 8px; align-items: stretch;">
+            <ui:Instance template="PlanetView" name="planet-view" />
+            <ui:Instance template="PoliticalView" name="political-view" style="align-self: center; justify-content: flex-start; align-items: center; width: auto; position: absolute; top: -40px;" />
+            <ui:Instance template="level-list" name="level-view" style="position: absolute; top: -76px;" />
+            <ui:VisualElement name="REMOVED" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
+                <ui:Instance template="BuildItems" name="build-view" style="display: flex;" />
+            </ui:VisualElement>
+            <ui:Instance template="migration-view" name="migration-view" style="width: 240px; height: auto;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="top-right" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; right: 8px; top: 8px; justify-content: flex-start; align-items: flex-end;">
+            <ui:Instance template="Time" name="time-view" />
+        </ui:VisualElement>
+        <ui:VisualElement name="bot-right" style="position: absolute; right: 8px; bottom: 8px;">
+            <ui:Instance template="transfer-view" name="transfer-view" style="width: 280px; height: 400px;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="bot-mid" style="background-color: rgba(0, 0, 0, 0); position: absolute; bottom: 8px; align-self: center;">
+            <ui:Instance template="trade-config" name="trade-config" style="display: none;" />
+            <ui:Instance template="trade-menu" name="trade-menu" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

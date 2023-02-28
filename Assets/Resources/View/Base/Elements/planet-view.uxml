@@ -1,0 +1,71 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Template name="element-round" src="project://database/Assets/Resources/View/Material/element-round.uxml?fileID=9197481963319205126&amp;guid=689ab7d8d19a81c49b5d2ec7641b1232&amp;type=3#element-round" />
+    <ui:Template name="element-square" src="project://database/Assets/Resources/View/Material/element-square.uxml?fileID=9197481963319205126&amp;guid=1ed5a3efafd972f47bf5e5cd44d17264&amp;type=3#element-square" />
+    <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="planet-view" class="body menu">
+        <ui:VisualElement name="top" class="top">
+            <Bserg.View.Custom.Level.LevelControl name="planet-level" size="Big" />
+            <ui:Label tabindex="-1" text="EARTH" display-tooltip-when-elided="true" name="name" style="margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;" />
+        </ui:VisualElement>
+        <ui:ScrollView name="ScrollView">
+            <ui:VisualElement name="Field">
+                <ui:VisualElement class="field" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start; align-items: stretch; width: 96px; flex-shrink: 0;">
+                        <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;View/images/contact-g6af3d3111_640&apos;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0; width: 14px; margin-left: 4px; margin-right: 4px; margin-top: 6px; margin-bottom: 6px; -unity-background-image-tint-color: rgb(119, 119, 119);" />
+                        <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population" class="value" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="population-other" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; justify-content: center; align-items: stretch; width: 49px; flex-shrink: 1; display: flex; visibility: visible;">
+                        <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population-diff" class="value" style="color: rgb(125, 125, 125); font-size: 10px; margin-right: 0; margin-left: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: upper-center; -unity-font-style: normal;" />
+                        <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-between; align-items: center; flex-shrink: 0; font-size: 10px; -unity-font-style: normal;">
+                            <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population-growth" class="value" style="color: rgb(52, 102, 34); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 8px;" />
+                            <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population-decline" class="value" style="color: rgb(153, 52, 52); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 8px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:Label tabindex="-1" text="100" display-tooltip-when-elided="true" name="population-migration" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; font-size: 10px; color: rgb(161, 161, 161); width: 32px;" />
+                    <Bserg.View.Custom.Level.LevelControl name="attraction" style="position: absolute; right: 2px; align-self: center;" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement name="element-list" class="field" style="background-color: rgba(0, 0, 0, 0);">
+                        <ui:Instance template="element-round" name="element-round" />
+                        <ui:Instance template="element-square" name="element-square" />
+                        <ui:VisualElement class="ptable-element clickable">
+                            <ui:Label tabindex="-1" text="C" display-tooltip-when-elided="true" name="element-c" class="ptable-element-icon" style="border-left-color: rgb(51, 102, 51); border-right-color: rgb(51, 102, 51); border-top-color: rgb(51, 102, 51); border-bottom-color: rgb(51, 102, 51);" />
+                            <ui:Label tabindex="-1" text="22.2 K" display-tooltip-when-elided="true" name="resources" class="ptable-element-value" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="ptable-element clickable">
+                            <ui:Label tabindex="-1" text="Si" display-tooltip-when-elided="true" name="element-si" class="ptable-element-icon" style="border-left-color: rgb(153, 61, 61); border-right-color: rgb(153, 61, 61); border-top-color: rgb(153, 61, 61); border-bottom-color: rgb(153, 61, 61);" />
+                            <ui:Label tabindex="-1" text="10.0 K" display-tooltip-when-elided="true" name="resources" class="ptable-element-value" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                        <ui:VisualElement name="artisanal-mine" class="buildable">
+                            <ui:VisualElement style="flex-grow: 0; background-color: rgba(255, 255, 255, 0); background-image: url(&apos;project://database/Assets/Resources/View/images/mine/artisanal-mine-square.png?fileID=2800000&amp;guid=85c10579e2785e441b7f54918cae1daa&amp;type=3#artisanal-mine-square&apos;); flex-shrink: 0; flex-basis: auto; -unity-background-scale-mode: scale-to-fit; border-left-color: rgb(103, 103, 103); border-right-color: rgb(103, 103, 103); border-top-color: rgb(103, 103, 103); border-bottom-color: rgb(103, 103, 103); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 48px; height: 48px; align-items: auto; justify-content: flex-start; align-self: auto; margin-top: 8px;" />
+                            <ui:Label tabindex="-1" text="0" display-tooltip-when-elided="true" name="artisanal-mine-label" style="flex-grow: 3; flex-shrink: 1; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 10px; color: rgb(192, 192, 192);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="surface-mine" class="buildable">
+                            <ui:VisualElement style="flex-grow: 0; background-color: rgba(255, 255, 255, 0); background-image: url(&apos;project://database/Assets/Resources/View/images/mine/surface-mine.png?fileID=2800000&amp;guid=f4fa4e76951cf2d489b56333541f55d0&amp;type=3#surface-mine&apos;); flex-shrink: 0; flex-basis: auto; -unity-background-scale-mode: scale-to-fit; border-left-color: rgb(103, 103, 103); border-right-color: rgb(103, 103, 103); border-top-color: rgb(103, 103, 103); border-bottom-color: rgb(103, 103, 103); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 48px; height: 48px; align-items: auto; justify-content: flex-start; align-self: auto; margin-top: 8px;" />
+                            <ui:Label tabindex="-1" text="0" display-tooltip-when-elided="true" name="surface-mine-label" style="flex-grow: 3; flex-shrink: 1; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 10px; color: rgb(192, 192, 192);" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="underground-mine" class="buildable">
+                            <ui:VisualElement style="flex-grow: 0; background-color: rgba(255, 255, 255, 0); background-image: url(&apos;project://database/Assets/Resources/View/images/mine/underground-mine.png?fileID=2800000&amp;guid=70415c4c43021934b98932addab17459&amp;type=3#underground-mine&apos;); flex-shrink: 0; flex-basis: auto; -unity-background-scale-mode: scale-to-fit; border-left-color: rgb(103, 103, 103); border-right-color: rgb(103, 103, 103); border-top-color: rgb(103, 103, 103); border-bottom-color: rgb(103, 103, 103); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; width: 48px; height: 48px; align-items: auto; justify-content: flex-start; align-self: auto; margin-top: 8px;" />
+                            <ui:Label tabindex="-1" text="0" display-tooltip-when-elided="true" name="underground-mine-label" style="flex-grow: 3; flex-shrink: 1; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 10px; color: rgb(192, 192, 192);" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="field" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start; align-items: stretch; width: 96px; flex-shrink: 0;">
+                        <ui:Label tabindex="-1" text="Spacecraft" display-tooltip-when-elided="true" name="Label" class="label" />
+                        <ui:Label tabindex="-1" text="0" display-tooltip-when-elided="true" name="spacecraft-pool" class="value" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement class="field" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                    <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start; align-items: stretch; width: 96px; flex-shrink: 0;">
+                        <ui:Label tabindex="-1" text="Housing" display-tooltip-when-elided="true" class="label" />
+                        <Bserg.View.Custom.Level.LevelControl name="housing-level" background-color="#4D732EFF" size="Medium" style="align-self: center;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <Bserg.View.Custom.Field.FieldControl title="Housing" name="housing-field" />
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

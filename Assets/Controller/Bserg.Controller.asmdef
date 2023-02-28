@@ -1,0 +1,23 @@
+{
+    "name": "Bserg.Controller",
+    "rootNamespace": "Bserg",
+    "references": [
+        "GUID:3e2368425a86e984e94e4b9f281c6cc4",
+        "GUID:9fe452b72e63a0044b952ebd152d9108",
+        "GUID:f962cafb8058faa49b2b079037af2da0",
+        "GUID:482a53648a9f7114aa9e9b08616836f7",
+        "GUID:19e9c6a58d609714298741a783398edd",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:7713963bda7330c4f8b372b706dca170"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

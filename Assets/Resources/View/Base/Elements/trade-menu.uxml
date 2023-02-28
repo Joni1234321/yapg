@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="trade-menu" class="body" style="flex-direction: row;">
+        <ui:VisualElement name="button-settle" class="button-small" style="background-image: resource(&apos;View/images/White_flag_icon&apos;); flex-direction: column-reverse;" />
+    </ui:VisualElement>
+</ui:UXML>

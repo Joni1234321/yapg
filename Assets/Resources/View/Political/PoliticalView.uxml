@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="body" class="top body" style="flex-grow: 0; height: 30px; align-items: center; flex-direction: row; width: 320px; align-self: center; justify-content: flex-start;">
+        <ui:Label tabindex="-1" text="99" display-tooltip-when-elided="true" name="stability" class="value" style="width: 40px; -unity-text-align: middle-center; background-color: rgb(128, 33, 0); color: rgb(178, 178, 178); -unity-font-style: bold; margin-bottom: 4px; margin-left: 4px; margin-right: 4px; margin-top: 4px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;" />
+        <ui:Label tabindex="-1" text="UN" display-tooltip-when-elided="true" name="player" class="label" style="-unity-font-style: bold;" />
+    </ui:VisualElement>
+</ui:UXML>

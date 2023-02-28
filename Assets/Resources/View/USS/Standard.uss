@@ -1,0 +1,186 @@
+.body {
+    background-color: rgb(41, 40, 49);
+    color: rgb(255, 255, 255);
+    -unity-font-style: bold;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgb(13, 13, 13);
+    border-right-color: rgb(13, 13, 13);
+    border-top-color: rgb(13, 13, 13);
+    border-bottom-color: rgb(13, 13, 13);
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+.top {
+    background-color: rgb(26, 26, 26);
+    align-items: stretch;
+    flex-direction: row;
+    font-size: 18px;
+    -unity-text-align: middle-left;
+    text-overflow: ellipsis;
+}
+
+.field {
+    flex-direction: row;
+    border-left-color: rgb(77, 77, 77);
+    border-right-color: rgb(77, 77, 77);
+    border-top-color: rgb(77, 77, 77);
+    border-bottom-color: rgb(77, 77, 77);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 1px;
+}
+
+.label {
+    color: rgb(178, 178, 178);
+}
+
+.value {
+    color: rgb(229, 229, 229);
+    -unity-text-align: middle-left;
+}
+
+.btn {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.buildable {
+    align-items: center;
+    width: 64px;
+}
+
+.buildable:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.build-item {
+    font-size: 20px;
+    flex-direction: row;
+    height: 32px;
+    align-self: auto;
+    justify-content: flex-start;
+    -unity-text-align: middle-left;
+}
+
+.build-progress {
+    align-self: auto;
+    flex-direction: row;
+}
+
+.build-item Label {
+}
+
+.build-item ProgressBar {
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-shrink: 0;
+    flex-grow: 0;
+    opacity: 1;
+}
+
+.menu {
+    width: 320px;
+    height: 400px;
+}
+
+.ptable-element-icon {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+    -unity-text-align: middle-center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    align-self: center;
+    justify-content: flex-start;
+    align-items: auto;
+    color: rgb(178, 178, 178);
+}
+
+.ptable-element-value {
+    font-size: 10px;
+    color: rgb(204, 204, 204);
+    -unity-text-align: middle-center;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 36px;
+}
+
+.ptable-element {
+    flex-direction: row;
+    border-right-width: 1px;
+    border-left-color: rgb(77, 77, 77);
+    border-right-color: rgb(77, 77, 77);
+    border-top-color: rgb(77, 77, 77);
+    border-bottom-color: rgb(77, 77, 77);
+    padding-right: 2px;
+    padding-left: 2px;
+    flex-shrink: 0;
+}
+
+.clickable:hover {
+    background-color: rgba(77, 77, 77, 0.4);
+}
+
+.button-small {
+    flex-shrink: 0;
+    -unity-background-scale-mode: scale-to-fit;
+    width: 64px;
+    height: 64px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    border-left-color: rgba(0, 0, 0, 0.5);
+    border-right-color: rgba(0, 0, 0, 0.5);
+    border-top-color: rgba(0, 0, 0, 0.5);
+    border-bottom-color: rgba(0, 0, 0, 0.5);
+    -unity-slice-left: 5;
+    -unity-slice-top: 5;
+    -unity-slice-right: 5;
+    -unity-slice-bottom: 5;
+    font-size: 10px;
+    -unity-text-align: upper-center;
+    text-overflow: ellipsis;
+}
+
+.button-small:hover {
+    background-color: rgba(77, 77, 77, 0.4);
+    -unity-background-image-tint-color: rgba(229, 229, 229, 0.5);
+}
+
+.img {
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: 4;
+    -unity-slice-top: 4;
+    -unity-slice-right: 4;
+    -unity-slice-bottom: 4;
+    flex-grow: 1;
+}
+
+.button-small>Label {
+    -unity-text-align: upper-center;
+}

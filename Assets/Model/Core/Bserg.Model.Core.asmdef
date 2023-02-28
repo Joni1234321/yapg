@@ -1,0 +1,20 @@
+{
+    "name": "Bserg.Model.Core",
+    "rootNamespace": "Bserg",
+    "references": [
+        "GUID:482a53648a9f7114aa9e9b08616836f7",
+        "GUID:f962cafb8058faa49b2b079037af2da0",
+        "GUID:19e9c6a58d609714298741a783398edd",
+        "GUID:7713963bda7330c4f8b372b706dca170",
+        "GUID:1b0a153be700041419c861ea0182411d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

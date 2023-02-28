@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="migration-view" class="body" style="flex-shrink: 0; flex-grow: 1;">
+        <ui:VisualElement name="VisualElement" class="top">
+            <ui:Label tabindex="-1" text="Migration" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <Bserg.View.Custom.Field.FieldControl name="migration-total" value="100 K" description="Total" title="Total" />
+        <ui:VisualElement name="migration-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);" />
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,20 @@
+{
+    "name": "Bserg.Controller.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c8e30f47a56d9cd43b0b0b3f37725b92",
+        "GUID:3e2368425a86e984e94e4b9f281c6cc4",
+        "GUID:482a53648a9f7114aa9e9b08616836f7"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="level-list" class="top body" style="flex-grow: 0; height: 30px; align-items: center; flex-direction: row; width: 320px; align-self: center; justify-content: flex-start;">
+        <Bserg.View.Custom.Level.LevelControl level="5" />
+        <Bserg.View.Custom.Level.LevelControl level="20" />
+    </ui:VisualElement>
+</ui:UXML>

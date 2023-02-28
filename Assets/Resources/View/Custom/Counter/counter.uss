@@ -1,0 +1,10 @@
+.counter {
+}
+
+.counter:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#counter:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}

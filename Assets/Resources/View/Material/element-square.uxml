@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="element-square" class="ptable-element clickable" style="flex-direction: row;">
+        <ui:Label tabindex="-1" text="Fe" display-tooltip-when-elided="true" name="label" class="ptable-element-icon" style="border-left-color: rgb(153, 153, 153); border-right-color: rgb(153, 153, 153); border-top-color: rgb(153, 153, 153); border-bottom-color: rgb(153, 153, 153);" />
+        <ui:Label tabindex="-1" text="755 K" display-tooltip-when-elided="true" name="value" class="ptable-element-value" />
+    </ui:VisualElement>
+</ui:UXML>

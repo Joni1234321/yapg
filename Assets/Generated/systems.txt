@@ -1,0 +1,82 @@
+Political System
+Money System / Resources
+Level System
+Time System
+*Population boosts productivity, and also transforming economy
+War System 
+    Fleet
+    Invasion 
+Migration System
+Population System
+Settle System
+
+Fleet system
+
+Robot System 
+
+Supply demand system
+Cargo fleet system
+Shipping lanes system
+
+Sensor System
+
+Infrastructure System
+Max port level 
+Housing System (migration as well, as attraction)
+
+Spaceport system (stuff go to spaceport before being sent to space)
+
+Diplomacy System
+Moon system 
+Sphere system
+
+Claiming Systems
+
+
+World Generation System
+
+
+Spying  (Slow to gather forces)
+Fleet power each system
+
+
+AI System
+
+
+Material Research Upgrades (that benefits all)
+Material Applied Upgrades (supply chain shit)
+
+Level of mines (surface, subsurface, deep surface)
+
+
+UI Circles
+
+Housing relative to population on planet 
+Building Spaceports and their levels (throughput and launch method)
+Different 
+
+UI something like that depending if u are at war or at peace (maybe also level of war), so when at war it shows miltary strength resources manpower and so on. But when not in war it will show population economy and so on
+
+Maybe quests / promises that requires ui difference
+TYPE 1 CIV or TYPE 2 CiV to show how far the player has progressed in the corner 
+
+Colonization, when housing then make sure that early inhabitants need everything imported, then they produce something themselves, but if migration too high then they need that imported as well
+
+Slingshot view (top down view, where you can see the space ships go from place to place)
+
+Decisions such as when migration shit happens, then it requires beurocracy at some point. To register and handle new migrants, then rules how strix they should be and also option to hire somebody from the departure instead of only handling them at destination
+
+UI when clicking on something (like population of a planet) a bigger screen should be shown and show graphs and formulas for how its population change is done
+Left click go through, Right click go back. Like they do in endless games 
+
+Also planetscreen should be a list of things about the planets (like pop, storage, industry, housing...) and then there should be a row for each type of level. In the top you should be able to sort by each level, and select only the levels u want. In the corner there shoudl be the average level for each planet based on the search parameters.
+
+
+Spaceships should make burns look cool (Different modes, single burn, or double burn [Acc, and decc])
+
+COOLER UI, ALL CIRCLES ON THE SIDE. if click ALT. THEN THEY ALL POP OUT WITH DETAILED VIEW 
+
+(Moons do small things, like mining and bases (Kinda like islands, also could be an invasion staging ground), also would really love the scenario where planet is claimed by one, but moon is claimed by another. The moon can then ofc be used to stage as a invasion ground (Like the invasion of Ukraine 22, where one player keeps massing stuff on the moon)
+
+Also i really like the idea that everyithing is given in levels (Logarithmic) so a billion pop is a level 9 pop. But maybe it should even be a logistic curve
+A logistic curve [https://en.wikipedia.org/wiki/Logistic_function] is a S Shaped curve, so one that grows slowly in the beginning (Colonization) then grows quickly (Habitation), but then flattens out (Overpopulation / Saturation)

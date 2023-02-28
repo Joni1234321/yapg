@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <ui:VisualElement name="transfer-view" class="body" style="flex-grow: 1;">
+        <ui:VisualElement class="top" style="justify-content: space-between; align-self: auto; align-items: stretch;">
+            <ui:Label tabindex="-1" text="Hohmann Transfers" display-tooltip-when-elided="true" />
+        </ui:VisualElement>
+        <ui:ScrollView name="transfer-list">
+            <Bserg.View.Custom.Transfer.TransferItemControl duration="10 Weeks" window="28 Weeks" title="EARTH - MARS" name="TransferItemControl" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>
