@@ -18,11 +18,30 @@
     border-right-width: 2px;
     border-top-width: 2px;
     border-bottom-width: 2px;
-    border-left-color: rgb(0, 0, 0);
-    border-right-color: rgb(0, 0, 0);
-    border-top-color: rgb(0, 0, 0);
-    border-bottom-color: rgb(0, 0, 0);
+    border-left-color: rgba(23, 23, 23, 0.6);
+    border-right-color: rgba(23, 23, 23, 0.6);
+    border-top-color: rgba(23, 23, 23, 0.6);
+    border-bottom-color: rgba(23, 23, 23, 0.6);
     width: 24px;
     height: 24px;
     -unity-font-style: bold;
+}
+
+.group {
+    align-self: center;
+    flex-direction: row;
+    flex-grow: 1;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+.group > Label {
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+}
+
+.group:hover {
+    background-color: rgba(77, 77, 77, 0.2);
 }

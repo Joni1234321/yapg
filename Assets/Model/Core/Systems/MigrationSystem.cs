@@ -12,12 +12,12 @@ namespace Bserg.Model.Core.Systems
         public float[] PlanetAttraction;
 
         // List of people from where to where they want to go, and the amount of people
-        public long[,] PlanetImmigration;
+        public float[,] PlanetImmigration;
 
         public MigrationSystem(Game game) : base(game)
         {
             PlanetAttraction = new float[Game.N];
-            PlanetImmigration = new long[Game.N,Game.N];
+            PlanetImmigration = new float[Game.N,Game.N];
         }
 
         public void System()
@@ -31,8 +31,7 @@ namespace Bserg.Model.Core.Systems
                 // If population is above carrying capacity
                 // If there is space for 100 times the population then its gonna max out at 12
                 // Maybe it should be something like if the population can be sustained instead of carrying capacity
-                float populationAttraction =
-                    -Mathf.Log((float)Game.PlanetPopulations[planetID] / Game.Planets[planetID].CarryingCapacity, 1.5f);
+                float populationAttraction = Game.Planets[planetID].CarryingCapacity - Game.PlanetPopulationLevels[planetID];
                 
                 // TODO: add burst hints
                 if (float.IsNaN(populationAttraction))
@@ -40,8 +39,7 @@ namespace Bserg.Model.Core.Systems
                     Debug.Assert(false);
                     populationAttraction = 100;
                 }
-                PlanetAttraction[planetID] = Mathf.Clamp(populationAttraction,
-                    MinAttractionFromPopulation, MaxAttractionFromPopulation);
+                PlanetAttraction[planetID] = Mathf.Clamp(populationAttraction, MinAttractionFromPopulation, MaxAttractionFromPopulation);
 
             }
 
@@ -64,7 +62,7 @@ namespace Bserg.Model.Core.Systems
                     // every point above attraction level will increase it by 120%
                     float destinationAttraction = PlanetAttraction[destinationID] - PlanetAttraction[departureID];
                     float emigrationRate = NormalEmigrationRate * Mathf.Pow(1.2f, destinationAttraction);
-                    PlanetImmigration[departureID, destinationID] += (long)(emigrationRate * Game.PlanetPopulations[departureID]);  
+                    PlanetImmigration[departureID, destinationID] = emigrationRate;  
                 }
             }
             

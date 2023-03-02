@@ -15,7 +15,7 @@ namespace Bserg.View.Custom.Level
             private readonly UxmlStringAttributeDescription levelInput = new() { name = "level", defaultValue = "10" };
             private readonly UxmlColorAttributeDescription backgroundColorInput = new() { name = "background-color", defaultValue = Color.HSVToRGB(0,0,.45f)};
             private readonly UxmlEnumAttributeDescription<LevelSizeEnum> levelSizeInput = new()
-                { name = "size", defaultValue = LevelSizeEnum.Medium };
+                { name = "level-size", defaultValue = LevelSizeEnum.Medium };
             
             public override void Init(VisualElement ve, IUxmlAttributes bag, CreationContext cc)
             {
@@ -62,7 +62,8 @@ namespace Bserg.View.Custom.Level
             Small,
             Medium, 
             Big,
-            Large
+            Large,
+            Extra
         }
 
         private LevelSizeEnum levelSize;
@@ -83,8 +84,9 @@ namespace Bserg.View.Custom.Level
         {
             LevelSizeEnum.Small => new SizeStyle(10, 20, 2),
             LevelSizeEnum.Medium => new SizeStyle(12, 24, 2),
-            LevelSizeEnum.Big => new SizeStyle(16, 30, 3),
+            LevelSizeEnum.Big => new SizeStyle(16, 32, 3),
             LevelSizeEnum.Large => new SizeStyle(20, 42, 4),
+            LevelSizeEnum.Extra => new SizeStyle(12, 30,2)
         };
         void ApplySizeStyle(SizeStyle sizeStyle)
         {
@@ -105,7 +107,7 @@ namespace Bserg.View.Custom.Level
         }
     }
 
-    struct SizeStyle
+    public struct SizeStyle
     {
         public readonly int FontSize, Size, BorderWidth;
 

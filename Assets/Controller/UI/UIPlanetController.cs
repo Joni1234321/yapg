@@ -1,14 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bserg.Controller.Material;
-using Bserg.Controller.Util;
+using Bserg.Controller.Tools;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
 using Bserg.View.Custom.Counter;
 using Bserg.View.Custom.Field;
 using Bserg.View.Custom.Level;
+using Bserg.View.Custom.Progress;
 using Bserg.View.Custom.Transfer;
+using Model.Utilities;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Time = Bserg.Model.Units.Time;
@@ -23,9 +25,10 @@ namespace Bserg.Controller.UI
         // View
         private List<VisualElement> buildList;
         private VisualElement elementList, levelList, transferList, migrationList;
-        private readonly Label populationLabel, populationDiffLabel, populationGrowthLabel, populationDeclineLabel, populationMigrationLabel, nameLabel, spacecraftPoolLabel;
+        private readonly Label populationLabel, populationMigrationLabel, nameLabel, spacecraftPoolLabel;
 
         private readonly LevelControl planetLevel, planetAttraction;
+        private readonly LevelGroupControl planetPopulation, planetHousing, planetFood;
         private VisualTreeAsset elementRound, elementSquareAsset;
         private FieldControl migrationTotalField;
         
@@ -41,15 +44,18 @@ namespace Bserg.Controller.UI
             
             // Population
             populationLabel = planetUI.Q<Label>("population");
-            populationDiffLabel = planetUI.Q<Label>("population-diff");
-            populationGrowthLabel = planetUI.Q<Label>("population-growth");
-            populationDeclineLabel = planetUI.Q<Label>("population-decline");
             populationMigrationLabel = planetUI.Q<Label>("population-migration");
-            planetAttraction = planetUI.Q<LevelControl>("attraction");
+            planetAttraction = planetUI.Q<LevelControl>("attraction-level");
+            planetPopulation = planetUI.Q<LevelGroupControl>("population-group");
+            planetHousing = planetUI.Q<LevelGroupControl>("housing-group");
+            planetFood = planetUI.Q<LevelGroupControl>("food-group");
+            
+            planetAttraction = planetUI.Q<LevelControl>("attraction-level");
+                
             spacecraftPoolLabel = planetUI.Q<Label>("spacecraft-pool");
 
             VisualElement artisanalMineButton = planetUI.Q<VisualElement>("artisanal-mine");
-            artisanalMineButton.RegisterCallback<MouseUpEvent>(Build);
+            //artisanalMineButton.RegisterCallback<MouseUpEvent>(Build);
 
             buildList = buildUI.Query(className: "build-item").ToList();
             
@@ -72,14 +78,21 @@ namespace Bserg.Controller.UI
             
             // Trade menu
         }
-        public void SetPlanet(string name, long population, long populationDiff, long populationGrowth, long populationDecline, long populationMigration, float attraction, long spacecraftPoolCount)
+
+        public void SetPlanet(string name, float populationLevel, float populationMigration, float attractionLevel, float housingLevel, float foodLevel, long spacecraftPoolCount)
         {
-            populationLabel.text = PrettyPrint.DecimalThousandsFormat(population);
-            populationDiffLabel.text = PrettyPrint.DecimalThousandsFormat(populationDiff);
-            populationGrowthLabel.text = PrettyPrint.DecimalThousandsFormat(populationGrowth);
-            populationDeclineLabel.text = PrettyPrint.DecimalThousandsFormat(populationDecline);
-            populationMigrationLabel.text = PrettyPrint.DecimalThousandsFormat(populationMigration);
-            planetAttraction.Level = attraction.ToString("0");
+            populationLabel.text = PrettyPrint.DecimalThousandsFormat(Util.LevelToLong(populationLevel));
+            //populationDiffLabel.text = PrettyPrint.DecimalThousandsFormat(populationDiff);
+            //populationGrowthLabel.text = PrettyPrint.DecimalThousandsFormat(populationGrowth);
+            //populationDeclineLabel.text = PrettyPrint.DecimalThousandsFormat(populationDecline);
+            populationMigrationLabel.text = PrettyPrint.DecimalThousandsFormat(Util.LevelToLong(populationMigration));
+            planetAttraction.Level = ((int)attractionLevel).ToString();
+            planetPopulation.Level = ((int)populationLevel).ToString();
+            planetFood.Level = ((int)foodLevel).ToString();
+            planetPopulation.Value = (populationLevel - (int)populationLevel) * 100f;
+            planetHousing.Value = (housingLevel - (int)housingLevel) * 100f;
+            planetFood.Value = (foodLevel - (int)foodLevel) * 100f;
+            planetHousing.Level = ((int)housingLevel).ToString();
             spacecraftPoolLabel.text = spacecraftPoolCount.ToString();
             nameLabel.text = name;
         }
@@ -167,9 +180,9 @@ namespace Bserg.Controller.UI
         /// <param name="departureID"></param>
         /// <param name="planetNames"></param>
         /// <param name="planetImmigration"></param>
-        public void UpdateMigration(int departureID, string[] planetNames, long[,] planetImmigration)
+        public void UpdateMigration(int departureID, string[] planetNames, float[,] planetImmigration)
         {
-            long total = 0;
+            float total = 0;
             migrationList.Clear();
             for (int destinationID = 0; destinationID < planetNames.Length; destinationID++)
             {
@@ -177,37 +190,14 @@ namespace Bserg.Controller.UI
                 FieldControl field = new FieldControl
                 {
                     Title = planetNames[destinationID],
-                    Value = PrettyPrint.DecimalThousandsFormat(planetImmigration[departureID, destinationID]),
+                    Value = planetImmigration[departureID, destinationID].ToString(),
                 };
                 migrationList.Add(field);
 
                 total += planetImmigration[departureID, destinationID];
             }
 
-            migrationTotalField.Value = PrettyPrint.DecimalThousandsFormat(total);
-        }
-
-        public void Update()
-        {
-            //HACK FOR NOW 
-            if (controller.MouseController.SelectedPlanetID == -1) return;
-            Planet planet = controller.Game.GetPlanet(controller.MouseController.SelectedPlanetID);
-            for (int i = 0; i < buildList.Count; i++)
-            {
-                if (i >= planet.BuildOrders.Count)
-                {
-                    buildList[i].Q<ProgressBar>().value = 0;
-                    ((Label)buildList[i].Children().ElementAt(1)).text = "Empty";
-                    continue;
-                }
-                buildList[i].Q<ProgressBar>().value = planet.BuildOrders[i].Progress;
-                ((Label)buildList[i].Children().ElementAt(1)).text = planet.BuildOrders[i].Name;
-            }
-        }
-
-        void Build(MouseUpEvent evt)
-        {
-            controller.Game.GetPlanet(controller.MouseController.SelectedPlanetID).BuildOrders.Add(new BuildOrder("Mine"));
+            migrationTotalField.Value = total.ToString();
         }
     }
 }

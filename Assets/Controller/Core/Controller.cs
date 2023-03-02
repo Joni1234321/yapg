@@ -37,11 +37,12 @@ namespace Bserg.Controller.Core
         {
             Planet[] planets = systemGenerator.GetPlanets();
             string[] names = systemGenerator.GetNames();
-            long[] populations = systemGenerator.GetPopulations();
+            float[] populationLevels = systemGenerator.GetPopulationLevels();
+
             PoliticalBody[] bodies = new PoliticalBody[planets.Length];
 
                 
-            Game = new Game(names, populations, bodies, planets);
+            Game = new Game(names, populationLevels, bodies, planets);
 
             TickController = new TickController(this);
             
@@ -64,6 +65,7 @@ namespace Bserg.Controller.Core
             {
                 activeOverlay.OnTick(Game, MouseController.HoverPlanetID, MouseController.SelectedPlanetID);
                 UIController.UITimeController.UpdateGameTime(Game.Ticks);
+                UIController.OnTick();
             }
             
             float dt = TickController.GetDT();

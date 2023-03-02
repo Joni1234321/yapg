@@ -1,6 +1,7 @@
 using System.Linq;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
+using Model.Utilities;
 using UnityEngine;
 
 
@@ -157,5 +158,6 @@ namespace Bserg.View.Space
 
         public string[] GetNames() => prefab.planetScriptables.Select(p => p.Name).ToArray();
         public long[] GetPopulations() => prefab.planetScriptables.Select(p => p.Population).ToArray();
+        public float[] GetPopulationLevels() => prefab.planetScriptables.Select(p => Util.LongToLevel(p.Population)).ToArray();
     }
 }

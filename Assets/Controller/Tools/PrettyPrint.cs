@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Bserg.Controller.Util
+namespace Bserg.Controller.Tools
 {
     public static class PrettyPrint
     {

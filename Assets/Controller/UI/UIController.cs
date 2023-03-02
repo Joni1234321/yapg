@@ -25,9 +25,8 @@ namespace Bserg.Controller.UI
 
         public VisualElement GetUI(string name) => ui.rootVisualElement.Q<VisualElement>(name); 
 
-        void Update()
+        public void OnTick()
         {
-            UIPlanetController.Update();
         }
     }
 }

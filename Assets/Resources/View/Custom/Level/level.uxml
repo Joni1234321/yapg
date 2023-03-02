@@ -1,4 +1,4 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <Style src="project://database/Assets/Resources/View/Custom/level.uss?fileID=7433441132597879392&amp;guid=425ee54811e886944b91116cf462c704&amp;type=3#level" />
-    <ui:Label tabindex="-1" text="20" display-tooltip-when-elided="true" name="level" class="level" />
+    <Style src="project://database/Assets/Resources/View/Custom/Level/level.uss?fileID=7433441132597879392&amp;guid=425ee54811e886944b91116cf462c704&amp;type=3#level" />
+    <ui:Label tabindex="-1" text="20" display-tooltip-when-elided="true" name="level" class="level" style="width: 24px;" />
 </ui:UXML>

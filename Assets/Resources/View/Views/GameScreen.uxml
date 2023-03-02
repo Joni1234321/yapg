@@ -14,9 +14,8 @@
             <ui:Instance template="PlanetView" name="planet-view" />
             <ui:Instance template="PoliticalView" name="political-view" style="align-self: center; justify-content: flex-start; align-items: center; width: auto; position: absolute; top: -40px;" />
             <ui:Instance template="level-list" name="level-view" style="position: absolute; top: -76px;" />
-            <ui:VisualElement name="REMOVED" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;">
-                <ui:Instance template="BuildItems" name="build-view" style="display: flex;" />
-            </ui:VisualElement>
+            <ui:Instance template="BuildItems" name="build-view" style="display: flex;" />
+            <ui:VisualElement name="REMOVED" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); display: none;" />
             <ui:Instance template="migration-view" name="migration-view" style="width: 240px; height: auto;" />
         </ui:VisualElement>
         <ui:VisualElement name="top-right" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); position: absolute; right: 8px; top: 8px; justify-content: flex-start; align-items: flex-end;">

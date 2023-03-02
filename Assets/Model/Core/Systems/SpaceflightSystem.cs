@@ -78,19 +78,18 @@ namespace Bserg.Model.Core.Systems
             switch (currentStep.Type)
             {
                 case Spacecraft.StepType.Unload:
-                    Game.PlanetPopulations[planetID] += spacecraft.MaxPopulation;
+                    Game.PlanetPopulationLevels[planetID] += spacecraft.MaxPopulation;
                     spacecraft.Population = 0;
                     break;
                 case Spacecraft.StepType.Load:
                     long neededPopulation = spacecraft.MaxPopulation - spacecraft.Population;
                     // Can max load down to 1000 people on planet TODO: UPDATE TO SOMETHING MORE SOPHISTICATED
-                    long validPopulationOnPlanet =
-                        Mathl.Min(Game.PlanetPopulations[planetID] - 1000, 0);
-                    long populationLoaded = Mathl.Min(neededPopulation, validPopulationOnPlanet);
+                    //long validPopulationOnPlanet = Mathl.Min(Game.PlanetPopulationLevels[planetID] - 9, 0);
+                    //long populationLoaded = Mathl.Min(neededPopulation, validPopulationOnPlanet);
                                 
                     // Load
-                    Game.PlanetPopulations[planetID] -= populationLoaded;
-                    spacecraft.Population += populationLoaded;
+                    Game.PlanetPopulationLevels[planetID] -= 0;
+                    spacecraft.Population += 0;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

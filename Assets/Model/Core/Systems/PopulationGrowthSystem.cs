@@ -1,4 +1,6 @@
-﻿namespace Bserg.Model.Core.Systems
+﻿using UnityEngine;
+
+namespace Bserg.Model.Core.Systems
 {
     /// <summary>
     /// Handle population growth and decline
@@ -8,30 +10,39 @@
     /// </summary>
     public class PopulationGrowthSystem : GameSystem
     {
-        public long[] PlanetBirths, PlanetDeaths;
+        public float[] PlanetBirths, PlanetDeaths;
 
         public PopulationGrowthSystem(Game game) : base(game)
         {
-            PlanetBirths = new long[Game.N];
-            PlanetDeaths = new long[Game.N];
+            PlanetBirths = new float[Game.N];
+            PlanetDeaths = new float[Game.N];
         }
         
         public void System()
         {
-            const float BirthRate = 0.01f;
+            // 8 % birthrate approx (2.15 ^ .1 = 8 %) 
+            const float BirthRate = 0.02f;
             const float DeathRate = 0.005f;
             for (int i = 0; i < Game.N; i++)
-            {
-                long oldPopulation = Game.PlanetPopulations[i];
+            {  
+                // Only applies to planets with populations
+                if (Game.PlanetPopulationLevels[i] == 0)
+                    continue;
                 
                 // Death rate
-                PlanetDeaths[i] = (long)(oldPopulation * DeathRate);
+                PlanetDeaths[i] = DeathRate;
 
                 // Birth rate
-                PlanetBirths[i] = (long)(oldPopulation * BirthRate);
+                // Affected down to 25% by not enough housing
+                float modifier = 1f;
+                int housingDiff = (int)Game.PlanetPopulationLevels[i] - (int)Game.PlanetHousingLevels[i];
+                if (housingDiff > 0)
+                    modifier *= 1f / Mathf.Min(housingDiff, 4);
+                
+                PlanetBirths[i] = BirthRate * modifier;
 
                 // New population
-                Game.PlanetPopulations[i] += PlanetBirths[i] - PlanetDeaths[i];
+                Game.PlanetPopulationLevels[i] += PlanetBirths[i] - PlanetDeaths[i];
             }
             
         }

@@ -3,6 +3,7 @@ using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Political;
 using Bserg.Model.Units;
+using UnityEngine;
 using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Model.Core
@@ -26,7 +27,9 @@ namespace Bserg.Model.Core
         public float[,] HohmannDeltaV;
         
         // Population
-        public long[] PlanetPopulations;
+        public float[] PlanetPopulationLevels;
+        public float[] PlanetHousingLevels;
+        public float[] PlanetFoodLevels;
 
         // Political
         public PoliticalBody[] PlanetPoliticalBodies;
@@ -37,7 +40,7 @@ namespace Bserg.Model.Core
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
 
-        public Game(string[] planetNames, long[] planetPopulations, PoliticalBody[] planetPoliticalBodies, Planet[] planets)
+        public Game(string[] planetNames, float[] planetPopulationLevels, PoliticalBody[] planetPoliticalBodies, Planet[] planets)
         {
             N = planetNames.Length;
             PlanetNames = planetNames;
@@ -61,8 +64,15 @@ namespace Bserg.Model.Core
             }
             HohmannTransfers = CalculateHohmannTransfers(planets[0], planets);
 
-                // Population
-            PlanetPopulations = planetPopulations;
+            // Population
+            PlanetPopulationLevels = planetPopulationLevels;
+            PlanetHousingLevels = new float[N];
+            PlanetFoodLevels = new float[N];
+            for (int i = 0; i < N; i++)
+            {
+                PlanetHousingLevels[i] = planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1.5f : 0);
+                PlanetFoodLevels[i] = PlanetHousingLevels[i];
+            }
 
             // Political
             PlanetPoliticalBodies = planetPoliticalBodies;
@@ -201,28 +211,6 @@ namespace Bserg.Model.Core
             PopulationGrowthSystem.System();
         }
         
-        /// <summary>
-        /// Handles build orders
-        /// </summary>
-        public void BuildSystem()
-        {
-            foreach (Planet planet in Planets)
-            {
-                // Tick
-                for (int i = 0; i < planet.BuildOrders.Count; i++)
-                {
-                    BuildOrder buildOrder = planet.BuildOrders[i];
-                    buildOrder.Progress++;
-                    if (buildOrder.Progress >= 100)
-                        toDelete.Push(i);
-                }
-
-                // Delete
-                while (toDelete.Count > 0)
-                    planet.BuildOrders.RemoveAt(toDelete.Pop());
-            }
-        }
-
         public Planet GetPlanet(int planetID)
         {
             if (planetID == -1)

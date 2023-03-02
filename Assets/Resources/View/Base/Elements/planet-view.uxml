@@ -2,27 +2,28 @@
     <ui:Template name="element-round" src="project://database/Assets/Resources/View/Material/element-round.uxml?fileID=9197481963319205126&amp;guid=689ab7d8d19a81c49b5d2ec7641b1232&amp;type=3#element-round" />
     <ui:Template name="element-square" src="project://database/Assets/Resources/View/Material/element-square.uxml?fileID=9197481963319205126&amp;guid=1ed5a3efafd972f47bf5e5cd44d17264&amp;type=3#element-square" />
     <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <Style src="project://database/Assets/Resources/View/USS/Other.uss?fileID=7433441132597879392&amp;guid=e239d11c5d32aca4eb01f0caa2591d9f&amp;type=3#Other" />
     <ui:VisualElement name="planet-view" class="body menu">
         <ui:VisualElement name="top" class="top">
-            <Bserg.View.Custom.Level.LevelControl name="planet-level" size="Big" />
+            <Bserg.View.Custom.Level.LevelControl name="planet-level" size="Big" level-size="Big" />
             <ui:Label tabindex="-1" text="EARTH" display-tooltip-when-elided="true" name="name" style="margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; padding-left: 2px; padding-right: 2px; padding-top: 2px; padding-bottom: 2px;" />
         </ui:VisualElement>
         <ui:ScrollView name="ScrollView">
-            <ui:VisualElement name="Field">
+            <ui:VisualElement>
                 <ui:VisualElement class="field" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                     <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start; align-items: stretch; width: 96px; flex-shrink: 0;">
                         <ui:VisualElement style="background-color: rgba(0, 0, 0, 0); background-image: resource(&apos;View/images/contact-g6af3d3111_640&apos;); -unity-background-scale-mode: scale-to-fit; flex-shrink: 0; width: 14px; margin-left: 4px; margin-right: 4px; margin-top: 6px; margin-bottom: 6px; -unity-background-image-tint-color: rgb(119, 119, 119);" />
                         <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population" class="value" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="population-other" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; justify-content: center; align-items: stretch; width: 49px; flex-shrink: 1; display: flex; visibility: visible;">
+                    <ui:VisualElement name="population-other" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; justify-content: center; align-items: stretch; width: 49px; flex-shrink: 1; display: none; visibility: visible;">
                         <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population-diff" class="value" style="color: rgb(125, 125, 125); font-size: 10px; margin-right: 0; margin-left: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: upper-center; -unity-font-style: normal;" />
                         <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: space-between; align-items: center; flex-shrink: 0; font-size: 10px; -unity-font-style: normal;">
                             <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population-growth" class="value" style="color: rgb(52, 102, 34); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 8px;" />
                             <ui:Label tabindex="-1" text="200 K" display-tooltip-when-elided="true" name="population-decline" class="value" style="color: rgb(153, 52, 52); margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; font-size: 8px;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:Label tabindex="-1" text="100" display-tooltip-when-elided="true" name="population-migration" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; font-size: 10px; color: rgb(161, 161, 161); width: 32px;" />
-                    <Bserg.View.Custom.Level.LevelControl name="attraction" style="position: absolute; right: 2px; align-self: center;" />
+                    <ui:Label tabindex="-1" text="100" display-tooltip-when-elided="true" name="population-migration" style="margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; -unity-text-align: middle-left; font-size: 10px; color: rgb(161, 161, 161); width: 32px; display: none;" />
+                    <Bserg.View.Custom.Level.LevelControl name="attraction-level" style="position: absolute; right: 2px; align-self: center;" />
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
                     <ui:VisualElement name="element-list" class="field" style="background-color: rgba(0, 0, 0, 0);">
@@ -58,13 +59,11 @@
                         <ui:Label tabindex="-1" text="0" display-tooltip-when-elided="true" name="spacecraft-pool" class="value" />
                     </ui:VisualElement>
                 </ui:VisualElement>
-                <ui:VisualElement class="field" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
-                    <ui:VisualElement style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: row; justify-content: flex-start; align-items: stretch; width: 96px; flex-shrink: 0;">
-                        <ui:Label tabindex="-1" text="Housing" display-tooltip-when-elided="true" class="label" />
-                        <Bserg.View.Custom.Level.LevelControl name="housing-level" background-color="#4D732EFF" size="Medium" style="align-self: center;" />
-                    </ui:VisualElement>
+                <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Pop" background-color="#4C4C4CFF" progress-enabled="true" value="45.1" level="30" name="population-group" />
+                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Food" background-color="#314E00FF" progress-enabled="true" value="45.1" level="3" name="food-group" />
+                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Housing" background-color="#2E5A73FF" progress-enabled="true" value="45.1" level="25" name="housing-group" />
                 </ui:VisualElement>
-                <Bserg.View.Custom.Field.FieldControl title="Housing" name="housing-field" />
             </ui:VisualElement>
         </ui:ScrollView>
     </ui:VisualElement>

@@ -105,16 +105,15 @@ namespace Bserg.Controller.Overlays
         private void UpdatePlanetData(Game game, int planetID)
         {
             
-            long totalMigration = 0;
+            float totalMigration = 0;
             for (int i = 0; i < game.N; i++) totalMigration += game.MigrationSystem.PlanetImmigration[i, planetID] - game.MigrationSystem.PlanetImmigration[planetID, i];
 
             uiController.UIPlanetController.SetPlanet(game.PlanetNames[planetID],
-                game.PlanetPopulations[planetID],
-                game.PopulationGrowthSystem.PlanetBirths[planetID] - game.PopulationGrowthSystem.PlanetDeaths[planetID],
-                game.PopulationGrowthSystem.PlanetBirths[planetID],
-                game.PopulationGrowthSystem.PlanetDeaths[planetID],
+                game.PlanetPopulationLevels[planetID], 
                 totalMigration,
                 game.MigrationSystem.PlanetAttraction[planetID],
+                game.PlanetHousingLevels[planetID],
+                game.PlanetFoodLevels[planetID],
                 game.SpaceflightSystem.SpacecraftPools[planetID].Count);
             
             
