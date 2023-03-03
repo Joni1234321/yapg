@@ -12,7 +12,7 @@ namespace Bserg.Controller.Core
     public class Controller : MonoBehaviour
     {
 
-        public const int CLICKABLE_LAYER = 7;
+        public const int UI_LAYER = 5, CLICKABLE_LAYER = 7;
         public SystemGenerator systemGenerator;
         public Game Game;
 

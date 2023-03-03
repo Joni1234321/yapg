@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Core;
 using Bserg.Controller.Material;
+using Bserg.Controller.Tools;
 using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
 using Bserg.View.Space;
+using Model.Utilities;
 using UnityEngine;
 
 namespace Bserg.Controller.Overlays
@@ -126,7 +128,7 @@ namespace Bserg.Controller.Overlays
             // Update UIS
             uiController.UIPlanetController.UpdateMaterials(elements);
             uiController.UIPlanetController.UpdateLevels(levels);
-            uiController.UIPlanetController.UpdateTransfers(planetID, game.PlanetNames, game.HohmannTransfers, game.HohmannDeltaV);
+            uiController.UIPlanetController.UpdateTransfers(planetID, game.PlanetNames, game.OrbitalTransferSystem.HohmannTransfers, game.OrbitalTransferSystem.HohmannDeltaV);
             uiController.UIPlanetController.UpdateMigration(planetID, game.PlanetNames, game.MigrationSystem.PlanetImmigration);
         }
 

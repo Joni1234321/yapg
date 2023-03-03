@@ -22,23 +22,24 @@ namespace Bserg.Model.Core
         // Planet
         public Planet[] Planets { get; }
         public string[] PlanetNames;
-        public float[] OrbitalPeriodsInTicks;
-        public HohmannTransfer<float>[,] HohmannTransfers;
-        public float[,] HohmannDeltaV;
         
         // Population
         public float[] PlanetPopulationLevels;
-        public float[] PlanetHousingLevels;
-        public float[] PlanetFoodLevels;
+        public float[] PlanetLandLevels;
+        public int[] PlanetHousingLevels;
+        public int[] PlanetFoodLevels;
 
         // Political
         public PoliticalBody[] PlanetPoliticalBodies;
         public Player Player;
 
+        public OrbitalTransferSystem OrbitalTransferSystem;
+        
         public PopulationGrowthSystem PopulationGrowthSystem;
         public MigrationSystem MigrationSystem;
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
+        
 
         public Game(string[] planetNames, float[] planetPopulationLevels, PoliticalBody[] planetPoliticalBodies, Planet[] planets)
         {
@@ -46,38 +47,27 @@ namespace Bserg.Model.Core
             PlanetNames = planetNames;
             Planets = planets;
             
-            // Orbits
-            StandardGravitationalParameter mu = new StandardGravitationalParameter(planets[0].Mass);
-            OrbitalPeriodsInTicks = new float[N];
-            HohmannDeltaV = new float[N, N];
-            for (int i = 0; i < N; i++) 
-                OrbitalPeriodsInTicks[i] = GameTick.ToTickF(OrbitalMechanics.GetOrbitalPeriod(mu, planets[i].OrbitRadius));
-            for (int i = 0; i < N; i++)
-            for (int j = 0; j < N; j++)
-            {
-                if (i == 0 || j == 0 || i == j)
-                {
-                    HohmannDeltaV[i, j] = 0;
-                    continue;
-                }
-                HohmannDeltaV[i, j] = (float)OrbitalMechanics.GetHohmannDeltaV(mu, planets[i].OrbitRadius, planets[j].OrbitRadius);
-            }
-            HohmannTransfers = CalculateHohmannTransfers(planets[0], planets);
-
             // Population
             PlanetPopulationLevels = planetPopulationLevels;
-            PlanetHousingLevels = new float[N];
-            PlanetFoodLevels = new float[N];
+            PlanetHousingLevels = new int[N];
+            PlanetLandLevels = new float[N];
+            PlanetFoodLevels = new int[N];
+
             for (int i = 0; i < N; i++)
             {
-                PlanetHousingLevels[i] = planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1.5f : 0);
-                PlanetFoodLevels[i] = PlanetHousingLevels[i];
+                PlanetHousingLevels[i] = (int)planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
+                PlanetLandLevels[i] = 100;
+                if (PlanetPopulationLevels[i] > 1)
+                    PlanetFoodLevels[i] = (int)PlanetPopulationLevels[i] + 1;
             }
 
             // Political
             PlanetPoliticalBodies = planetPoliticalBodies;
             Player = new Player("Player1", "Democracy", "UN");
 
+            
+            OrbitalTransferSystem = new OrbitalTransferSystem(this);
+            
             PopulationGrowthSystem = new PopulationGrowthSystem(this);
             MigrationSystem = new MigrationSystem(this);
             SettleSystem = new SettleSystem(this);
@@ -92,73 +82,6 @@ namespace Bserg.Model.Core
         private Stack<int> toDelete = new(64);
 
 
-        /// <summary>
-        /// Hohmann transfer has a launch window and a duration to destination
-        /// </summary>
-        public struct HohmannTransfer<T>
-        {
-            public readonly T Offset, Window, Duration;
-
-            /// <summary>
-            /// 
-            /// </summary>
-            /// <param name="offset">first launch window</param>
-            /// <param name="window">delta time till next launch windows</param>
-            /// <param name="duration">time it takes from launch at departure till destination</param>
-            public HohmannTransfer(T offset, T window, T duration)
-            {
-                Offset = offset;
-                Window = window;
-                Duration = duration;
-            }
-        }
-        
-        /// <summary>
-        /// Calculates all the hohmann transfers windows
-        /// </summary>
-        /// <param name="orbit">The object they orbit</param>
-        /// <param name="planets"> Planets to calculate </param>
-        /// <returns>Returns n*n array, first coordiante is departure, second is arrival</returns>
-        HohmannTransfer<float>[,] CalculateHohmannTransfers(Planet orbit, Planet[] planets)
-        {
-            // Orbit values
-            StandardGravitationalParameter mu = new StandardGravitationalParameter(orbit.Mass);
-            
-            // Planets
-            int n = planets.Length;
-            HohmannTransfer<float>[,] transfers = new HohmannTransfer<float>[n, n];
-
-            for (int i = 0; i < n; i++)
-            {
-                Planet departure = planets[i];
-                Time departureOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(mu, departure.OrbitRadius);
-
-                for (int j = 0; j < n; j++)
-                {
-                    // No time between itself
-                    if (i == j)
-                    {
-                        transfers[i, j] = new HohmannTransfer<float>(0, 0, 0);
-                        continue;
-                    }
-
-                    // Calculate
-                    Planet destination = planets[j];
-                    Time destinationOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(mu, destination.OrbitRadius);
-                    Time window = 
-                        OrbitalMechanics.GetSynodicPeriod(departureOrbitalPeriod, destinationOrbitalPeriod);
-                    Time duration =
-                        OrbitalMechanics.HohmannTransferDuration(mu, departure.OrbitRadius, destination.OrbitRadius);
-                    double deltaAngleAtLaunch =
-                        OrbitalMechanics.HohmannAngleDifferenceAtLaunch(destinationOrbitalPeriod, duration);
-                    Time timeUntilFirstWindow = OrbitalMechanics.GetTimeUntilAngleDifference(deltaAngleAtLaunch, departureOrbitalPeriod, destinationOrbitalPeriod); 
-                    transfers[i, j] = new HohmannTransfer<float>(GameTick.ToTickF(timeUntilFirstWindow), GameTick.ToTickF(window), GameTick.ToTickF(duration));
-                }
-            }
-
-            // Return
-            return transfers;
-        }
         
         /// <summary>
         /// Game progresses through ticks

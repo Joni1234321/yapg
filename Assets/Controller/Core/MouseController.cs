@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Bserg.Controller.Overlays;
 using Bserg.Model.Core;
 using Bserg.View.Space;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
 {
     public class MouseController
     {
         public Camera Camera;
+        UIDocument uiDocument;
+
         public int HoverPlanetID = -1;
         public int SelectedPlanetID = -1;
 
         public MouseController()
         {
             Camera = Camera.main;
+            uiDocument = GameObject.Find("UIDocument").GetComponent<UIDocument>();
         }
 
 
@@ -23,9 +30,9 @@ namespace Bserg.Controller.Core
             int newHoverPlanetID = GetHoverPlanetID(game);
             int oldHoverPlanetID = HoverPlanetID;
             int oldSelectedPlanetID = SelectedPlanetID;
-            bool oldHoverValid = HoverPlanetID != -1;
-            bool newHoverValid = newHoverPlanetID != -1;
-            bool oldSelectedValid = SelectedPlanetID != -1;
+            bool oldHoverValid = HoverPlanetID > -1;
+            bool newHoverValid = newHoverPlanetID > -1;
+            bool oldSelectedValid = SelectedPlanetID > -1;
 
 
             // Hover change
@@ -39,8 +46,9 @@ namespace Bserg.Controller.Core
                     activeOverlay.PlanetHoverEnter(game, newHoverPlanetID, SelectedPlanetID);
             }
 
+
             // Selected Change
-            if (Input.GetMouseButtonDown(0) && newHoverPlanetID != SelectedPlanetID)
+            if (WorldMouseButtonDown(0) && newHoverPlanetID != SelectedPlanetID)
             {
                 SelectedPlanetID = newHoverPlanetID;
 
@@ -113,15 +121,53 @@ namespace Bserg.Controller.Core
         /// <summary>
         /// Returns first planet that is within hover distance of mouse
         /// </summary>
-        /// <returns>Planet hovering over or null if none found</returns>
+        /// <returns>Planet hovering over, -1 if none found</returns>
         private int GetHoverPlanetID(Game game)
         {
-            int layerMask = 1 << Controller.CLICKABLE_LAYER;
-            
-            if (Physics.Raycast(Camera.ScreenPointToRay (Input.mousePosition), out RaycastHit hit, Mathf.Infinity, layerMask))
+            int layerMask = (1 << Controller.CLICKABLE_LAYER) ;
+
+            if (Physics.Raycast(Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
+                    layerMask))
+            {
                 return hit.collider.GetComponent<PlanetIDScript>().planetID;
+            }
             
             return -1;
         }
+
+
+        /// <summary>
+        /// Returns wether the mouse has been hit while not over a ui object
+        /// </summary>
+        /// <param name="button"></param>
+        /// <returns></returns>
+        bool WorldMouseButtonDown(int button)
+        {
+            if (Input.GetMouseButtonDown(button))
+                return !IsMouseOverUI(Input.mousePosition);
+
+            return false;
+        }
+        
+        /// <summary>
+        /// Checks if pointer is over ui, by checking the alpha value over the position of the mouse over the current UI
+        /// </summary>
+        /// <param name="screenPos"> Mouse Position</param>
+        /// <returns></returns>
+        bool IsMouseOverUI ( Vector2 screenPos )
+        {
+            Vector2 pointerUiPos = new Vector2{ x = screenPos.x , y = Screen.height - screenPos.y };
+            List<VisualElement> picked = new List<VisualElement>();
+            uiDocument.rootVisualElement.panel.PickAll( pointerUiPos , picked );
+            foreach( var ve in picked )
+                if( ve!=null )
+                {
+                    Color32 bcol = ve.resolvedStyle.backgroundColor;
+                    if( bcol.a!=0 && ve.enabledInHierarchy )
+                        return true;
+                }
+            return false;
+        }
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bserg.Model.Space
+namespace Bserg.Controller.Tools
 {
     public struct LevelStyle
     {
@@ -30,7 +30,10 @@ namespace Bserg.Model.Space
                 return;
             
             Add(new LevelStyle("Economic", Color.HSVToRGB(0.14f, 1f, 0.6f)));
-            Add(new LevelStyle("Population", Color.HSVToRGB(1f/3f, .5f, .4f)));
+            Add(new LevelStyle("Population", Color.HSVToRGB(0, 0, .3f)));
+            Add(new LevelStyle("Food", Color.HSVToRGB(80f/360f, 1f, .3f)));
+            Add(new LevelStyle("Housing", Color.HSVToRGB(200f/360f, 1f, .4f)));
+            Add(new LevelStyle("Land", Color.HSVToRGB(30f/360f, .4f, .6f)));
             Add(new LevelStyle("Military", Color.HSVToRGB(0, .6f , .6f)));
             Add(new LevelStyle("Social", Color.HSVToRGB(.8f, .4f, .4f)));
             Add(new LevelStyle("Infrastructure", Color.HSVToRGB(0,0,.6f)));

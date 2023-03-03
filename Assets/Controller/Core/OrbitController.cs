@@ -45,7 +45,7 @@ namespace Bserg.Controller.Core
         /// <returns></returns>
         public float GetPlanetAngleAtTicksF(Game game, int planetID, float ticks)
         {
-            float orbitalPeriodsInTick = game.OrbitalPeriodsInTicks[planetID];
+            float orbitalPeriodsInTick = game.OrbitalTransferSystem.OrbitalPeriodsInTicks[planetID];
             if (orbitalPeriodsInTick == 0)
                 return 0;
             return 2 * Mathf.PI * ticks / orbitalPeriodsInTick;

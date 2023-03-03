@@ -1,4 +1,6 @@
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.UI
@@ -6,7 +8,7 @@ namespace Bserg.Controller.UI
     public class UIController : MonoBehaviour
     {
         // Controllers
-        public Core.Controller controller;
+        public Core.Controller controller;  
         public UIPlanetController UIPlanetController;
         public UITimeController UITimeController;
         

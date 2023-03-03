@@ -61,8 +61,8 @@
                 </ui:VisualElement>
                 <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
                     <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Pop" background-color="#4C4C4CFF" progress-enabled="true" value="45.1" level="30" name="population-group" />
-                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Food" background-color="#314E00FF" progress-enabled="true" value="45.1" level="3" name="food-group" />
-                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Housing" background-color="#2E5A73FF" progress-enabled="true" value="45.1" level="25" name="housing-group" />
+                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Food" background-color="#344E00FF" progress-enabled="false" value="45.1" level="3" name="food-group" />
+                    <Bserg.View.Custom.Level.LevelGroupControl level-size="Big" text="Housing" background-color="#004166FF" progress-enabled="false" value="45.1" level="25" name="housing-group" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>

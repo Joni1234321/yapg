@@ -10,7 +10,7 @@
                     <ui:Label tabindex="-1" text="Input" display-tooltip-when-elided="true" />
                     <ui:VisualElement name="input-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end;">
                         <Bserg.View.Custom.Level.LevelGroupControl background-color="#734058FF" text="Pop" level="7" level-size="Big" />
-                        <Bserg.View.Custom.Level.LevelGroupControl background-color="#735942FF" text="Land" level="10" level-size="Big" />
+                        <Bserg.View.Custom.Level.LevelGroupControl background-color="#997A5CFF" text="Land" level="10" level-size="Big" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="output" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: center;">

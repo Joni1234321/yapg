@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Bserg.Controller.Editor
+namespace Controller.Editor
 {
     [CustomEditor(typeof(SystemGenerator))]
     public class SystemGeneratorEditor : UnityEditor.Editor

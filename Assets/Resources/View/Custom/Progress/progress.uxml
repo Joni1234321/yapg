@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="progress-bar" style="flex-grow: 1; background-color: rgb(28, 28, 31);">
+        <ui:VisualElement name="VisualElement" style="flex-grow: 1; width: auto; margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px; background-color: rgba(132, 134, 153, 0.8);">
+            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); margin-left: 1px; margin-right: 1px; margin-top: 1px; margin-bottom: 1px; flex-direction: column-reverse;">
+                <ui:VisualElement name="progress" style="flex-grow: 1; background-color: rgba(61, 68, 102, 0.8); flex-direction: column-reverse;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
