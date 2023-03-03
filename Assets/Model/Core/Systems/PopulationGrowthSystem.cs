@@ -23,6 +23,9 @@ namespace Bserg.Model.Core.Systems
             // 8 % birthrate approx (2.15 ^ .1 = 8 %) 
             const float BirthRate = 0.02f;
             const float DeathRate = 0.005f;
+
+            int[] housingLevels = Game.PlanetLevels.Get("Housing");
+            
             for (int i = 0; i < Game.N; i++)
             {  
                 // Only applies to planets with populations
@@ -35,7 +38,7 @@ namespace Bserg.Model.Core.Systems
                 // Birth rate
                 // Affected down to 25% by not enough housing
                 float modifier = 1f;
-                int housingDiff = (int)Game.PlanetPopulationLevels[i] - (int)Game.PlanetHousingLevels[i];
+                int housingDiff = (int)Game.PlanetPopulationLevels[i] - housingLevels[i];
                 if (housingDiff > 0)
                     modifier *= 1f / Mathf.Min(housingDiff, 4);
                 

@@ -5,8 +5,6 @@ using Bserg.Controller.Tools;
 using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
-using Bserg.View.Space;
-using Model.Utilities;
 using UnityEngine;
 
 namespace Bserg.Controller.Overlays
@@ -46,12 +44,12 @@ namespace Bserg.Controller.Overlays
 
         public override void UpdateSelected(Game game, int selectedPlanetID)
         {
-            ShowSelectorAt(game, selectedPlanetID, 0);
+            ShowSelectorAt(game, selectedPlanetID, DeltaTick);
         }
 
         public override void UpdateHover(Game game, int hoverPlanetID)
         {
-            ShowSelectorAt(game, hoverPlanetID, 0);
+            ShowSelectorAt(game, hoverPlanetID, DeltaTick);
         }
 
         public override void UpdateHoverAndSelected(Game game, int hoverPlanetID, int selectedPlanetID)
@@ -110,13 +108,13 @@ namespace Bserg.Controller.Overlays
             float totalMigration = 0;
             for (int i = 0; i < game.N; i++) totalMigration += game.MigrationSystem.PlanetImmigration[i, planetID] - game.MigrationSystem.PlanetImmigration[planetID, i];
 
-            uiController.UIPlanetController.SetPlanet(game.PlanetNames[planetID],
-                game.PlanetPopulationLevels[planetID], 
-                totalMigration,
-                game.MigrationSystem.PlanetAttraction[planetID],
-                game.PlanetHousingLevels[planetID],
-                game.PlanetFoodLevels[planetID],
-                game.SpaceflightSystem.SpacecraftPools[planetID].Count);
+            uiController.UIPlanetController.SetPlanet(
+                game.PlanetNames[planetID],
+                game.SpaceflightSystem.SpacecraftPools[planetID].Count,
+                game.PlanetLevels,
+                planetID,
+                game.PlanetPopulationLevels[planetID] % 1f
+                );
             
             
             // Levels (HACK)
@@ -126,10 +124,10 @@ namespace Bserg.Controller.Overlays
                 { new("Population", 2), new("Social", 3), new("Infrastructure", 4) };
                 
             // Update UIS
-            uiController.UIPlanetController.UpdateMaterials(elements);
-            uiController.UIPlanetController.UpdateLevels(levels);
-            uiController.UIPlanetController.UpdateTransfers(planetID, game.PlanetNames, game.OrbitalTransferSystem.HohmannTransfers, game.OrbitalTransferSystem.HohmannDeltaV);
-            uiController.UIPlanetController.UpdateMigration(planetID, game.PlanetNames, game.MigrationSystem.PlanetImmigration);
+            //uiController.UIPlanetController.UpdateMaterials(elements);
+            //uiController.UIPlanetController.UpdateLevels(levels);
+            //uiController.UIPlanetController.UpdateTransfers(planetID, game.PlanetNames, game.OrbitalTransferSystem.HohmannTransfers, game.OrbitalTransferSystem.HohmannDeltaV);
+            //uiController.UIPlanetController.UpdateMigration(planetID, game.PlanetNames, game.MigrationSystem.PlanetImmigration);
         }
 
     }

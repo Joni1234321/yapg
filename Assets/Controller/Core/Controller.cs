@@ -3,7 +3,6 @@ using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Political;
 using Bserg.Model.Space;
-using Bserg.Model.Units;
 using Bserg.View.Space;
 using UnityEngine;
 
@@ -52,10 +51,15 @@ namespace Bserg.Controller.Core
             OrbitController = new OrbitController(systemGenerator);
             SpaceflightController = new SpaceflightController(OrbitController);
             
+        }
+
+        void Start()
+        {
             // Overlays
             NormalOverlay = new NormalOverlay(UIController, OrbitController);
             TradeOverlay = new TradeOverlay(Game, this, UIController);
             SetActiveOverlay(NormalOverlay);
+
         }
 
 
@@ -71,7 +75,7 @@ namespace Bserg.Controller.Core
             float dt = TickController.GetDT();
 
             InputController.Update(this);
-            MouseController.Update(Game, activeOverlay);
+            MouseController.Update(Game, activeOverlay, dt);
             
             // No need to update if paused
             if (!TickController.Running)

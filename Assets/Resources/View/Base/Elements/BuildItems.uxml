@@ -1,22 +1,29 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
-    <ui:VisualElement class="body menu" style="flex-grow: 1; width: 300px;">
-        <ui:VisualElement class="top">
+    <ui:VisualElement class="body menu" style="flex-grow: 1; height: auto; width: 240px;">
+        <ui:VisualElement name="VisualElement" class="top">
             <ui:Label tabindex="-1" text="Build Menu" display-tooltip-when-elided="true" />
         </ui:VisualElement>
         <ui:ScrollView name="build-list" style="flex-grow: 1;">
-            <ui:VisualElement name="levels" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-                <ui:VisualElement name="input" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: center;">
-                    <ui:Label tabindex="-1" text="Input" display-tooltip-when-elided="true" />
-                    <ui:VisualElement name="input-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end;">
-                        <Bserg.View.Custom.Level.LevelGroupControl background-color="#734058FF" text="Pop" level="7" level-size="Big" />
-                        <Bserg.View.Custom.Level.LevelGroupControl background-color="#997A5CFF" text="Land" level="10" level-size="Big" />
-                    </ui:VisualElement>
+            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                <ui:VisualElement style="flex-grow: 0; margin-right: 2px; opacity: 0.5; visibility: visible; display: flex; border-right-width: 2px; border-left-color: rgb(26, 26, 26); border-right-color: rgb(26, 26, 26); border-top-color: rgb(26, 26, 26); border-bottom-color: rgb(26, 26, 26);">
+                    <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#314E00FF" level="X" style="height: 39px; justify-content: center; align-items: center; width: 39px;" />
+                    <ui:Label tabindex="-1" display-tooltip-when-elided="true" style="-unity-font-style: italic; display: flex;" />
+                    <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#997A5CFF" level="X" style="height: 39px; justify-content: center; align-items: center; width: 39px;" />
+                    <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#734058FF" level="X" style="height: 39px; justify-content: center; align-items: center; width: 39px;" />
                 </ui:VisualElement>
-                <ui:VisualElement name="output" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: center;">
-                    <ui:Label tabindex="-1" text="Output" display-tooltip-when-elided="true" />
-                    <ui:VisualElement name="output-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end;">
-                        <Bserg.View.Custom.Level.LevelGroupControl background-color="#314E00FF" text="Food" level="10" level-size="Big" progress-enabled="false" />
+                <ui:VisualElement name="levels" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column-reverse; align-items: stretch; justify-content: flex-end;">
+                    <ui:VisualElement name="input" style="background-color: rgba(0, 0, 0, 0); flex-direction: column;">
+                        <ui:Label tabindex="-1" text="         consumes" display-tooltip-when-elided="true" style="-unity-font-style: italic; display: flex;" />
+                        <ui:VisualElement name="input-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start;">
+                            <Bserg.View.Custom.Level.LevelGroupControl background-color="#997A5CFF" text="Land" level="10" level-size="Big" reverse="false" />
+                            <Bserg.View.Custom.Level.LevelGroupControl background-color="#734058FF" text="Pop" level="7" level-size="Big" reverse="false" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="output" style="background-color: rgba(0, 0, 0, 0); align-items: stretch; align-self: auto; flex-direction: column;">
+                        <ui:VisualElement name="output-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start;">
+                            <Bserg.View.Custom.Level.LevelGroupControl background-color="#314E00FF" text="Food" level="10" level-size="Big" progress-enabled="false" reverse="false" style="align-items: flex-start;" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

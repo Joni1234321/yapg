@@ -46,7 +46,7 @@ namespace Bserg.Controller.Overlays
                 selectors[i].transform.localScale = Vector3.one * Mathf.Log(planet.Size * 2 + Mathf.Exp(1));
             }
 
-            tradeConfig = uiController.GetUI("trade-config");
+            tradeConfig = uiController.UIPlanetController.GetUI("trade-config");
 
             tradeFrom = tradeConfig.Q<VisualElement>("from");
             tradeTo = tradeConfig.Q<VisualElement>("to");

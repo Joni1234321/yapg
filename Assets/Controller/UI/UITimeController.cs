@@ -4,6 +4,9 @@ using UnityEngine.UIElements;
 
 namespace Bserg.Controller.UI
 {
+    /// <summary>
+    /// Controls the ui for time
+    /// </summary>
     public class UITimeController
     {
         // View 

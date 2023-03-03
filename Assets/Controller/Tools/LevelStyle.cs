@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using log4net.Core;
 using UnityEngine;
 
 namespace Bserg.Controller.Tools
@@ -20,6 +22,8 @@ namespace Bserg.Controller.Tools
         public static LevelStyle Get(string name) => styles[name];
         public static LevelStyle Get(LevelCount d) => styles[d.Name];
 
+        public static List<string> GetAll() => styles.Keys.ToList();
+        
         private static void Add(LevelStyle style)
         {
             styles.Add(style.Name, style);

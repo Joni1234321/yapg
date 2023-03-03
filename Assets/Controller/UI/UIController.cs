@@ -1,6 +1,5 @@
-using System.Reflection;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.UI
@@ -13,19 +12,17 @@ namespace Bserg.Controller.UI
         public UITimeController UITimeController;
         
         // View
-        public UIDocument ui;
-        void Start()
+        public UIDocument uiDocument;
+        void Awake()
         {
             // Sub controllers
-            UIPlanetController = new UIPlanetController(controller, GetUI("planet-view"), GetUI("build-view"),
-                GetUI("level-view"), GetUI("transfer-view"), GetUI("migration-view"));
-            UITimeController = new UITimeController(controller.TickController, GetUI("time-view"));
+            UIPlanetController = new UIPlanetController(uiDocument);
+            UITimeController = new UITimeController(controller.TickController, uiDocument.rootVisualElement.Q<VisualElement>("time-view"));
 
-            GetUI("trade-menu").Q<VisualElement>("button-settle")
+            uiDocument.rootVisualElement.Q<VisualElement>("trade-menu").Q<VisualElement>("button-settle")
                 .RegisterCallback<ClickEvent>(_ => controller.SetActiveOverlay(controller.TradeOverlay));
         }
 
-        public VisualElement GetUI(string name) => ui.rootVisualElement.Q<VisualElement>(name); 
 
         public void OnTick()
         {

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using Bserg.Controller.Overlays;
 using Bserg.Model.Core;
 using Bserg.View.Space;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
@@ -86,10 +83,11 @@ namespace Bserg.Controller.Core
         /// <summary>
         /// Place hover effect over planet, and if clicked then select
         /// </summary>
-        public void Update(Game game, Overlay activeOverlay)
+        public void Update(Game game, Overlay activeOverlay, float dt)
         {
+            activeOverlay.DeltaTick = dt;
             // Deselect
-            if (Input.GetMouseButtonDown(1))
+            if (WorldMouseButtonDown(1))
             {
                 SelectedPlanetID = -1;
                 activeOverlay.UpdateFocusNone();

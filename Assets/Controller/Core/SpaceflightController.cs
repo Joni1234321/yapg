@@ -1,10 +1,7 @@
-﻿using System;
-using Bserg.Model.Core;
+﻿using Bserg.Model.Core;
 using Bserg.Model.Core.Systems;
-using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Units;
-using Bserg.View.Space;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

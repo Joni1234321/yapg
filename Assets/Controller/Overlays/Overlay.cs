@@ -7,6 +7,11 @@ namespace Bserg.Controller.Overlays
     /// </summary>
     public abstract class Overlay
     {
+        /// <summary>
+        /// Percentage of time passed between last tick and next tick
+        /// </summary>
+        public float DeltaTick;
+        
         public abstract void Enable(Game game);
         public abstract void Disable();
 

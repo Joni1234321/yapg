@@ -3,7 +3,6 @@ using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Political;
 using Bserg.Model.Units;
-using UnityEngine;
 using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Model.Core
@@ -24,10 +23,8 @@ namespace Bserg.Model.Core
         public string[] PlanetNames;
         
         // Population
+        public PlanetLevels PlanetLevels;
         public float[] PlanetPopulationLevels;
-        public float[] PlanetLandLevels;
-        public int[] PlanetHousingLevels;
-        public int[] PlanetFoodLevels;
 
         // Political
         public PoliticalBody[] PlanetPoliticalBodies;
@@ -47,18 +44,23 @@ namespace Bserg.Model.Core
             PlanetNames = planetNames;
             Planets = planets;
             
+            Recipe.Load();
+            
             // Population
+            PlanetLevels = new PlanetLevels(N);
             PlanetPopulationLevels = planetPopulationLevels;
-            PlanetHousingLevels = new int[N];
-            PlanetLandLevels = new float[N];
-            PlanetFoodLevels = new int[N];
+
+            int[] planetHousingLevels = PlanetLevels.Get("Housing");
+            int[] planetFoodLevels = PlanetLevels.Get("Food");
+            int[] planetLandLevels = PlanetLevels.Get("Land");
 
             for (int i = 0; i < N; i++)
             {
-                PlanetHousingLevels[i] = (int)planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
-                PlanetLandLevels[i] = 100;
+                planetHousingLevels[i] = (int)planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
+                planetLandLevels[i] = 50;
                 if (PlanetPopulationLevels[i] > 1)
-                    PlanetFoodLevels[i] = (int)PlanetPopulationLevels[i] + 1;
+                    planetFoodLevels[i] = (int)PlanetPopulationLevels[i] + 1;
+                
             }
 
             // Political

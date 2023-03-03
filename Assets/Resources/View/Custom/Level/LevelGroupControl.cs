@@ -1,5 +1,4 @@
 using Bserg.View.Custom.Progress;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,8 +12,9 @@ namespace Bserg.View.Custom.Level
         public new class UxmlTraits : VisualElement.UxmlTraits
         {
             private readonly UxmlStringAttributeDescription textInput = new() { name = "text", defaultValue = "something" };
-            private readonly UxmlStringAttributeDescription levelInput = new() { name = "level", defaultValue = "10" };
+            private readonly UxmlStringAttributeDescription levelInput = new() { name = "level", defaultValue = "X" };
             private readonly UxmlBoolAttributeDescription progressEnabledInput = new() { name = "progress-enabled", defaultValue = false };
+            private readonly UxmlBoolAttributeDescription reverseInput = new() { name = "reverse", defaultValue = false };
             private readonly UxmlFloatAttributeDescription valueInput = new() { name = "value", defaultValue = 31.2f };
             private readonly UxmlColorAttributeDescription backgroundColorInput = new() { name = "background-color", defaultValue = Color.HSVToRGB(0,0,.45f)};
             private readonly UxmlEnumAttributeDescription<LevelControl.LevelSizeEnum> levelSizeInput = new()
@@ -29,11 +29,13 @@ namespace Bserg.View.Custom.Level
                 ate.Level = levelInput.GetValueFromBag(bag, cc);
                 ate.Value = valueInput.GetValueFromBag(bag, cc);
                 ate.ProgressEnabled = progressEnabledInput.GetValueFromBag(bag, cc);
+                ate.Reverse = reverseInput.GetValueFromBag(bag, cc);
                 ate.BackgroundColor = backgroundColorInput.GetValueFromBag(bag, cc);
                 ate.LevelSize = levelSizeInput.GetValueFromBag(bag, cc);
             }
         }
 
+        private VisualElement body;
         private Label nameLabel;
         private LevelControl levelControl;
         private ProgressControl progressControl;
@@ -51,7 +53,7 @@ namespace Bserg.View.Custom.Level
             set => progressControl.Value = value;
         }
 
-        private bool progressEnabled;
+        private bool progressEnabled, reverse;
 
         public bool ProgressEnabled
         {
@@ -60,6 +62,16 @@ namespace Bserg.View.Custom.Level
             {
                 progressEnabled = value;
                 progressControl.style.display = value ? DisplayStyle.Flex :DisplayStyle.None;
+            }
+        }
+        
+        public bool Reverse
+        {
+            get => reverse;
+            set
+            {
+                reverse = value;
+                body.style.flexDirection = value ? FlexDirection.Row : FlexDirection.RowReverse;
             }
         }
 
@@ -98,13 +110,16 @@ namespace Bserg.View.Custom.Level
 
         public LevelGroupControl()
         {
-            VisualElement body = Resources.Load<VisualTreeAsset>($"View/Custom/Level/level-group").CloneTree();
-            Add(body);
-            levelControl = body.Q<LevelControl>();
-            nameLabel = body.Q<Label>("name");
-            progressControl = body.Q<ProgressControl>();
+            VisualElement root = Resources.Load<VisualTreeAsset>($"View/Custom/Level/level-group").CloneTree();
+            body = root.Q("level-group");
+            Add(root);
+            levelControl = root.Q<LevelControl>();
+            nameLabel = root.Q<Label>("name");
+            progressControl = root.Q<ProgressControl>();
             
         }
+        
+     
     }
 
 }

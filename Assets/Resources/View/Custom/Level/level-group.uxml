@@ -1,8 +1,8 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/View/Custom/Level/level.uss?fileID=7433441132597879392&amp;guid=425ee54811e886944b91116cf462c704&amp;type=3#level" />
-    <ui:VisualElement name="level-group" class="group" style="align-items: flex-start; flex-grow: 0;">
-        <ui:Label tabindex="-1" text="Housing" display-tooltip-when-elided="true" name="name" class="label" style="border-bottom-color: rgb(46, 90, 115);" />
+    <ui:VisualElement name="level-group" class="group" style="align-items: center; flex-grow: 0; margin-right: 2px; flex-direction: row-reverse;">
+        <ui:Label tabindex="-1" text="Housing" display-tooltip-when-elided="true" name="name" class="label" style="border-bottom-color: rgb(46, 90, 115); display: flex;" />
         <Bserg.View.Custom.Level.LevelControl name="housing-level" background-color="#2E5A73FF" size="Big" level="15" level-size="Big" />
-        <Bserg.View.Custom.Progress.ProgressControl value="32.4" is-vertical="false" vertical="true" name="housing-progress" fill="#2E5A73FF" style="width: 8px; height: 28px; align-self: center;" />
+        <Bserg.View.Custom.Progress.ProgressControl value="32.4" is-vertical="false" vertical="true" name="housing-progress" fill="#2E5A73FF" style="width: 8px; height: 28px; align-self: center; margin-left: 2px; margin-right: 2px; margin-top: 0; margin-bottom: 0;" />
     </ui:VisualElement>
 </ui:UXML>
