@@ -18,7 +18,7 @@ namespace Bserg.Controller.UI
             // Sub controllers
             UIPlanetController = new UIPlanetController(uiDocument, controller.Game.PlanetLevels);
             UITimeController = new UITimeController(controller.TickController, uiDocument.rootVisualElement.Q<VisualElement>("time-view"));
-            WorldLabelUI = new WorldLabelUI(Resources.Load<GameObject>("View/Custom/Labels/PlanetLabel"), GameObject.Find("Canvas").transform);
+            WorldLabelUI = new WorldLabelUI(Resources.Load<GameObject>("View/Custom/Labels/PlanetLabel"), GameObject.Find("PlanetLabels").transform);
 
             uiDocument.rootVisualElement.Q<VisualElement>("trade-menu").Q<VisualElement>("button-settle")
                 .RegisterCallback<ClickEvent>(_ => controller.SetActiveOverlay(controller.TradeOverlay));

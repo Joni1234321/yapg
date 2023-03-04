@@ -7,26 +7,22 @@ namespace Bserg.Controller.UI
 {
     public class WorldLabelUI
     {
-        private readonly Camera camera;
         public readonly Transform Parent;
         public readonly GameObject Prefab;
         
         private List<GameObject> pool;
-        private List<RectTransform> rectTransforms;
         private List<TextMeshProUGUI> labels;
         private int activeGameObjectsLength;
         
 
         public WorldLabelUI(GameObject prefab, Transform parent)
         {
-            camera = Camera.main;
             Prefab = prefab;
             Parent = parent;
             
             const int N = 30;
 
             pool = new List<GameObject>(N);
-            rectTransforms = new List<RectTransform>(N);
             labels = new List<TextMeshProUGUI>(N);
 
             for (int i = 0; i < N; i++)
@@ -46,8 +42,10 @@ namespace Bserg.Controller.UI
             // Draw labels on planets
             for (int i = 0; i < n; i++)
             {
-                pool[i].transform.position = planetPositions[i] - new Vector3(0, .5f, 0);
+                Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y - .5f, 0);
+                pool[i].transform.position = position;
                 labels[i].text = planetNames[i];
+                
             }
         }
 
@@ -80,7 +78,6 @@ namespace Bserg.Controller.UI
         {
             GameObject go = Object.Instantiate(Prefab, Parent);
             pool.Add(go);
-            rectTransforms.Add(go.GetComponent<RectTransform>());
             labels.Add(go.GetComponent<TextMeshProUGUI>());
             go.SetActive(false);
         }
