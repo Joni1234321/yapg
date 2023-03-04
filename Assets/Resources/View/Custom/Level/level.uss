@@ -33,12 +33,6 @@
     flex-grow: 1;
     margin-left: 2px;
     margin-right: 2px;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    border-top-width: 2px;
-    border-bottom-width: 2px;
-    transition-duration: 0.2s;
-    transition-delay: 0.1s;
 }
 
 .group > Label {
@@ -49,7 +43,16 @@
     display: none;
 }
 
-.group:hover {
+.cool {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+    transition-duration: 0.2s;
+    transition-delay: 0.1s;
+}
+
+.cool:hover {
     border-left-color: rgba(145, 145, 145, 0.42);
     border-right-color: rgba(145, 145, 145, 0.42);
     border-top-color: rgba(145, 145, 145, 0.42);

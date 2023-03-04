@@ -9,19 +9,38 @@ namespace Bserg.Controller.UI.Planet
 {
     public class BuildUI : UIClass
     {
-        private readonly VisualElement inputList, outputList;
+        private readonly VisualElement inputList, outputList, upgrade, downgrade;
         private List<LevelGroupControl> inputs, outputs;
-        private CounterControl buildLevel;
 
-        private Recipe currentRecipe;
+        public Recipe CurrentRecipe;
 
-        public BuildUI(VisualElement ui) : base(ui)
-        {            
+        private readonly PlanetLevels planetLevels;
+        private int currentPlanetID = -1;
+
+        public BuildUI(VisualElement ui, PlanetLevels planetLevels) : base(ui)
+        {
+            this.planetLevels = planetLevels;
+            
             inputList = ui.Q<VisualElement>("input-list");
             outputList = ui.Q<VisualElement>("output-list");
-            buildLevel = ui.Q<CounterControl>();
+            upgrade = ui.Q<VisualElement>("upgrade");
+            downgrade = ui.Q<VisualElement>("downgrade");
             inputs = inputList.Query<LevelGroupControl>().ToList();
             outputs = outputList.Query<LevelGroupControl>().ToList();
+            
+            upgrade.RegisterCallback<ClickEvent>(_ => Upgrade());
+            downgrade.RegisterCallback<ClickEvent>(_ => Downgrade());
+        }
+
+        protected override void OnNewSelectedPlanet(int planetID)
+        {
+            currentPlanetID = planetID;
+            UpdateBuild();
+        }
+
+        protected override void OnDeselectPlanet()
+        {
+            UpdateBuild(0);
         }
 
         /// <summary>
@@ -30,7 +49,7 @@ namespace Bserg.Controller.UI.Planet
         /// <param name="recipe"></param>
         public void ChangeRecipe(Recipe recipe, int currentLevel)
         {
-            currentRecipe = recipe;
+            CurrentRecipe = recipe;
             
             inputList.Clear();
             outputList.Clear();
@@ -50,22 +69,40 @@ namespace Bserg.Controller.UI.Planet
                 outputList.Add(group);
                 outputs.Add(group);
             }
-            
             UpdateBuild(currentLevel);
         }
-        
+
+        public void UpdateBuild() => UpdateBuild(planetLevels.Get(CurrentRecipe.Output[0].Name)[currentPlanetID]);
                 
         /// <summary>
-        /// Updates the UI's level count for items in recipe
+        /// Updates the UI's level count for items in recipe, but doesnt change the recipe
         /// </summary>
         /// <param name="level"></param>
         public void UpdateBuild(int level)
         {
-            for (int i = 0; i < currentRecipe.Input.Length; i++)
-                inputs[i].Level = (currentRecipe.Input[i].Level + level).ToString();
+            for (int i = 0; i < CurrentRecipe.Input.Length; i++)
+                inputs[i].Level = (CurrentRecipe.Input[i].Level + level).ToString();
             
-            for (int i = 0; i < currentRecipe.Output.Length; i++)
-                outputs[i].Level = (currentRecipe.Output[i].Level + level).ToString();
+            for (int i = 0; i < CurrentRecipe.Output.Length; i++)
+                outputs[i].Level = (CurrentRecipe.Output[i].Level + level).ToString();
+        }
+
+        /// <summary>
+        /// Upgrades the level count on the current recipe
+        /// </summary>
+        void Upgrade()
+        {
+            planetLevels.Get(CurrentRecipe.Output[0].Name)[currentPlanetID]++;
+            UpdateBuild();
+        }
+
+        /// <summary>
+        /// Downgrades the current level count on the current recipe
+        /// </summary>
+        void Downgrade()
+        {
+            planetLevels.Get(CurrentRecipe.Output[0].Name)[currentPlanetID]--;
+            UpdateBuild();
         }
         
         

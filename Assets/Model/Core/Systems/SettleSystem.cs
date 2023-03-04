@@ -58,7 +58,7 @@ namespace Bserg.Model.Core.Systems
         /// <returns></returns>
         public bool ValidDeparture(int departureID, long populationRequest)
         {
-            return populationRequest + 1000 < Game.PlanetPopulationLevels[departureID];
+            return populationRequest + 1000 < Game.PlanetPopulationProgress[departureID];
         }
 
         /// <summary>

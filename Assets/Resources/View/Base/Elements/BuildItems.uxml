@@ -1,5 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/View/USS/Standard.uss?fileID=7433441132597879392&amp;guid=ef18f6564570ad943b1d60ed55f4aefb&amp;type=3#Standard" />
+    <Style src="project://database/Assets/Resources/View/Custom/Level/level.uss?fileID=7433441132597879392&amp;guid=425ee54811e886944b91116cf462c704&amp;type=3#level" />
     <ui:VisualElement class="body menu" style="flex-grow: 1; height: auto; width: 240px;">
         <ui:VisualElement name="VisualElement" class="top">
             <ui:Label tabindex="-1" text="Build Menu" display-tooltip-when-elided="true" />
@@ -28,6 +29,9 @@
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>
-        <Bserg.View.Custom.Counter.CounterControl text-string="Production Level" value-int="7" name="CounterControl" buttons-enabled="false" />
+        <ui:VisualElement name="VisualElement" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); flex-direction: column; justify-content: space-around; align-items: stretch; align-self: stretch;">
+            <ui:Label tabindex="-1" text="Upgrade" display-tooltip-when-elided="true" name="upgrade" class="cool" style="-unity-text-align: upper-center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 8px; padding-right: 8px; -unity-font-style: bold;" />
+            <ui:Label tabindex="-1" text="Downgrade" display-tooltip-when-elided="true" name="downgrade" class="cool" style="-unity-text-align: upper-center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-right: 8px; padding-left: 8px; -unity-font-style: bold;" />
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

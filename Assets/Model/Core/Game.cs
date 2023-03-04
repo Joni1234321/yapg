@@ -24,7 +24,7 @@ namespace Bserg.Model.Core
         
         // Population
         public PlanetLevels PlanetLevels;
-        public float[] PlanetPopulationLevels;
+        public float[] PlanetPopulationProgress;
 
         // Political
         public PoliticalBody[] PlanetPoliticalBodies;
@@ -38,7 +38,7 @@ namespace Bserg.Model.Core
         public SpaceflightSystem SpaceflightSystem;
         
 
-        public Game(string[] planetNames, float[] planetPopulationLevels, PoliticalBody[] planetPoliticalBodies, Planet[] planets)
+        public Game(string[] planetNames, float[] givenPopulationLevels, PoliticalBody[] planetPoliticalBodies, Planet[] planets)
         {
             N = planetNames.Length;
             PlanetNames = planetNames;
@@ -48,18 +48,21 @@ namespace Bserg.Model.Core
             
             // Population
             PlanetLevels = new PlanetLevels(N);
-            PlanetPopulationLevels = planetPopulationLevels;
+            PlanetPopulationProgress = new float[N];
 
             int[] planetHousingLevels = PlanetLevels.Get("Housing");
             int[] planetFoodLevels = PlanetLevels.Get("Food");
             int[] planetLandLevels = PlanetLevels.Get("Land");
+            int[] planetPopulationLevels = PlanetLevels.Get("Population");
 
             for (int i = 0; i < N; i++)
             {
-                planetHousingLevels[i] = (int)planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
+                planetPopulationLevels[i] = (int)givenPopulationLevels[i];
+                PlanetPopulationProgress[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
+                planetHousingLevels[i] = planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
                 planetLandLevels[i] = 50;
-                if (PlanetPopulationLevels[i] > 1)
-                    planetFoodLevels[i] = (int)PlanetPopulationLevels[i] + 1;
+                if (planetPopulationLevels[i] > 1)
+                    planetFoodLevels[i] = (int)planetPopulationLevels[i] + 1;
                 
             }
 

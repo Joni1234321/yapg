@@ -27,8 +27,11 @@ namespace Bserg.Controller.UI
         public BuildUI BuildUI;
         public PlanetUI PlanetUI;
         public LevelUI LevelUI;
+
+        private int selectedPlanetID;
         
-        public UIPlanetController(UIDocument uiDocument)
+        
+        public UIPlanetController(UIDocument uiDocument, PlanetLevels planetLevels)
         {
             this.uiDocument = uiDocument;
             
@@ -37,20 +40,40 @@ namespace Bserg.Controller.UI
             
             MigrationUI = new MigrationUI(GetUI("migration-view"));
             TransferUI = new TransferUI(GetUI("transfer-view"));
-            BuildUI = new BuildUI(GetUI("build-view"));
+            BuildUI = new BuildUI(GetUI("build-view"), planetLevels);
             LevelUI = new LevelUI(GetUI("level-view"));
             
             PlanetUI = new PlanetUI(GetUI("planet-view"), BuildUI);
         }
 
-        public VisualElement GetUI(string name) => uiDocument.rootVisualElement.Q<VisualElement>(name); 
+        public VisualElement GetUI(string name) => uiDocument.rootVisualElement.Q<VisualElement>(name);
 
+        /// <summary>
+        /// Called whenever the selected or visualised planet has changed
+        /// </summary>
+        /// <param name="planetID"></param>
+        public void SetPlanet(int planetID)
+        {
+            if (planetID == selectedPlanetID)
+                return;
 
+            selectedPlanetID = planetID;
+            
+            if (planetID < 0)
+            {
+                UIClass.HideAll();
+                UIClass.ClearSelectedPlanet();
+            }
+            else
+            {
+                UIClass.ShowAll();
+                UIClass.SetSelectedPlanet(planetID);
+            }
+        }
 
         public void SetPlanet(string name, long spacecraftPoolCount, PlanetLevels planetLevels, int planetID, float populationProgress)
         {
             PlanetUI.Update(name, spacecraftPoolCount, planetLevels, planetID, populationProgress);
-            BuildUI.UpdateBuild(planetLevels.Get("Housing")[planetID]);
         }
 
 

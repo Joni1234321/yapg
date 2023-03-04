@@ -5,6 +5,7 @@ using Bserg.Model.Political;
 using Bserg.Model.Space;
 using Bserg.View.Space;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
 {
@@ -27,9 +28,9 @@ namespace Bserg.Controller.Core
 
         public OrbitController OrbitController;
         public SpaceflightController SpaceflightController;
-        
-        
+
         public UIController UIController;
+        public UIDocument uiDocument;
 
         
         void Awake()
@@ -55,6 +56,11 @@ namespace Bserg.Controller.Core
 
         void Start()
         {
+            // UI
+            UIController = new UIController(this, uiDocument);
+            // Set earth as planet
+            UIController.UIPlanetController.SetPlanet(3);
+            
             // Overlays
             NormalOverlay = new NormalOverlay(UIController, OrbitController);
             TradeOverlay = new TradeOverlay(Game, this, UIController);
@@ -69,7 +75,6 @@ namespace Bserg.Controller.Core
             {
                 activeOverlay.OnTick(Game, MouseController.HoverPlanetID, MouseController.SelectedPlanetID);
                 UIController.UITimeController.UpdateGameTime(Game.Ticks);
-                UIController.OnTick();
             }
             
             float dt = TickController.GetDT();

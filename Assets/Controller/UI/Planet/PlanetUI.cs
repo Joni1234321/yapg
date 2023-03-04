@@ -37,8 +37,8 @@ namespace Bserg.Controller.UI.Planet
             
             buildUI.ChangeRecipe(Recipe.Get("Food"), 0);
             planetPopulation = buildUI.CreateLevelGroup("Population", false, true, "Pop");
-            planetHousing = buildUI.CreateLevelGroup("Food");
-            planetFood = buildUI.CreateLevelGroup("Housing");
+            planetFood = buildUI.CreateLevelGroup("Food");
+            planetHousing = buildUI.CreateLevelGroup("Housing");
             planetLand = buildUI.CreateLevelGroup("Land");
             
             groups.Add(planetPopulation);
@@ -59,7 +59,7 @@ namespace Bserg.Controller.UI.Planet
             
             // Population
             planetPopulation.Level = populationLevel.ToString();
-            planetPopulation.Value = populationProgress;
+            planetPopulation.Value = populationProgress * 100f;
 
             // BUILD
             planetFood.Level = foodLevel.ToString();
@@ -68,7 +68,7 @@ namespace Bserg.Controller.UI.Planet
 
             
             // Labels
-            populationLabel.text = PrettyPrint.DecimalThousandsFormat(Util.LevelToLong(populationLevel));
+            populationLabel.text = PrettyPrint.DecimalThousandsFormat(Util.LevelToLong(populationLevel + populationProgress));
             
             spacecraftPoolLabel.text = spacecraftPoolCount.ToString();
             nameLabel.text = name;

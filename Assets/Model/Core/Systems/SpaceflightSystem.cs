@@ -77,7 +77,7 @@ namespace Bserg.Model.Core.Systems
             switch (currentStep.Type)
             {
                 case Spacecraft.StepType.Unload:
-                    Game.PlanetPopulationLevels[planetID] += spacecraft.MaxPopulation;
+                    Game.PlanetPopulationProgress[planetID] += spacecraft.MaxPopulation;
                     spacecraft.Population = 0;
                     break;
                 case Spacecraft.StepType.Load:
@@ -87,7 +87,7 @@ namespace Bserg.Model.Core.Systems
                     //long populationLoaded = Mathl.Min(neededPopulation, validPopulationOnPlanet);
                                 
                     // Load
-                    Game.PlanetPopulationLevels[planetID] -= 0;
+                    Game.PlanetPopulationProgress[planetID] -= 0;
                     spacecraft.Population += 0;
                     break;
                 default:

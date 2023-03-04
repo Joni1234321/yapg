@@ -30,7 +30,7 @@ namespace Bserg.Controller.Overlays
 
         public override void Disable()
         {
-            selector.SetActive(false);
+            HideSelector();
         }
 
 
@@ -67,7 +67,7 @@ namespace Bserg.Controller.Overlays
         {
             if (selectedPlanetID == -1)
             {
-                selector.gameObject.SetActive(false);
+                HideSelector();
                 return;
             }
             
@@ -80,7 +80,7 @@ namespace Bserg.Controller.Overlays
         }
         public override void PlanetSelectedExit(Game game, int selectedPlanetID)
         {
-            selector.gameObject.SetActive(false);
+            HideSelector();
         }
 
 
@@ -102,26 +102,36 @@ namespace Bserg.Controller.Overlays
             selector.transform.localScale = Vector3.one * (Mathf.Log(planet.Size * 2 + Mathf.Exp(1)) * 2);
         }
 
+        /// <summary>
+        /// Called whenever no planet is selected
+        /// </summary>
+        private void HideSelector()
+        {
+            selector.gameObject.SetActive(false);
+            uiController.UIPlanetController.SetPlanet(-1);
+        }
+
         private void UpdatePlanetData(Game game, int planetID)
         {
-            
-            float totalMigration = 0;
-            for (int i = 0; i < game.N; i++) totalMigration += game.MigrationSystem.PlanetImmigration[i, planetID] - game.MigrationSystem.PlanetImmigration[planetID, i];
+            uiController.UIPlanetController.SetPlanet(planetID);
 
             uiController.UIPlanetController.SetPlanet(
                 game.PlanetNames[planetID],
                 game.SpaceflightSystem.SpacecraftPools[planetID].Count,
                 game.PlanetLevels,
                 planetID,
-                game.PlanetPopulationLevels[planetID] % 1f
+                game.PlanetPopulationProgress[planetID] % 1f
                 );
             
             
+            //float totalMigration = 0;
+            //for (int i = 0; i < game.N; i++) totalMigration += game.MigrationSystem.PlanetImmigration[i, planetID] - game.MigrationSystem.PlanetImmigration[planetID, i];
+
             // Levels (HACK)
-            List<ElementCount> elements = new List<ElementCount> 
-                { new("Fe", 100_000), new("Si", 30), new("MJ", 200_000)};
-            List<LevelCount> levels = new List<LevelCount> 
-                { new("Population", 2), new("Social", 3), new("Infrastructure", 4) };
+            //List<ElementCount> elements = new List<ElementCount> 
+            //    { new("Fe", 100_000), new("Si", 30), new("MJ", 200_000)};
+            //List<LevelCount> levels = new List<LevelCount> 
+            //    { new("Population", 2), new("Social", 3), new("Infrastructure", 4) };
                 
             // Update UIS
             //uiController.UIPlanetController.UpdateMaterials(elements);

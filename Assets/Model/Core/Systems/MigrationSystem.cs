@@ -31,7 +31,7 @@ namespace Bserg.Model.Core.Systems
                 // If population is above carrying capacity
                 // If there is space for 100 times the population then its gonna max out at 12
                 // Maybe it should be something like if the population can be sustained instead of carrying capacity
-                float populationAttraction = Game.Planets[planetID].CarryingCapacity - Game.PlanetPopulationLevels[planetID];
+                float populationAttraction = Game.Planets[planetID].CarryingCapacity - Game.PlanetPopulationProgress[planetID];
                 
                 // TODO: add burst hints
                 if (float.IsNaN(populationAttraction))
