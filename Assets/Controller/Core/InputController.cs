@@ -4,7 +4,7 @@ namespace Bserg.Controller.Core
 {
     public class InputController
     {
-        public void Update (Controller controller)
+        public void OnUpdate (Controller controller)
         {
             if (Input.GetKeyDown(KeyCode.Space))
                 controller.TickController.ToggleGameRunning();

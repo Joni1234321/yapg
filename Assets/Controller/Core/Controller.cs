@@ -71,17 +71,19 @@ namespace Bserg.Controller.Core
 
         private void Update()
         {
+
             if (TickController.Update(Game))
             {
                 activeOverlay.OnTick(Game, MouseController.HoverPlanetID, MouseController.SelectedPlanetID);
-                UIController.UITimeController.UpdateGameTime(Game.Ticks);
+                UIController.OnTick(Game);
             }
             
             float dt = TickController.GetDT();
 
-            InputController.Update(this);
-            MouseController.Update(Game, activeOverlay, dt);
-            
+            InputController.OnUpdate(this);
+            MouseController.OnUpdate(Game, activeOverlay, dt);
+            UIController.OnUpdate(Game, OrbitController, dt);
+
             // No need to update if paused
             if (!TickController.Running)
                 return;

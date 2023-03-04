@@ -21,6 +21,7 @@ namespace Bserg.Controller.UI
     {
         private UIDocument uiDocument;
         
+        
         // UI
         public MigrationUI MigrationUI;
         public TransferUI TransferUI;
@@ -28,12 +29,14 @@ namespace Bserg.Controller.UI
         public PlanetUI PlanetUI;
         public LevelUI LevelUI;
 
+        private PlanetLevels planetLevels;
         private int selectedPlanetID;
-        
+        private int previousPopulation;
         
         public UIPlanetController(UIDocument uiDocument, PlanetLevels planetLevels)
         {
             this.uiDocument = uiDocument;
+            this.planetLevels = planetLevels;
             
             LevelStyle.Load();
             ElementStyle.Load();
@@ -68,12 +71,21 @@ namespace Bserg.Controller.UI
             {
                 UIClass.ShowAll();
                 UIClass.SetSelectedPlanet(planetID);
+                previousPopulation = planetLevels.Get("Population")[planetID];
             }
         }
-
-        public void SetPlanet(string name, long spacecraftPoolCount, PlanetLevels planetLevels, int planetID, float populationProgress)
+        
+        
+        public void SetPlanet(string name, long spacecraftPoolCount, int planetID, float populationProgress)
         {
             PlanetUI.Update(name, spacecraftPoolCount, planetLevels, planetID, populationProgress);
+            
+            int pop = planetLevels.Get("Population")[planetID];
+            if (previousPopulation != pop)
+            {
+                previousPopulation = pop;
+                BuildUI.UpdateBuild();
+            }
         }
 
 

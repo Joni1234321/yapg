@@ -83,7 +83,7 @@ namespace Bserg.Controller.Core
         /// <summary>
         /// Place hover effect over planet, and if clicked then select
         /// </summary>
-        public void Update(Game game, Overlay activeOverlay, float dt)
+        public void OnUpdate(Game game, Overlay activeOverlay, float dt)
         {
             activeOverlay.DeltaTick = dt;
             // Deselect

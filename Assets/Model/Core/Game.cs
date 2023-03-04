@@ -62,7 +62,7 @@ namespace Bserg.Model.Core
                 planetHousingLevels[i] = planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
                 planetLandLevels[i] = 50;
                 if (planetPopulationLevels[i] > 1)
-                    planetFoodLevels[i] = (int)planetPopulationLevels[i] + 1;
+                    planetFoodLevels[i] = planetPopulationLevels[i] + 1;
                 
             }
 

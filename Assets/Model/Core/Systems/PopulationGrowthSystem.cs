@@ -51,19 +51,27 @@ namespace Bserg.Model.Core.Systems
                 // NOW CHECK AND CHANGE PROGRESS
                 while (Game.PlanetPopulationProgress[i] > 1)
                 {
-                    populationLevels[i]++;
                     Game.PlanetPopulationProgress[i] = (Game.PlanetPopulationProgress[i] - 1) * .5f;
+                    
+                    // Auto Upgrade all, including population
+                    int[][] allLevels = Game.PlanetLevels.GetAll();
+                    for (int levelI = 0; levelI < allLevels.Length; levelI++)
+                        allLevels[levelI][i]++;
                 }
 
                 while (Game.PlanetPopulationProgress[i] < 0)
                 {
-                    populationLevels[i]--;
                     Game.PlanetPopulationProgress[i] = (Game.PlanetPopulationProgress[i] + 1) * 2f;
+                    
+                    // Auto Upgrade all, including population
+                    int[][] allLevels = Game.PlanetLevels.GetAll();
+                    for (int levelI = 0; levelI < allLevels.Length; levelI++)
+                        allLevels[levelI][i]--;
                 }
                     
             }
-            
-            
         }
+        
+
     }
 }

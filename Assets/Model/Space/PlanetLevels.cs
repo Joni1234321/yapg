@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Bserg.Model.Space
 {
@@ -17,5 +18,11 @@ namespace Bserg.Model.Space
         private readonly Dictionary<string, int[]> levels = new();
 
         public int[] Get(string name) => levels[name];
+
+        /// <summary>
+        /// Returns all stats
+        /// </summary>
+        /// <returns></returns>
+        public int[][] GetAll() => levels.Values.ToArray();
     }
 }

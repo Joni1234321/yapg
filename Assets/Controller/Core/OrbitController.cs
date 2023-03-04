@@ -32,10 +32,22 @@ namespace Bserg.Controller.Core
             }
         }
         
+        /// <summary>
+        /// Returns the position of the planet at a given tick and delta
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="planetID"></param>
+        /// <param name="ticks"></param>
+        /// <returns></returns>
         public Vector3 GetPlanetPositionAtTickF (Game game, int planetID, float ticks)
         {
             return SystemGenerator.GetPlanetPosition((float)game.Planets[planetID].OrbitRadius.To(Length.UnitType.AstronomicalUnits), GetPlanetAngleAtTicksF(game, planetID, ticks));
         }
+        
+        
+        
+        
+        
 
         /// <summary>
         /// Return angles in radians

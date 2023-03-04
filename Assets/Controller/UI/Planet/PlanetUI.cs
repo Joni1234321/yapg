@@ -35,7 +35,6 @@ namespace Bserg.Controller.UI.Planet
             groups = ui.Q<VisualElement>("groups");
             groups.Clear();
             
-            buildUI.ChangeRecipe(Recipe.Get("Food"), 0);
             planetPopulation = buildUI.CreateLevelGroup("Population", false, true, "Pop");
             planetFood = buildUI.CreateLevelGroup("Food");
             planetHousing = buildUI.CreateLevelGroup("Housing");

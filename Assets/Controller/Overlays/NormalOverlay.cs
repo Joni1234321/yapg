@@ -118,7 +118,6 @@ namespace Bserg.Controller.Overlays
             uiController.UIPlanetController.SetPlanet(
                 game.PlanetNames[planetID],
                 game.SpaceflightSystem.SpacecraftPools[planetID].Count,
-                game.PlanetLevels,
                 planetID,
                 game.PlanetPopulationProgress[planetID] % 1f
                 );

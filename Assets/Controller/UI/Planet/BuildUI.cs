@@ -30,6 +30,7 @@ namespace Bserg.Controller.UI.Planet
             
             upgrade.RegisterCallback<ClickEvent>(_ => Upgrade());
             downgrade.RegisterCallback<ClickEvent>(_ => Downgrade());
+            ChangeRecipe(Recipe.Get("Food"), false);
         }
 
         protected override void OnNewSelectedPlanet(int planetID)
@@ -46,8 +47,7 @@ namespace Bserg.Controller.UI.Planet
         /// <summary>
         /// Changes the look of the buildmenu
         /// </summary>
-        /// <param name="recipe"></param>
-        public void ChangeRecipe(Recipe recipe, int currentLevel)
+        public void ChangeRecipe(Recipe recipe, bool update = true)
         {
             CurrentRecipe = recipe;
             
@@ -69,7 +69,8 @@ namespace Bserg.Controller.UI.Planet
                 outputList.Add(group);
                 outputs.Add(group);
             }
-            UpdateBuild(currentLevel);
+            
+            if (update) UpdateBuild();
         }
 
         public void UpdateBuild() => UpdateBuild(planetLevels.Get(CurrentRecipe.Output[0].Name)[currentPlanetID]);
@@ -123,7 +124,7 @@ namespace Bserg.Controller.UI.Planet
             if (slang != null)
                 group.Text = slang;
             
-            group.RegisterCallback<ClickEvent>(_ => ChangeRecipe(Recipe.Get(style.Name), 0));
+            group.RegisterCallback<ClickEvent>(_ => ChangeRecipe(Recipe.Get(style.Name)));
             return group;
         }
 
