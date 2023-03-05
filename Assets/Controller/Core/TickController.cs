@@ -13,7 +13,7 @@ namespace Bserg.Controller.Core
         }
         
         private static readonly float[] TICK_TIME = { 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
-        private float timeSinceLastTick;
+        public float DeltaTick { get; private set; }
         public int GameSpeed { private set; get; }
         public bool Running { private set; get; }
         
@@ -27,10 +27,10 @@ namespace Bserg.Controller.Core
             if (!Running)
                 return false;
             
-            timeSinceLastTick += UnityEngine.Time.deltaTime;
-            if (timeSinceLastTick > TICK_TIME[GameSpeed])
+            DeltaTick += UnityEngine.Time.deltaTime / TICK_TIME[GameSpeed];
+            if (DeltaTick >= 1)
             {
-                timeSinceLastTick = 0;
+                DeltaTick = 0;
                 game.DoTick();
                 return true;
             }
@@ -38,15 +38,6 @@ namespace Bserg.Controller.Core
             return false;
         }
 
-        /// <summary>
-        /// Returns how long between the two ticks it as a ratio
-        /// </summary>
-        /// <returns></returns>
-        public float GetDT()
-        {
-            return timeSinceLastTick / TICK_TIME[GameSpeed];
-        }
-        
         public void ToggleGameRunning()
         {
             Running = !Running;

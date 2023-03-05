@@ -41,12 +41,12 @@ namespace Bserg.Controller.Overlays
 
         public override void UpdateSelected(Game game, int selectedPlanetID)
         {
-            ShowSelectorAt(game, selectedPlanetID, DeltaTick);
+            ShowSelectorAt(game, selectedPlanetID);
         }
 
         public override void UpdateHover(Game game, int hoverPlanetID)
         {
-            ShowSelectorAt(game, hoverPlanetID, DeltaTick);
+            ShowSelectorAt(game, hoverPlanetID);
         }
 
         public override void UpdateHoverAndSelected(Game game, int hoverPlanetID, int selectedPlanetID)
@@ -57,7 +57,7 @@ namespace Bserg.Controller.Overlays
 
         public override void PlanetHoverEnter(Game game, int hoverPlanetID, int selectedPlanetID)
         {
-            ShowSelectorAt(game, hoverPlanetID, 0);
+            ShowSelectorAt(game, hoverPlanetID);
         }
         
         public override void PlanetHoverExit(Game game, int hoverPlanetID, int selectedPlanetID)
@@ -68,12 +68,12 @@ namespace Bserg.Controller.Overlays
                 return;
             }
             
-            ShowSelectorAt(game, selectedPlanetID, 0);
+            ShowSelectorAt(game, selectedPlanetID);
         }
         
         public override void PlanetSelectedEnter(Game game, int selectedPlanetID)
         {
-            ShowSelectorAt(game, selectedPlanetID, 0);
+            ShowSelectorAt(game, selectedPlanetID);
         }
         public override void PlanetSelectedExit(Game game, int selectedPlanetID)
         {
@@ -87,15 +87,13 @@ namespace Bserg.Controller.Overlays
         /// Moves the selector to outerring at the selected planet
         /// </summary>
         /// <param name="planetID"></param>
-        private void ShowSelectorAt(Game game, int planetID, float dt)
+        private void ShowSelectorAt(Game game, int planetID)
         {
             selector.gameObject.SetActive(true);
             UpdatePlanetData(game, planetID);
-
-            
             
             Planet planet = game.GetPlanet(planetID);
-            selector.transform.position = orbitController.GetPlanetPositionAtTickF(game, planetID, game.Ticks + dt);;
+            selector.transform.position = orbitController.GetPlanetPositionAtTickF(game, planetID, game.Ticks + DeltaTick);;
             selector.transform.localScale = Vector3.one * (Mathf.Log(planet.Size * 2 + Mathf.Exp(1)) * 2);
         }
 

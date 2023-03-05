@@ -69,6 +69,7 @@ namespace Bserg.Controller.Core
         }
 
 
+        private bool firstTickAfterPause = true;
         private void Update()
         {
 
@@ -78,15 +79,23 @@ namespace Bserg.Controller.Core
                 UIController.OnTick(Game);
             }
             
-            float dt = TickController.GetDT();
+            float dt = TickController.DeltaTick;
 
             InputController.OnUpdate(this);
             MouseController.OnUpdate(Game, activeOverlay, dt);
             UIController.OnUpdate(Game, OrbitController, dt);
 
-            // No need to update if paused
+
+            // No need to update if paused, unless one time
             if (!TickController.Running)
-                return;
+            {
+                if (!firstTickAfterPause)
+                    return;
+                
+                firstTickAfterPause = false;
+            }
+            else
+                firstTickAfterPause = true;
             
             OrbitController.Update(Game, dt);
             SpaceflightController.Update(Game, dt);
