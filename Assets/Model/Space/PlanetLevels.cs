@@ -27,6 +27,8 @@ namespace Bserg.Model.Space
         /// </summary>
         /// <returns></returns>
         public int[][] GetAll() => levels.Values.ToArray();
+
+        public string[] GetAllNames() => levels.Keys.ToArray();
     }
 
     public class PlanetLevelsGeneric<T>

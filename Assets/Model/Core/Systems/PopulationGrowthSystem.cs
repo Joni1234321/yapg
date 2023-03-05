@@ -54,9 +54,10 @@ namespace Bserg.Model.Core.Systems
                     Game.PlanetPopulationProgress[i] = (Game.PlanetPopulationProgress[i] - 1) * .5f;
                     
                     // Auto Upgrade all, including population
-                    int[][] allLevels = Game.PlanetLevels.GetAll();
-                    for (int levelI = 0; levelI < allLevels.Length; levelI++)
-                        allLevels[levelI][i]++;
+                    Game.PlanetLevels.Get("Population")[i]++;
+                    string[] allLevels = Game.PlanetLevels.GetAllNames();
+                    for (int namesI = 0; namesI < allLevels.Length; namesI++)
+                        Game.BuildSystem.Upgrade(Recipe.Get(allLevels[namesI]), 1, i);
                 }
 
                 while (Game.PlanetPopulationProgress[i] < 0)

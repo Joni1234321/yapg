@@ -1,20 +1,9 @@
-using System.Collections.Generic;
 using Bserg.Controller.Material;
 using Bserg.Controller.Tools;
 using Bserg.Controller.UI.Planet;
 using Bserg.Model.Core;
-using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
-using Bserg.Model.Units;
-using Bserg.View.Custom.Counter;
-using Bserg.View.Custom.Field;
-using Bserg.View.Custom.Level;
-using Bserg.View.Custom.Transfer;
-using Bserg.View.Space;
-using Model.Utilities;
-using UnityEngine;
 using UnityEngine.UIElements;
-using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Controller.UI
 {

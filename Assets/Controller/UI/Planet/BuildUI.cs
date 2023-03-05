@@ -2,7 +2,6 @@
 using Bserg.Controller.Tools;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
-using Bserg.View.Custom.Counter;
 using Bserg.View.Custom.Level;
 using Bserg.View.Custom.Progress;
 using UnityEngine;

@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Bserg.Controller.Core;
+﻿using Bserg.Controller.Core;
 using Bserg.Model.Core;
 using UnityEngine;
 using UnityEngine.UIElements;

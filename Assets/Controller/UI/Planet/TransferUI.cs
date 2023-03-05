@@ -1,6 +1,5 @@
 ﻿using Bserg.Model.Core.Systems;
 using Bserg.Model.Units;
-using Bserg.View.Custom.Field;
 using Bserg.View.Custom.Transfer;
 using UnityEngine.UIElements;
 

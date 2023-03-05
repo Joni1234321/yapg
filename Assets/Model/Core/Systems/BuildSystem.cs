@@ -143,6 +143,9 @@ namespace Bserg.Model.Core.Systems
         public bool Upgrade(Recipe recipe, int increaseInLevels, int planetID)
         {
             int productionLevel = Game.PlanetLevels.Get(recipe.Output[0].Name)[planetID];
+            if (recipe.Input.Length == 0)
+                return false;
+            
             for (int i = 0; i < recipe.Input.Length; i++)
             {
                 if (!CanIncreaseConsumption(recipe.Input[i].Name, planetID, productionLevel + recipe.Input[i].OffsetLevel, productionLevel + recipe.Input[i].OffsetLevel + increaseInLevels))
