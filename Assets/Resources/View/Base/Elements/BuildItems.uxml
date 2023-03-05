@@ -27,6 +27,7 @@
                             <Bserg.View.Custom.Level.LevelGroupControl background-color="#734058FF" text="Pop" level="7" level-size="Big" reverse="false" />
                         </ui:VisualElement>
                     </ui:VisualElement>
+                    <Bserg.View.Custom.Progress.ProgressControl fill="#314E00FF" value="4.9" name="output-progress" style="height: 10px; padding-left: 4px; padding-right: 4px; visibility: visible; display: none;" />
                     <ui:VisualElement name="output" style="background-color: rgba(0, 0, 0, 0); align-items: stretch; align-self: auto; flex-direction: column;">
                         <ui:VisualElement name="output-list" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-start;">
                             <Bserg.View.Custom.Level.LevelGroupControl background-color="#314E00FF" text="Food" level="10" level-size="Big" progress-enabled="false" reverse="false" style="align-items: flex-start;" />

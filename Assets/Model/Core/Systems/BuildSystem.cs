@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Xml;
-using Bserg.Model.Space;
+﻿using Bserg.Model.Space;
 using UnityEngine;
 
 
@@ -11,6 +8,7 @@ namespace Bserg.Model.Core.Systems
     {
 
         private readonly PlanetLevelsGeneric<uint> consumptionMasks;
+        
         private const int BIT_SIZE = sizeof(uint) * 8;
         private const uint MAX_USED = 1U << (BIT_SIZE - 1);
         public BuildSystem(Game game) : base(game)
@@ -170,6 +168,17 @@ namespace Bserg.Model.Core.Systems
             
             return true;
         }
-        
+
+
+        /// <summary>
+        /// Called whenever a production is increased, then reduce the consumption mask
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="planetID"></param>
+        /// <param name="increase"></param>
+        public void OnProductionIncreased(string name, int planetID, int increase)
+        {
+            consumptionMasks.Get(name)[planetID] >>= increase;
+        }
     }
 }

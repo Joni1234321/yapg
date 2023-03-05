@@ -24,6 +24,7 @@ namespace Bserg.Model.Core
         
         // Population
         public PlanetLevels PlanetLevels;
+        public PlanetLevelsGeneric<float> LevelProgress;
         public float[] PlanetPopulationProgress;
 
         // Political
@@ -50,10 +51,9 @@ namespace Bserg.Model.Core
             
             // Population
             PlanetLevels = new PlanetLevels(N);
-            PlanetPopulationProgress = new float[N];
+            LevelProgress = new PlanetLevelsGeneric<float>(N);
+            PlanetPopulationProgress = LevelProgress.Get("Population");
 
-            int[] planetHousingLevels = PlanetLevels.Get("Housing");
-            int[] planetFoodLevels = PlanetLevels.Get("Food");
             int[] planetLandLevels = PlanetLevels.Get("Land");
             int[] planetPopulationLevels = PlanetLevels.Get("Population");
 
@@ -78,12 +78,14 @@ namespace Bserg.Model.Core
             {
                 planetLandLevels[i] = 50;
                 planetPopulationLevels[i] = (int)givenPopulationLevels[i];
-                PlanetPopulationProgress[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
+                LevelProgress.Get("Population")[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
 
                 BuildSystem.SetRecipeLevel(Recipe.Get("Housing"), i, planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0));
                 if (planetPopulationLevels[i] > 1)
                     BuildSystem.SetRecipeLevel(Recipe.Get("Food"), i, planetPopulationLevels[i] + 1);
             }
+            
+            
             
             // Dude
             OnTickMonth += TickMonth;

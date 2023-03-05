@@ -9,7 +9,7 @@
     <ui:Template name="trade-config" src="project://database/Assets/Resources/View/Base/Elements/trade-config.uxml?fileID=9197481963319205126&amp;guid=eeb2572d1c6fb104f8e35b1f7bcef4ff&amp;type=3#trade-config" />
     <ui:Template name="trade-menu" src="project://database/Assets/Resources/View/Base/Elements/trade-menu.uxml?fileID=9197481963319205126&amp;guid=b1b97d26f5494b94d9eb156342623934&amp;type=3#trade-menu" />
     <Style src="project://database/Assets/Resources/View/USS/View.uss?fileID=7433441132597879392&amp;guid=f9b843377bcdf0a4583b2a0edd411d33&amp;type=3#View" />
-    <ui:VisualElement name="screen" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+    <ui:VisualElement name="screen" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); transition-duration: 1s; transition-property: display; transition-delay: 1s;">
         <ui:VisualElement name="bot-left" class="split" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row; position: absolute; left: 8px; right: auto; bottom: 8px; align-items: stretch;">
             <ui:Instance template="PlanetView" name="planet-view" />
             <ui:Instance template="PoliticalView" name="political-view" style="align-self: center; justify-content: flex-start; align-items: center; width: auto; position: absolute; top: -40px;" />

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Bserg.Controller.Material;
 using Bserg.Controller.Tools;
 using Bserg.Controller.UI.Planet;
+using Bserg.Model.Core;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
@@ -33,17 +34,17 @@ namespace Bserg.Controller.UI
         private int selectedPlanetID;
         private int previousPopulation;
         
-        public UIPlanetController(UIDocument uiDocument, PlanetLevels planetLevels, BuildSystem buildSystem)
+        public UIPlanetController(UIDocument uiDocument, Game game)
         {
             this.uiDocument = uiDocument;
-            this.planetLevels = planetLevels;
+            planetLevels = game.PlanetLevels;
             
             LevelStyle.Load();
             ElementStyle.Load();
             
             MigrationUI = new MigrationUI(GetUI("migration-view"));
             TransferUI = new TransferUI(GetUI("transfer-view"));
-            BuildUI = new BuildUI(GetUI("build-view"), planetLevels, buildSystem);
+            BuildUI = new BuildUI(GetUI("build-view"), game.PlanetLevels, game.LevelProgress, game.BuildSystem);
             LevelUI = new LevelUI(GetUI("level-view"));
             
             PlanetUI = new PlanetUI(GetUI("planet-view"), BuildUI);
@@ -57,9 +58,6 @@ namespace Bserg.Controller.UI
         /// <param name="planetID"></param>
         public void SetPlanet(int planetID)
         {
-            if (planetID == selectedPlanetID)
-                return;
-
             selectedPlanetID = planetID;
             
             if (planetID < 0)
@@ -79,7 +77,7 @@ namespace Bserg.Controller.UI
         public void SetPlanet(string name, long spacecraftPoolCount, int planetID, float populationProgress)
         {
             PlanetUI.Update(name, spacecraftPoolCount, planetLevels, planetID, populationProgress);
-            
+            BuildUI.OnTick();
             int pop = planetLevels.Get("Population")[planetID];
             if (previousPopulation != pop)
             {

@@ -89,8 +89,8 @@ namespace Bserg.Controller.Core
             // Deselect
             if (WorldMouseButtonDown(1))
             {
+                activeOverlay.PlanetSelectedExit(game, SelectedPlanetID);
                 SelectedPlanetID = -1;
-                activeOverlay.UpdateFocusNone();
             }
 
             CheckIfHoverOrSelectChange(game, activeOverlay);

@@ -4,6 +4,7 @@ using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Counter;
 using Bserg.View.Custom.Level;
+using Bserg.View.Custom.Progress;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,32 +12,41 @@ namespace Bserg.Controller.UI.Planet
 {
     public class BuildUI : UIClass
     {
-        private readonly VisualElement inputList, outputList, inputRemainingList, upgrade, downgrade;
+        private readonly VisualElement inputList, outputList, inputRemainingList, upgrade, downgrade, inputSection;
         private List<LevelGroupControl> inputs, outputs;
         private List<LevelControl> inputRemaining;
+        private ProgressControl outputProgress;
 
-        public Recipe CurrentRecipe;
+        public Recipe CurrentRecipe { get; private set; }
+        private bool showProgressBar = false;
 
         private readonly PlanetLevels planetLevels;
+        private readonly PlanetLevelsGeneric<float> planetProgress;
         private readonly BuildSystem buildSystem;
         
         private int currentPlanetID = -1;
 
-        public BuildUI(VisualElement ui, PlanetLevels planetLevels, BuildSystem buildSystem) : base(ui)
+        public BuildUI(VisualElement ui, PlanetLevels planetLevels, PlanetLevelsGeneric<float> planetProgress, BuildSystem buildSystem) : base(ui)
         {
             this.planetLevels = planetLevels;
+            this.planetProgress = planetProgress;
             this.buildSystem = buildSystem;
             
             inputList = ui.Q<VisualElement>("input-list");
+            inputSection = ui.Q<VisualElement>("input");
             outputList = ui.Q<VisualElement>("output-list");
             inputRemainingList = ui.Q<VisualElement>("input-remaining");
             
             
             upgrade = ui.Q<VisualElement>("upgrade");
             downgrade = ui.Q<VisualElement>("downgrade");
+            
+            
             inputs = inputList.Query<LevelGroupControl>().ToList();
             outputs = outputList.Query<LevelGroupControl>().ToList();
             inputRemaining = inputRemainingList.Query<LevelControl>().ToList();
+
+            outputProgress = ui.Q<ProgressControl>("output-progress");
             
             upgrade.RegisterCallback<ClickEvent>(_ => Upgrade());
             downgrade.RegisterCallback<ClickEvent>(_ => Downgrade());
@@ -60,6 +70,8 @@ namespace Bserg.Controller.UI.Planet
         public void ChangeRecipe(Recipe recipe, bool update = true)
         {
             CurrentRecipe = recipe;
+            bool isFixed = recipe.Input.Length == 0;
+            showProgressBar = isFixed && recipe.Output[0].Name == "Population";
             
             inputList.Clear();
             outputList.Clear();
@@ -86,7 +98,16 @@ namespace Bserg.Controller.UI.Planet
                 LevelGroupControl group = CreateLevelGroup(recipe.Output[i].Name);
                 outputList.Add(group);
                 outputs.Add(group);
+                outputProgress.Fill = group.BackgroundColor;
             }
+
+            
+            outputProgress.style.display = showProgressBar ? DisplayStyle.Flex : DisplayStyle.None;
+            
+            upgrade.style.display = isFixed ? DisplayStyle.None : DisplayStyle.Flex;
+            downgrade.style.display = isFixed ? DisplayStyle.None : DisplayStyle.Flex;
+            inputSection.style.display = isFixed ? DisplayStyle.None : DisplayStyle.Flex;
+            inputRemainingList.style.display = isFixed ? DisplayStyle.None : DisplayStyle.Flex;
             
             if (update) UpdateBuild();
         }
@@ -108,8 +129,16 @@ namespace Bserg.Controller.UI.Planet
             
             for (int i = 0; i < CurrentRecipe.Output.Length; i++)
                 outputs[i].Level = (CurrentRecipe.Output[i].OffsetLevel + level).ToString();
+
         }
 
+
+        public void OnTick()
+        {
+            if (showProgressBar)
+                outputProgress.Value = planetProgress.Get(CurrentRecipe.Output[0].Name)[currentPlanetID] * 100;
+        }
+        
         /// <summary>
         /// Upgrades the level count on the current recipe
         /// </summary>

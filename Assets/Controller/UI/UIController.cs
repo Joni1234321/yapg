@@ -16,7 +16,7 @@ namespace Bserg.Controller.UI
         public UIController(Core.Controller controller, UIDocument uiDocument)
         {
             // Sub controllers
-            UIPlanetController = new UIPlanetController(uiDocument, controller.Game.PlanetLevels, controller.Game.BuildSystem);
+            UIPlanetController = new UIPlanetController(uiDocument, controller.Game);
             UITimeController = new UITimeController(controller.TickController, uiDocument.rootVisualElement.Q<VisualElement>("time-view"));
             WorldLabelUI = new WorldLabelUI(Resources.Load<GameObject>("View/Custom/Labels/PlanetLabel"), GameObject.Find("PlanetLabels").transform);
 

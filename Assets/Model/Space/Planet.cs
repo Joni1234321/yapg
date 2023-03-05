@@ -26,17 +26,4 @@ namespace Bserg.Model.Space
             CarryingCapacity = (long)(Size * Size * 50 * 1_000_000_000);
         }
     }
-
-
-    public class BuildOrder
-    {
-        public readonly string Name; 
-        public int Progress;
-
-        public BuildOrder(string name)
-        {
-            Name = name;
-            Progress = 0;
-        }
-    }
 }
