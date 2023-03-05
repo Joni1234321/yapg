@@ -33,7 +33,7 @@ namespace Bserg.Controller.UI
         private int selectedPlanetID;
         private int previousPopulation;
         
-        public UIPlanetController(UIDocument uiDocument, PlanetLevels planetLevels)
+        public UIPlanetController(UIDocument uiDocument, PlanetLevels planetLevels, BuildSystem buildSystem)
         {
             this.uiDocument = uiDocument;
             this.planetLevels = planetLevels;
@@ -43,7 +43,7 @@ namespace Bserg.Controller.UI
             
             MigrationUI = new MigrationUI(GetUI("migration-view"));
             TransferUI = new TransferUI(GetUI("transfer-view"));
-            BuildUI = new BuildUI(GetUI("build-view"), planetLevels);
+            BuildUI = new BuildUI(GetUI("build-view"), planetLevels, buildSystem);
             LevelUI = new LevelUI(GetUI("level-view"));
             
             PlanetUI = new PlanetUI(GetUI("planet-view"), BuildUI);

@@ -6,12 +6,18 @@
             <ui:Label tabindex="-1" text="Build Menu" display-tooltip-when-elided="true" />
         </ui:VisualElement>
         <ui:ScrollView name="build-list" style="flex-grow: 1;">
-            <ui:VisualElement name="VisualElement" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
-                <ui:VisualElement style="flex-grow: 0; margin-right: 2px; opacity: 0.5; visibility: visible; display: flex; border-right-width: 2px; border-left-color: rgb(26, 26, 26); border-right-color: rgb(26, 26, 26); border-top-color: rgb(26, 26, 26); border-bottom-color: rgb(26, 26, 26);">
-                    <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#314E00FF" level="X" style="height: 39px; justify-content: center; align-items: center; width: 39px;" />
-                    <ui:Label tabindex="-1" display-tooltip-when-elided="true" style="-unity-font-style: italic; display: flex;" />
-                    <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#997A5CFF" level="X" style="height: 39px; justify-content: center; align-items: center; width: 39px;" />
-                    <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#734058FF" level="X" style="height: 39px; justify-content: center; align-items: center; width: 39px;" />
+            <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: row;">
+                <ui:VisualElement name="remaining" style="flex-grow: 0; margin-right: 2px; opacity: 0.5; visibility: visible; display: flex; border-right-width: 2px; border-left-color: rgb(26, 26, 26); border-right-color: rgb(26, 26, 26); border-top-color: rgb(26, 26, 26); border-bottom-color: rgb(26, 26, 26); flex-direction: column-reverse; justify-content: flex-end;">
+                    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+                        <ui:Label tabindex="-1" display-tooltip-when-elided="true" style="-unity-font-style: italic; display: flex;" />
+                        <ui:VisualElement name="input-remaining" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0); align-items: stretch;">
+                            <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#997A5CFF" level="X" class="fake-group" />
+                            <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#734058FF" level="X" class="fake-group" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="output-remaining" style="flex-grow: 0; background-color: rgba(0, 0, 0, 0);">
+                        <Bserg.View.Custom.Level.LevelControl level-size="Medium" background-color="#314E00FF" level="X" name="LevelControl" class="fake-group" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="levels" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); flex-direction: column-reverse; align-items: stretch; justify-content: flex-end;">
                     <ui:VisualElement name="input" style="background-color: rgba(0, 0, 0, 0); flex-direction: column;">

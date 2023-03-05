@@ -28,13 +28,13 @@ namespace Bserg.Model.Space
 
 
             // Adjust so that output 0 is level 0 at level 0
-            int offset = Output[0].Level;
+            int offset = Output[0].OffsetLevel;
 
             for (int i = 0; i < Input.Length; i++)
-                Input[i].Level -= offset;
+                Input[i].OffsetLevel -= offset;
 
             for (int i = 0; i < Output.Length; i++)
-                Output[i].Level -= offset;
+                Output[i].OffsetLevel -= offset;
         }
 
         private static readonly Dictionary<string, Recipe> Recipes = new();
@@ -93,12 +93,12 @@ namespace Bserg.Model.Space
     public struct RecipeItem
     {
         public readonly string Name;
-        public int Level;
+        public int OffsetLevel;
 
-        public RecipeItem(string name, int level)
+        public RecipeItem(string name, int offsetLevel)
         {
             Name = name;
-            Level = level;
+            OffsetLevel = offsetLevel;
         }
     }
 }

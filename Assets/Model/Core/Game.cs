@@ -33,6 +33,8 @@ namespace Bserg.Model.Core
         public OrbitalTransferSystem OrbitalTransferSystem;
         
         public PopulationGrowthSystem PopulationGrowthSystem;
+        public BuildSystem BuildSystem;
+        
         public MigrationSystem MigrationSystem;
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
@@ -55,16 +57,7 @@ namespace Bserg.Model.Core
             int[] planetLandLevels = PlanetLevels.Get("Land");
             int[] planetPopulationLevels = PlanetLevels.Get("Population");
 
-            for (int i = 0; i < N; i++)
-            {
-                planetPopulationLevels[i] = (int)givenPopulationLevels[i];
-                PlanetPopulationProgress[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
-                planetHousingLevels[i] = planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0);
-                planetLandLevels[i] = 50;
-                if (planetPopulationLevels[i] > 1)
-                    planetFoodLevels[i] = planetPopulationLevels[i] + 1;
-                
-            }
+
 
             // Political
             PlanetPoliticalBodies = planetPoliticalBodies;
@@ -74,9 +67,23 @@ namespace Bserg.Model.Core
             OrbitalTransferSystem = new OrbitalTransferSystem(this);
             
             PopulationGrowthSystem = new PopulationGrowthSystem(this);
+            BuildSystem = new BuildSystem(this);
+            
             MigrationSystem = new MigrationSystem(this);
             SettleSystem = new SettleSystem(this);
             SpaceflightSystem = new SpaceflightSystem(this);
+            
+            
+            for (int i = 0; i < N; i++)
+            {
+                planetLandLevels[i] = 50;
+                planetPopulationLevels[i] = (int)givenPopulationLevels[i];
+                PlanetPopulationProgress[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
+
+                BuildSystem.SetRecipeLevel(Recipe.Get("Housing"), i, planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0));
+                if (planetPopulationLevels[i] > 1)
+                    BuildSystem.SetRecipeLevel(Recipe.Get("Food"), i, planetPopulationLevels[i] + 1);
+            }
             
             // Dude
             OnTickMonth += TickMonth;
