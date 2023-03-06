@@ -16,60 +16,70 @@ MonoBehaviour:
   - Name: Sun
     Population: 0
     material: {fileID: 2100000, guid: 19e4d56a077aafc4b87a8e46afdb242e, type: 2}
-    Size: 2
+    Color: {r: 0.9921569, g: 0.9490197, b: 0.027450982, a: 1}
+    Size: 109
     WeightEarthMass: 333000
     RadiusAU: 0
   - Name: Mercury
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.1
+    Color: {r: 0.6792453, g: 0.6581417, b: 0.63759345, a: 1}
+    Size: 0.376
     WeightEarthMass: 0.1
     RadiusAU: 0.39
   - Name: Venus
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.15
+    Color: {r: 0.83137256, g: 0.7897646, b: 0.24313724, a: 1}
+    Size: 0.9
     WeightEarthMass: 0.1
     RadiusAU: 0.72
   - Name: Earth
     Population: 8000000000
     material: {fileID: 2100000, guid: ad5c3a0805ba48348aa9ba0e1a429074, type: 2}
-    Size: 0.2
+    Color: {r: 0.17727776, g: 0.48900002, b: 0.14300944, a: 1}
+    Size: 1
     WeightEarthMass: 1
     RadiusAU: 1
   - Name: Mars
     Population: 100
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.3
+    Color: {r: 0.83137256, g: 0.33934838, b: 0.24313724, a: 1}
+    Size: 0.533
     WeightEarthMass: 0.1
     RadiusAU: 1.52
   - Name: Jupiter
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.7
+    Color: {r: 0.83137256, g: 0.53333336, b: 0.24313726, a: 1}
+    Size: 11.2
     WeightEarthMass: 0.1
     RadiusAU: 5.2
   - Name: Saturn
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.3
+    Color: {r: 0.24313724, g: 0.5322164, b: 0.83137256, a: 1}
+    Size: 9.46
     WeightEarthMass: 0.1
     RadiusAU: 9.54
   - Name: Uranus
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.3
+    Color: {r: 0.29031914, g: 0.24313724, b: 0.83137256, a: 1}
+    Size: 4.06
     WeightEarthMass: 0.1
     RadiusAU: 19.2
   - Name: Neptune
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.3
+    Color: {r: 0.35298705, g: 0.24313724, b: 0.83137256, a: 1}
+    Size: 3.88
     WeightEarthMass: 0.1
     RadiusAU: 30.06
   - Name: Pluto
     Population: 0
     material: {fileID: 2100000, guid: 03bacf357d9733c48a1f8a332617f376, type: 2}
-    Size: 0.3
+    Color: {r: 0.83137256, g: 0.24313724, b: 0.6205491, a: 1}
+    Size: 0.1666667
     WeightEarthMass: 0.1
     RadiusAU: 50

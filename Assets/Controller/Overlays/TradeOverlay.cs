@@ -42,7 +42,7 @@ namespace Bserg.Controller.Overlays
                 
                 Planet planet = game.Planets[i];
                 
-                selectors[i].transform.position = planet.Position;
+                selectors[i].transform.position = planet.StartingPosition;
                 selectors[i].transform.localScale = Vector3.one * Mathf.Log(planet.Size * 2 + Mathf.Exp(1));
             }
 

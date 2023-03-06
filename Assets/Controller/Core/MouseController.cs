@@ -122,11 +122,13 @@ namespace Bserg.Controller.Core
         /// <returns>Planet hovering over, -1 if none found</returns>
         private int GetHoverPlanetID(Game game)
         {
-            int layerMask = (1 << Controller.CLICKABLE_LAYER) ;
+            int layerMask = (1 << Controller.CLICKABLE_LAYER) | (1 << Controller.UI_LAYER);
 
             if (Physics.Raycast(Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
                     layerMask))
             {
+                if (hit.collider.gameObject.layer == Controller.UI_LAYER)
+                    Debug.Log("Hit UI");
                 return hit.collider.GetComponent<PlanetIDScript>().planetID;
             }
             

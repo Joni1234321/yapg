@@ -5,7 +5,9 @@ namespace Bserg.Model.Space
 {
     public class Planet
     {
-        public Vector3 Position;
+        public readonly Vector3 StartingPosition;
+        public readonly string Name;
+        public readonly Color Color;
         public readonly float Size;
         public readonly Mass Mass;
         public readonly Length OrbitRadius;
@@ -13,9 +15,11 @@ namespace Bserg.Model.Space
         public float OuterRadius => (Size + 2f) / 2f;
         public readonly long CarryingCapacity;
         
-        public Planet(Vector3 position, float size, Mass mass, Length orbitRadius)
+        public Planet(Vector3 startingPosition, string name, Color color, float size, Mass mass, Length orbitRadius)
         {
-            Position = position;
+            StartingPosition = startingPosition;
+            Name = name;
+            Color = color;
             Size = size;
             Mass = mass;
             OrbitRadius = orbitRadius;

@@ -10,14 +10,14 @@ namespace Bserg.Controller.UI
         // Controllers
         public UIPlanetController UIPlanetController;
         public UITimeController UITimeController;
-        public WorldLabelUI WorldLabelUI;
+        public WorldUI WorldUI;
         
         public UIController(Core.Controller controller, UIDocument uiDocument)
         {
             // Sub controllers
             UIPlanetController = new UIPlanetController(uiDocument, controller.Game);
             UITimeController = new UITimeController(controller.TickController, uiDocument.rootVisualElement.Q<VisualElement>("time-view"));
-            WorldLabelUI = new WorldLabelUI(Resources.Load<GameObject>("View/Custom/Labels/PlanetLabel"), GameObject.Find("PlanetLabels").transform);
+            WorldUI = new WorldUI(controller.OrbitController, GameObject.Find("PlanetLabels").transform);
 
             uiDocument.rootVisualElement.Q<VisualElement>("trade-menu").Q<VisualElement>("button-settle")
                 .RegisterCallback<ClickEvent>(_ => controller.SetActiveOverlay(controller.TradeOverlay));
@@ -29,7 +29,8 @@ namespace Bserg.Controller.UI
             Vector3[] planetPositions = new Vector3[game.N];
             for (int i = 0; i < game.N; i++)
                 planetPositions[i] = orbitController.GetPlanetPositionAtTickF(game, i, game.Ticks + dt);
-            WorldLabelUI.DrawLabelsOnPlanets(game.PlanetNames, planetPositions);
+            
+            WorldUI.DrawUI(planetPositions, game.Planets);
         }
 
         public void OnTick(Game game)

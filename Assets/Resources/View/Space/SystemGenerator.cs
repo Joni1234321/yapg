@@ -12,6 +12,7 @@ namespace Bserg.View.Space
         public GameObject planetPrefab, orbitPrefab;
         public Transform orbitParent;
         public SystemPrefab prefab;
+        private static readonly int Emmision = Shader.PropertyToID("_Emmision");
 
         public int offsetFromSun;
         public float distanceMult = 1f, sizeMult = 1f; 
@@ -30,12 +31,20 @@ namespace Bserg.View.Space
             for (int i = 0; i < prefab.planetScriptables.Length; i++)
             {
                 PlanetScriptable planetScriptable = prefab.planetScriptables[i];
+                
                 GameObject go = Instantiate(planetPrefab, transform);
                 go.GetComponent<PlanetIDScript>().planetID = i;
+                
                 go.name = planetScriptable.Name;
                 go.GetComponent<MeshRenderer>().material = planetScriptable.material;
-                go.transform.localScale = GetPlanetSize(planetScriptable.Size);
+                
+                go.transform.localScale = GetRealPlanetSize(planetScriptable.Size);
+                go.GetComponent<SphereCollider>().radius = GetIconPlanetSize(planetScriptable.Size).x / go.transform.localScale.x;
 
+                // Only change color during play mode
+                if (Application.isPlaying)
+                    go.GetComponent<MeshRenderer>().material.SetColor(Emmision, planetScriptable.Color);
+                
                 if (i == 0)
                     go.transform.position = Vector3.zero;
                 else
@@ -43,7 +52,7 @@ namespace Bserg.View.Space
 
                 // Just for shortcut
                 PlanetScriptable p = planetScriptable;
-                planets[i] = new Planet(go.transform.position, p.Size, new Mass(p.WeightEarthMass, Mass.UnitType.EarthMass), new Length(p.RadiusAU, Length.UnitType.AstronomicalUnits));
+                planets[i] = new Planet(go.transform.position, p.Name, p.Color, p.Size, new Mass(p.WeightEarthMass, Mass.UnitType.EarthMass), new Length(p.RadiusAU, Length.UnitType.AstronomicalUnits));
                 
                 // ORBIT
                 if (i == 0) continue;
@@ -145,12 +154,12 @@ namespace Bserg.View.Space
 
 
 
-        public float reduceSize = 1f;
-        public Vector3 GetPlanetSize(float size)
-        {
-            // Return ln of the value
-            return Vector3.one * Mathf.Log(size * sizeMult + Mathf.Exp(1)) * reduceSize;
-        }
+        public float reduceSize = .01f;
+        public Vector3 GetRealPlanetSize(float size) => Vector3.one * size * reduceSize;
+
+        public Vector3 GetIconPlanetSize(float size) =>
+            Vector3.one * (2-1/(1+size));
+        
         public Planet[] GetPlanets()
         {
             return CreateSystem();

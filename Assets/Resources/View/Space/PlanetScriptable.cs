@@ -9,6 +9,7 @@ namespace Bserg.View.Space
         public long Population;
 
         public Material material;
+        public Color Color;
 
         public float Size;
         public double WeightEarthMass;
