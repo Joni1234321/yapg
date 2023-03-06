@@ -14,6 +14,7 @@ namespace Bserg.Controller.UI
         public readonly GameObject ParentPrefab, LabelPrefab, ImagePrefab, IconPrefab;
         
         private List<GameObject> pool;
+        //private List<RectTransform> rectTransforms;
         private List<TextMeshProUGUI> labels;
         private List<RawImage> images, icons;
         
@@ -58,7 +59,10 @@ namespace Bserg.Controller.UI
             {
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
                 Vector3 iconSize = OrbitController.SystemGenerator.GetIconPlanetSize(planets[i].Size);
-                pool[i].transform.position = position;
+                //pool[i].GetComponent<RectTransform>().anchoredPosition = Camera.main.WorldToScreenPoint(position);
+                Vector3 t = Camera.main.WorldToScreenPoint(position);
+                pool[i].transform.position = t;
+                
                 labels[i].text = planets[i].Name;
                 icons[i].transform.localScale = iconSize;
                 icons[i].color = planets[i].Color;

@@ -20,7 +20,6 @@ namespace Bserg.Controller.UI
         public LevelUI LevelUI;
 
         private PlanetLevels planetLevels;
-        private int selectedPlanetID;
         private int previousPopulation;
         
         public UIPlanetController(UIDocument uiDocument, Game game)
@@ -47,8 +46,6 @@ namespace Bserg.Controller.UI
         /// <param name="planetID"></param>
         public void SetPlanet(int planetID)
         {
-            selectedPlanetID = planetID;
-            
             if (planetID < 0)
             {
                 UIClass.HideAll();

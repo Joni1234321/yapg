@@ -9,15 +9,13 @@ namespace Bserg.Controller.Core
 {
     public class MouseController
     {
-        public Camera Camera;
+        private CameraController cameraController;
         UIDocument uiDocument;
 
-        public int HoverPlanetID = -1;
-        public int SelectedPlanetID = -1;
 
-        public MouseController()
+        public MouseController(CameraController cameraController)
         {
-            Camera = Camera.main;
+            this.cameraController = cameraController;
             uiDocument = GameObject.Find("UIDocument").GetComponent<UIDocument>();
         }
 
@@ -25,29 +23,29 @@ namespace Bserg.Controller.Core
         void CheckIfHoverOrSelectChange(Game game, Overlay activeOverlay)
         {
             int newHoverPlanetID = GetHoverPlanetID(game);
-            int oldHoverPlanetID = HoverPlanetID;
-            int oldSelectedPlanetID = SelectedPlanetID;
-            bool oldHoverValid = HoverPlanetID > -1;
+            int oldHoverPlanetID = SelectionController.HoverPlanetID;
+            int oldSelectedPlanetID = SelectionController.SelectedPlanetID;
+            bool oldHoverValid = SelectionController.HoverPlanetID > -1;
             bool newHoverValid = newHoverPlanetID > -1;
-            bool oldSelectedValid = SelectedPlanetID > -1;
+            bool oldSelectedValid = SelectionController.SelectedPlanetID > -1;
 
 
             // Hover change
-            if (newHoverPlanetID != HoverPlanetID)
+            if (newHoverPlanetID != SelectionController.HoverPlanetID)
             {
-                HoverPlanetID = newHoverPlanetID;
+                SelectionController.HoverPlanetID = newHoverPlanetID;
                 if (oldHoverValid)
-                    activeOverlay.PlanetHoverExit(game, oldHoverPlanetID, SelectedPlanetID);
+                    activeOverlay.PlanetHoverExit(game, oldHoverPlanetID, SelectionController.SelectedPlanetID);
 
                 if (newHoverValid)
-                    activeOverlay.PlanetHoverEnter(game, newHoverPlanetID, SelectedPlanetID);
+                    activeOverlay.PlanetHoverEnter(game, newHoverPlanetID, SelectionController.SelectedPlanetID);
             }
 
 
             // Selected Change
-            if (WorldMouseButtonDown(0) && newHoverPlanetID != SelectedPlanetID)
+            if (WorldMouseButtonDown(0) && newHoverPlanetID != SelectionController.SelectedPlanetID)
             {
-                SelectedPlanetID = newHoverPlanetID;
+                SelectionController.SelectedPlanetID = newHoverPlanetID;
 
                 if (oldSelectedValid)
                     activeOverlay.PlanetSelectedExit(game, oldSelectedPlanetID);
@@ -64,18 +62,16 @@ namespace Bserg.Controller.Core
         /// <param name="activeOverlay"></param>
         void UpdateFocus(Game game, Overlay activeOverlay)
         {
-            bool selectedValid = SelectedPlanetID != -1;
-            bool hoverValid = HoverPlanetID != -1;
             // Hover
-            if (hoverValid)
+            if (SelectionController.HoverPlanetValid)
             {
-                if (selectedValid) activeOverlay.UpdateHoverAndSelected(game, HoverPlanetID, SelectedPlanetID);
-                else activeOverlay.UpdateHover(game, HoverPlanetID);
+                if (SelectionController.SelectedPlanetValid) activeOverlay.UpdateHoverAndSelected(game, SelectionController.HoverPlanetID, SelectionController.SelectedPlanetID);
+                else activeOverlay.UpdateHover(game, SelectionController.HoverPlanetID);
             }
             // No hover then use old selected Planet
             else
             {
-                if (selectedValid) activeOverlay.UpdateSelected(game, SelectedPlanetID);
+                if (SelectionController.SelectedPlanetValid) activeOverlay.UpdateSelected(game, SelectionController.SelectedPlanetID);
                 else activeOverlay.UpdateFocusNone();
             }
         }
@@ -89,30 +85,14 @@ namespace Bserg.Controller.Core
             // Deselect
             if (WorldMouseButtonDown(1))
             {
-                activeOverlay.PlanetSelectedExit(game, SelectedPlanetID);
-                SelectedPlanetID = -1;
+                activeOverlay.PlanetSelectedExit(game, SelectionController.SelectedPlanetID);
+                SelectionController.SelectedPlanetID = -1;
             }
 
             CheckIfHoverOrSelectChange(game, activeOverlay);
             UpdateFocus(game, activeOverlay);
-            UpdateZoom();
         }
 
-        private float closestZoom = 0.3f, farthestZoom = 400f, targetCameraSize = 10;
-        void UpdateZoom()
-        {
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
-                targetCameraSize *= 1.1f; 
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                targetCameraSize *= .90f;
-
-            float sizeDiff = targetCameraSize - Camera.orthographicSize;
-            if (Mathf.Abs(sizeDiff) > 0.1f)
-            {
-                float smooth = 10 * Time.deltaTime * Mathf.Clamp(Mathf.Abs(sizeDiff), .05f, 20f) * Mathf.Sign(sizeDiff);
-                Camera.orthographicSize = Mathf.Clamp(Camera.orthographicSize + smooth, closestZoom, farthestZoom);
-            }
-        }
         
         
         // ReSharper disable Unity.PerformanceAnalysis
@@ -124,7 +104,7 @@ namespace Bserg.Controller.Core
         {
             int layerMask = (1 << Controller.CLICKABLE_LAYER) | (1 << Controller.UI_LAYER);
 
-            if (Physics.Raycast(Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
+            if (Physics.Raycast(cameraController.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
                     layerMask))
             {
                 if (hit.collider.gameObject.layer == Controller.UI_LAYER)

@@ -12,6 +12,13 @@ namespace Bserg.Controller.Core
                 controller.TickController.IncreaseGameSpeed(1);
             if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
                 controller.TickController.IncreaseGameSpeed(-1);
+            
+            if (Input.GetKeyDown(KeyCode.E))
+                controller.CameraController.EnterPlanetView();
+            if (Input.GetKeyDown(KeyCode.Q))
+                controller.CameraController.EnterSolarSystemView();
+
+
         }
     }
 }

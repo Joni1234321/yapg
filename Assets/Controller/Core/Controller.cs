@@ -15,6 +15,8 @@ namespace Bserg.Controller.Core
         public const int UI_LAYER = 5, CLICKABLE_LAYER = 7;
         public SystemGenerator systemGenerator;
         public Game Game;
+        
+        public CameraController CameraController;
 
         // Overlays
         private Overlay activeOverlay;
@@ -35,6 +37,9 @@ namespace Bserg.Controller.Core
         
         void Awake()
         {
+            SelectionController.SelectedPlanetID = -1;
+            SelectionController.HoverPlanetID = -1;
+            
             Planet[] planets = systemGenerator.GetPlanets();
             string[] names = systemGenerator.GetNames();
             float[] populationLevels = systemGenerator.GetPopulationLevels();
@@ -44,10 +49,12 @@ namespace Bserg.Controller.Core
                 
             Game = new Game(names, populationLevels, bodies, planets);
 
+            CameraController = new CameraController();
+            
             TickController = new TickController(this);
             
             InputController = new InputController();
-            MouseController = new MouseController();
+            MouseController = new MouseController(CameraController);
 
             OrbitController = new OrbitController(systemGenerator);
             SpaceflightController = new SpaceflightController(OrbitController);
@@ -75,7 +82,7 @@ namespace Bserg.Controller.Core
 
             if (TickController.Update(Game))
             {
-                activeOverlay.OnTick(Game, MouseController.HoverPlanetID, MouseController.SelectedPlanetID);
+                activeOverlay.OnTick(Game, SelectionController.HoverPlanetID, SelectionController.SelectedPlanetID);
                 UIController.OnTick(Game);
             }
             
@@ -83,6 +90,9 @@ namespace Bserg.Controller.Core
 
             InputController.OnUpdate(this);
             MouseController.OnUpdate(Game, activeOverlay, dt);
+            CameraController.OnUpdate(Game, OrbitController, dt);
+
+            // UI LAST
             UIController.OnUpdate(Game, OrbitController, dt);
 
 
