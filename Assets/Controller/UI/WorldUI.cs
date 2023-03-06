@@ -48,9 +48,9 @@ namespace Bserg.Controller.UI
         /// </summary>
         /// <param name="planetPositions"></param>
         /// <param name="planets"></param>
-        public void DrawUI(Vector3[] planetPositions, Model.Space.Planet[] planets)
+        public void DrawUI(Vector3[] planetPositions, List<Model.Space.Planet> planets)
         {
-            int n = planets.Length;
+            int n = planets.Count;
             AdjustPool(n);
 
             // Draw labels on planets
@@ -77,6 +77,7 @@ namespace Bserg.Controller.UI
             // Increase pool size if too many
             for (int i = 0; i < poolDiff; i++)
                 AddPlanetLabel();
+
 
             // Set active if too many or deactivate some if too few
             for (int i = 0; i < activeDiff; i++)
@@ -118,7 +119,7 @@ namespace Bserg.Controller.UI
         /// </summary>
         void DisableLabel()
         {
-            pool[activeGameObjectsLength--].SetActive(true);
+            pool[--activeGameObjectsLength].SetActive(false);
         }
 
         
