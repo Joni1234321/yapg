@@ -1,18 +1,21 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Bserg.View.Space
 {
     [System.Serializable]
     public struct PlanetScriptable
     {
-        public  string Name;
+        public string Name;
         public long Population;
 
-        public Material material;
+        //public Material material;
         public Color Color;
 
         public float Size;
         public double WeightEarthMass;
         public double RadiusAU;
+        public int OrbitObject;
     }
+
 }

@@ -5,12 +5,15 @@ using UnityEngine;
 
 namespace Bserg.Controller.Core
 {
-    public class OrbitController
+    /// <summary>
+    /// Draw the planets and their orbits
+    /// </summary>
+    public class PlanetController
     {
 
         public SystemGenerator SystemGenerator;
 
-        public OrbitController(SystemGenerator systemGenerator)
+        public PlanetController(SystemGenerator systemGenerator)
         {
             SystemGenerator = systemGenerator;
         }
@@ -19,12 +22,21 @@ namespace Bserg.Controller.Core
         // Show all the planets
         public void Update(Game game, float dt)
         {
+            if (!SystemGenerator.Orbits.Get(SelectionController.SelectedPlanetID, out OrbitData orbitData))
+                Debug.LogError("Couldnt Find Selected Planet ID");
+            
+            
             
             for (int planetID = 0; planetID < game.N; planetID++)
             {
-                SystemGenerator.transform.GetChild(planetID).transform.position = GetPlanetPositionAtTickF(game, planetID, game.Ticks + dt);
-            
-                // Orbit
+                // Planet GO
+                SystemGenerator.planetTransforms[planetID].position = GetPlanetPositionAtTickF(game, planetID, game.Ticks + dt);
+                int orbitID = game.Planets[planetID].OrbitObject;
+                
+                if (orbitID != -1)
+                    SystemGenerator.planetTransforms[planetID].position += SystemGenerator.planetTransforms[orbitID].transform.position;
+
+                // Orbit GO
                 if (planetID != 0)
                 {
                     SystemGenerator.orbitParent.GetChild(planetID - 1).transform.localEulerAngles = new Vector3(0,0,Mathf.Rad2Deg * GetPlanetAngleAtTicksF(game, planetID, game.Ticks + dt));

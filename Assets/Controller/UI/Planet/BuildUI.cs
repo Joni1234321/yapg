@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Tools;
+using Bserg.Model.Core.Operators;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Level;
@@ -21,15 +22,15 @@ namespace Bserg.Controller.UI.Planet
 
         private readonly PlanetLevels planetLevels;
         private readonly PlanetLevelsGeneric<float> planetProgress;
-        private readonly BuildSystem buildSystem;
+        private readonly BuildOperator buildOperator;
         
         private int currentPlanetID = -1;
 
-        public BuildUI(VisualElement ui, PlanetLevels planetLevels, PlanetLevelsGeneric<float> planetProgress, BuildSystem buildSystem) : base(ui)
+        public BuildUI(VisualElement ui, PlanetLevels planetLevels, PlanetLevelsGeneric<float> planetProgress, BuildOperator buildOperator) : base(ui)
         {
             this.planetLevels = planetLevels;
             this.planetProgress = planetProgress;
-            this.buildSystem = buildSystem;
+            this.buildOperator = buildOperator;
             
             inputList = ui.Q<VisualElement>("input-list");
             inputSection = ui.Q<VisualElement>("input");
@@ -123,7 +124,7 @@ namespace Bserg.Controller.UI.Planet
             {
                 int consumption = CurrentRecipe.Input[i].OffsetLevel + level;
                 inputs[i].Level = consumption.ToString();
-                inputRemaining[i].Level = buildSystem.GetHighestLevel(CurrentRecipe.Input[i].Name, currentPlanetID, consumption).ToString();
+                inputRemaining[i].Level = buildOperator.GetHighestLevel(CurrentRecipe.Input[i].Name, currentPlanetID, consumption).ToString();
             }
             
             for (int i = 0; i < CurrentRecipe.Output.Length; i++)
@@ -144,7 +145,7 @@ namespace Bserg.Controller.UI.Planet
         void Upgrade()
         {
             //planetLevels.Get(CurrentRecipe.Output[0].Name)[currentPlanetID]
-            if (!buildSystem.Upgrade(CurrentRecipe, 1, currentPlanetID))
+            if (!buildOperator.Upgrade(CurrentRecipe, 1, currentPlanetID))
                 Debug.Log("No Upgrade");
             //planetLevels.Get(CurrentRecipe.Output[0].Name)[currentPlanetID]++;
             UpdateBuild();
@@ -155,7 +156,7 @@ namespace Bserg.Controller.UI.Planet
         /// </summary>
         void Downgrade()
         {
-            if (!buildSystem.DownGrade(CurrentRecipe, 1, currentPlanetID))
+            if (!buildOperator.DownGrade(CurrentRecipe, 1, currentPlanetID))
                 Debug.Log("No Downgrade");
             UpdateBuild();
         }

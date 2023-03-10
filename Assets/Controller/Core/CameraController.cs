@@ -22,9 +22,9 @@ namespace Bserg.Controller.Core
         private void UpdateZoom()
         {
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
-                targetSize *= 1.1f; 
+                targetSize *= 1.2f; 
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                targetSize *= .90f;
+                targetSize *= .80f;
 
             float currentSize = Camera.orthographicSize;
             targetSize = Mathf.Clamp(targetSize, closestZoom, farthestZoom);
@@ -84,11 +84,11 @@ namespace Bserg.Controller.Core
             targetSize = 10;
         }
 
-        public void OnUpdate(Game game, OrbitController orbitController, float dt)
+        public void OnUpdate(Game game, PlanetController planetController, float dt)
         {
             animationTime += Time.deltaTime;
             UpdateZoom();
-            Vector3 planetPosition = orbitController.GetPlanetPositionAtTickF(game, focusPlanetID, game.Ticks + dt);
+            Vector3 planetPosition = planetController.GetPlanetPositionAtTickF(game, focusPlanetID, game.Ticks + dt);
             UpdatePosition(planetPosition);
         } 
         

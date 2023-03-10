@@ -1,5 +1,8 @@
 ﻿namespace Bserg.Controller.Core
 {
+    /// <summary>
+    /// Contain information about the currently selected / hover planet
+    /// </summary>
     public static class SelectionController
     {
         private static int hoverPlanetID = -1, selectedPlanetID = -1;

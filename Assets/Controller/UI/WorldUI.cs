@@ -8,7 +8,8 @@ namespace Bserg.Controller.UI
 {
     public class WorldUI
     {
-        public OrbitController OrbitController;
+        public PlanetController PlanetController;
+        private CameraController cameraController;
             
         public readonly Transform Parent;
         public readonly GameObject ParentPrefab, LabelPrefab, ImagePrefab, IconPrefab;
@@ -21,9 +22,10 @@ namespace Bserg.Controller.UI
         private int activeGameObjectsLength;
         
 
-        public WorldUI(OrbitController orbitController,  Transform parent)
+        public WorldUI(PlanetController planetController, CameraController cameraController, Transform parent)
         {
-            OrbitController = orbitController;
+            PlanetController = planetController;
+            this.cameraController = cameraController;
             
             ParentPrefab = Resources.Load<GameObject>("View/Custom/Labels/PlanetParent");
             LabelPrefab = Resources.Load<GameObject>("View/Custom/Labels/PlanetLabel");
@@ -58,11 +60,8 @@ namespace Bserg.Controller.UI
             for (int i = 0; i < n; i++)
             {
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
-                Vector3 iconSize = OrbitController.SystemGenerator.GetIconPlanetSize(planets[i].Size);
-                //pool[i].GetComponent<RectTransform>().anchoredPosition = Camera.main.WorldToScreenPoint(position);
-                Vector3 t = Camera.main.WorldToScreenPoint(position);
-                pool[i].transform.position = t;
-                
+                Vector3 iconSize = PlanetController.SystemGenerator.GetIconPlanetSize(planets[i].Size);
+                pool[i].transform.position = cameraController.Camera.WorldToScreenPoint(position);
                 labels[i].text = planets[i].Name;
                 icons[i].transform.localScale = iconSize;
                 icons[i].color = planets[i].Color;
@@ -106,10 +105,12 @@ namespace Bserg.Controller.UI
             GameObject labelGo = Object.Instantiate(LabelPrefab, below);
             labels.Add(labelGo.GetComponent<TextMeshProUGUI>());
             
-            GameObject imageGo = Object.Instantiate(ImagePrefab, below);
-            images.Add(imageGo.GetComponent<RawImage>());
-            imageGo.SetActive(false);
+            GameObject imageGo = Object.Instantiate(ImagePrefab, above);
+            RawImage imageImage = imageGo.GetComponent<RawImage>();
+            imageImage.rectTransform.offsetMax = new Vector2(imageImage.rectTransform.offsetMax.x, 0);
+            images.Add(imageImage);
             
+            RectTransform t = images[0].rectTransform;            
             GameObject iconGo = Object.Instantiate(IconPrefab, center);
             icons.Add(iconGo.GetComponent<RawImage>());
             

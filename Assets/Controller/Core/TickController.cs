@@ -3,6 +3,9 @@ using Bserg.Model.Units;
 
 namespace Bserg.Controller.Core
 {
+    /// <summary>
+    /// Handles game time and when next tick should be calculated
+    /// </summary>
     public class TickController
     {
         public Controller Controller;

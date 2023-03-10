@@ -1,17 +1,17 @@
-﻿using Bserg.Model.Space;
+﻿using Bserg.Model.Core.Systems;
+using Bserg.Model.Space;
 using UnityEngine;
 
-
-namespace Bserg.Model.Core.Systems
+namespace Bserg.Model.Core.Operators
 {
-    public class BuildSystem : GameSystem
+    public class BuildOperator : GameOperator
     {
 
         private readonly PlanetLevelsGeneric<uint> consumptionMasks;
         
         private const int BIT_SIZE = sizeof(uint) * 8;
         private const uint MAX_USED = 1U << (BIT_SIZE - 1);
-        public BuildSystem(Game game) : base(game)
+        public BuildOperator(Game game) : base(game)
         {
             consumptionMasks = new PlanetLevelsGeneric<uint>(game.N);
         }
@@ -25,7 +25,7 @@ namespace Bserg.Model.Core.Systems
         /// <param name="production"></param>
         /// <param name="consumption"></param>
         /// <returns></returns>
-        uint GetConsumptionMask(int production, int consumption)
+        private uint GetConsumptionMask(int production, int consumption)
         {
             int diff = production - consumption;
             if (diff >= BIT_SIZE)

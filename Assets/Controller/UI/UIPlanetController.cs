@@ -32,7 +32,7 @@ namespace Bserg.Controller.UI
             
             MigrationUI = new MigrationUI(GetUI("migration-view"));
             TransferUI = new TransferUI(GetUI("transfer-view"));
-            BuildUI = new BuildUI(GetUI("build-view"), game.PlanetLevels, game.LevelProgress, game.BuildSystem);
+            BuildUI = new BuildUI(GetUI("build-view"), game.PlanetLevels, game.LevelProgress, game.BuildOperator);
             LevelUI = new LevelUI(GetUI("level-view"));
             
             PlanetUI = new PlanetUI(GetUI("planet-view"), BuildUI);

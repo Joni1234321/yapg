@@ -2,6 +2,9 @@
 
 namespace Bserg.Controller.Core
 {
+    /// <summary>
+    /// Manages input, and calls their hotkeys
+    /// </summary>
     public class InputController
     {
         public void OnUpdate (Controller controller)

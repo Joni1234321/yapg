@@ -28,7 +28,7 @@ namespace Bserg.Controller.Core
         public InputController InputController;
         public MouseController MouseController;
 
-        public OrbitController OrbitController;
+        public PlanetController PlanetController;
         public SpaceflightController SpaceflightController;
 
         public UIController UIController;
@@ -56,8 +56,8 @@ namespace Bserg.Controller.Core
             InputController = new InputController();
             MouseController = new MouseController(CameraController);
 
-            OrbitController = new OrbitController(systemGenerator);
-            SpaceflightController = new SpaceflightController(OrbitController);
+            PlanetController = new PlanetController(systemGenerator);
+            SpaceflightController = new SpaceflightController(PlanetController);
             
         }
 
@@ -69,7 +69,7 @@ namespace Bserg.Controller.Core
             UIController.UIPlanetController.SetPlanet(3);
             
             // Overlays
-            NormalOverlay = new NormalOverlay(UIController, OrbitController);
+            NormalOverlay = new NormalOverlay(UIController, PlanetController);
             TradeOverlay = new TradeOverlay(Game, this, UIController);
             SetActiveOverlay(NormalOverlay);
 
@@ -90,10 +90,10 @@ namespace Bserg.Controller.Core
 
             InputController.OnUpdate(this);
             MouseController.OnUpdate(Game, activeOverlay, dt);
-            CameraController.OnUpdate(Game, OrbitController, dt);
+            CameraController.OnUpdate(Game, PlanetController, dt);
 
             // UI LAST
-            UIController.OnUpdate(Game, OrbitController, dt);
+            UIController.OnUpdate(Game, PlanetController, dt);
 
 
             // No need to update if paused, unless one time
@@ -107,7 +107,7 @@ namespace Bserg.Controller.Core
             else
                 firstTickAfterPause = true;
             
-            OrbitController.Update(Game, dt);
+            PlanetController.Update(Game, dt);
             SpaceflightController.Update(Game, dt);
             
         }

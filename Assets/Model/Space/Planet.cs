@@ -11,11 +11,12 @@ namespace Bserg.Model.Space
         public readonly float Size;
         public readonly Mass Mass;
         public readonly Length OrbitRadius;
+        public readonly int OrbitObject;
 
         public float OuterRadius => (Size + 2f) / 2f;
         public readonly long CarryingCapacity;
         
-        public Planet(Vector3 startingPosition, string name, Color color, float size, Mass mass, Length orbitRadius)
+        public Planet(Vector3 startingPosition, string name, Color color, float size, Mass mass, Length orbitRadius, int orbitObject)
         {
             StartingPosition = startingPosition;
             Name = name;
@@ -23,6 +24,7 @@ namespace Bserg.Model.Space
             Size = size;
             Mass = mass;
             OrbitRadius = orbitRadius;
+            OrbitObject = orbitObject;
             
 
             // 0.5 = 12.5 Billion

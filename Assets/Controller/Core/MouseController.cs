@@ -7,6 +7,9 @@ using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
 {
+    /// <summary>
+    /// Handles mouse input
+    /// </summary>
     public class MouseController
     {
         private CameraController cameraController;

@@ -19,17 +19,18 @@ namespace Bserg.Model.Core.Systems
             StandardGravitationalParameter mu = new StandardGravitationalParameter(Game.Planets[0].Mass);
             OrbitalPeriodsInTicks = new float[Game.N];
             HohmannDeltaV = new float[Game.N,Game.N];
-            for (int i = 0; i < Game.N; i++) 
-                OrbitalPeriodsInTicks[i] = GameTick.ToTickF(OrbitalMechanics.GetOrbitalPeriod(mu, Game.Planets[i].OrbitRadius));
-            for (int i = 0; i < Game.N; i++)
-            for (int j = 0; j < Game.N; j++)
+            for (int i = 1; i < Game.N; i++) 
+                OrbitalPeriodsInTicks[i] = GameTick.ToTickF(OrbitalMechanics.GetOrbitalPeriod(new StandardGravitationalParameter(Game.Planets[Game.Planets[i].OrbitObject].Mass), Game.Planets[i].OrbitRadius));
+            for (int planetDeparture = 0; planetDeparture < Game.N; planetDeparture++)
+            for (int planetDestination = 0; planetDestination < Game.N; planetDestination++)
             {
-                if (i == 0 || j == 0 || i == j)
+                if (planetDeparture == 0 || planetDestination == 0 || planetDeparture == planetDestination)
                 {
-                    HohmannDeltaV[i, j] = 0;
+                    HohmannDeltaV[planetDeparture, planetDestination] = 0;
                     continue;
                 }
-                HohmannDeltaV[i, j] = (float)OrbitalMechanics.GetHohmannDeltaV(mu, Game.Planets[i].OrbitRadius, Game.Planets[j].OrbitRadius);
+                // Function doesnt work for satellites
+                HohmannDeltaV[planetDeparture, planetDestination] = (float)OrbitalMechanics.GetHohmannDeltaV(mu, Game.Planets[planetDeparture].OrbitRadius, Game.Planets[planetDestination].OrbitRadius);
             }
             HohmannTransfers = CalculateHohmannTransfers(Game.Planets[0], Game.Planets);
         }

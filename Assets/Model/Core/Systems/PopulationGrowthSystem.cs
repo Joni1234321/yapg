@@ -57,7 +57,7 @@ namespace Bserg.Model.Core.Systems
                     Game.PlanetLevels.Get("Population")[i]++;
                     string[] allLevels = Game.PlanetLevels.GetAllNames();
                     for (int namesI = 0; namesI < allLevels.Length; namesI++)
-                        Game.BuildSystem.Upgrade(Recipe.Get(allLevels[namesI]), 1, i);
+                        Game.BuildOperator.Upgrade(Recipe.Get(allLevels[namesI]), 1, i);
                 }
 
                 while (Game.PlanetPopulationProgress[i] < 0)

@@ -6,7 +6,7 @@ using Model.Population;
 namespace Bserg.Model.Core.Systems
 {
     /// <summary>
-    ///     Handle settlement migration
+    /// Handle settlement migration
     /// </summary>
     public class SettleSystem : GameSystem
     {

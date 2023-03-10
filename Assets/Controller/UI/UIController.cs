@@ -23,7 +23,7 @@ namespace Bserg.Controller.UI
             // Sub controllers
             UIPlanetController = new UIPlanetController(uiDocument, controller.Game);
             UITimeController = new UITimeController(controller.TickController, uiDocument.rootVisualElement.Q<VisualElement>("time-view"));
-            WorldUI = new WorldUI(controller.OrbitController, GameObject.Find("PlanetLabels").transform);
+            WorldUI = new WorldUI(controller.PlanetController, controller.CameraController, GameObject.Find("PlanetLabels").transform);
 
             uiDocument.rootVisualElement.Q<VisualElement>("trade-menu").Q<VisualElement>("button-settle")
                 .RegisterCallback<ClickEvent>(_ => controller.SetActiveOverlay(controller.TradeOverlay));
@@ -39,14 +39,14 @@ namespace Bserg.Controller.UI
         }
 
 
-        public void OnUpdate(Game game, OrbitController orbitController, float dt)
+        public void OnUpdate(Game game, PlanetController planetController, float dt)
         {
             bool showInner = Camera.orthographicSize < 40f;
             List<Model.Space.Planet> planets = showInner ? allPlanets : outerPlanets;
             Vector3[] planetPositions = new Vector3[planets.Count];
-            planetPositions[0] = orbitController.GetPlanetPositionAtTickF(game, 0, game.Ticks + dt);
+            planetPositions[0] = planetController.GetPlanetPositionAtTickF(game, 0, game.Ticks + dt);
             for (int i = 1; i < planetPositions.Length; i++)
-                planetPositions[i] = orbitController.GetPlanetPositionAtTickF(game, i + (showInner ? 0 : 4), game.Ticks + dt);
+                planetPositions[i] = planetController.GetPlanetPositionAtTickF(game, i + (showInner ? 0 : 4), game.Ticks + dt);
             
             
             WorldUI.DrawUI(planetPositions, planets);

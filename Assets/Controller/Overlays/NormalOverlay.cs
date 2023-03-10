@@ -10,12 +10,12 @@ namespace Bserg.Controller.Overlays
     {
         private GameObject selector;
         private UIController uiController;
-        private OrbitController orbitController;
-        public NormalOverlay(UIController uiController, OrbitController orbitController)
+        private PlanetController planetController;
+        public NormalOverlay(UIController uiController, PlanetController planetController)
         {
             selector = GameObject.Find("Selector");
             this.uiController = uiController;
-            this.orbitController = orbitController;
+            this.planetController = planetController;
 
             Disable();
         }
@@ -94,8 +94,8 @@ namespace Bserg.Controller.Overlays
             
             Planet planet = game.GetPlanet(planetID);
             
-            selector.transform.position = orbitController.GetPlanetPositionAtTickF(game, planetID, game.Ticks + DeltaTick);;
-            selector.transform.localScale = orbitController.SystemGenerator.GetIconPlanetSize(planet.Size);
+            selector.transform.position = planetController.GetPlanetPositionAtTickF(game, planetID, game.Ticks + DeltaTick);;
+            selector.transform.localScale = planetController.SystemGenerator.GetIconPlanetSize(planet.Size);
         }
 
         /// <summary>

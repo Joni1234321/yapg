@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Bserg.Model.Core.Operators;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Political;
@@ -34,7 +35,7 @@ namespace Bserg.Model.Core
         public OrbitalTransferSystem OrbitalTransferSystem;
         
         public PopulationGrowthSystem PopulationGrowthSystem;
-        public BuildSystem BuildSystem;
+        public BuildOperator BuildOperator;
         
         public MigrationSystem MigrationSystem;
         public SettleSystem SettleSystem;
@@ -67,7 +68,7 @@ namespace Bserg.Model.Core
             OrbitalTransferSystem = new OrbitalTransferSystem(this);
             
             PopulationGrowthSystem = new PopulationGrowthSystem(this);
-            BuildSystem = new BuildSystem(this);
+            BuildOperator = new BuildOperator(this);
             
             MigrationSystem = new MigrationSystem(this);
             SettleSystem = new SettleSystem(this);
@@ -80,9 +81,9 @@ namespace Bserg.Model.Core
                 planetPopulationLevels[i] = (int)givenPopulationLevels[i];
                 LevelProgress.Get("Population")[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
 
-                BuildSystem.SetRecipeLevel(Recipe.Get("Housing"), i, planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0));
+                BuildOperator.SetRecipeLevel(Recipe.Get("Housing"), i, planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0));
                 if (planetPopulationLevels[i] > 1)
-                    BuildSystem.SetRecipeLevel(Recipe.Get("Food"), i, planetPopulationLevels[i] + 1);
+                    BuildOperator.SetRecipeLevel(Recipe.Get("Food"), i, planetPopulationLevels[i] + 1);
             }
             
             

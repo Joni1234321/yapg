@@ -1,7 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
 using Model.Utilities;
+using Mono.Cecil;
 using UnityEngine;
 
 
@@ -13,12 +16,23 @@ namespace Bserg.View.Space
         public Transform orbitParent;
         public SystemPrefab prefab;
         private static readonly int Emmision = Shader.PropertyToID("_Emmision");
+        Material material;
 
         public int offsetFromSun;
-        public float distanceMult = 1f, sizeMult = 1f; 
+        public float distanceMult = 1f, sizeMult = 1f;
+
+        public Transform[] planetTransforms;
+        public OrbitData Orbits;
+        private void OnEnable()
+        {
+            material = Resources.Load<Material>("View/Shaders/MarsMaterial");
+        }
+
+
         public Planet[] CreateSystem()
         {
             Planet[] planets = new Planet[prefab.planetScriptables.Length];
+            Orbits = new OrbitData(-1);
             
             // Remove old planets
             int n = transform.childCount;
@@ -27,42 +41,63 @@ namespace Bserg.View.Space
             for (int i = 0; i < n - 1; i++)
                 DestroyImmediate(orbitParent.GetChild(0).gameObject);
 
+            planetTransforms = new Transform[prefab.planetScriptables.Length];
             // Create new ones
             for (int i = 0; i < prefab.planetScriptables.Length; i++)
             {
-                PlanetScriptable planetScriptable = prefab.planetScriptables[i];
-                
-                GameObject go = Instantiate(planetPrefab, transform);
-                go.GetComponent<PlanetIDScript>().planetID = i;
-                
-                go.name = planetScriptable.Name;
-                go.GetComponent<MeshRenderer>().material = planetScriptable.material;
-                
-                go.transform.localScale = GetRealPlanetSize(planetScriptable.Size);
-                go.GetComponent<SphereCollider>().radius = GetIconPlanetSize(planetScriptable.Size).x / go.transform.localScale.x;
-
-                // Only change color during play mode
-                if (Application.isPlaying)
-                    go.GetComponent<MeshRenderer>().material.SetColor(Emmision, planetScriptable.Color);
-                
-                if (i == 0)
-                    go.transform.position = Vector3.zero;
-                else
-                    go.transform.position = GetPlanetPosition((float)planetScriptable.RadiusAU, 0);
-
-                // Just for shortcut
-                PlanetScriptable p = planetScriptable;
-                planets[i] = new Planet(go.transform.position, p.Name, p.Color, p.Size, new Mass(p.WeightEarthMass, Mass.UnitType.EarthMass), new Length(p.RadiusAU, Length.UnitType.AstronomicalUnits));
-                
-                // ORBIT
-                if (i == 0) continue;
-                GameObject orbitOG = Instantiate(orbitPrefab, orbitParent);
-                orbitOG.transform.localScale = Vector3.one  * (AUToWorld((float)planetScriptable.RadiusAU) * 4);
+                PlanetScriptable p = prefab.planetScriptables[i];
+                planets[i] = CreatePlanet(p);
+                planetTransforms[i] = CreatePlanetGameObject(planets[i], i).transform;
+                if (!Orbits.Add(i, p.OrbitObject))
+                    Debug.LogError("Cant find orbiting object in system");
             }
 
             return planets;
         }
 
+        Planet CreatePlanet(PlanetScriptable p)
+        {
+            return new Planet(
+                GetPlanetPosition((float)p.RadiusAU, 0), 
+                p.Name, 
+                p.Color, 
+                p.Size,
+                new Mass(p.WeightEarthMass, Mass.UnitType.EarthMass),
+                new Length(p.RadiusAU, Length.UnitType.AstronomicalUnits),
+                p.OrbitObject);
+        }
+        GameObject CreatePlanetGameObject(Planet planet, int planetID)
+        {
+            GameObject go = Instantiate(planetPrefab, transform);
+            go.transform.position = planet.StartingPosition;
+            int orbitID = planet.OrbitObject;
+            if (orbitID != -1)
+                go.transform.position += planetTransforms[orbitID].transform.position;
+                
+            go.GetComponent<PlanetIDScript>().planetID = planetID;
+                
+            go.name = planet.Name;
+            go.GetComponent<MeshRenderer>().material = material;
+                
+            go.transform.localScale = GetRealPlanetSize(planet.Size);
+            go.GetComponent<SphereCollider>().radius = GetIconPlanetSize(planet.Size).x / go.transform.localScale.x;
+
+            // Only change color during play mode
+            if (Application.isPlaying)
+                go.GetComponent<MeshRenderer>().material.SetColor(Emmision, planet.Color);
+                
+            
+            // ORBIT
+            if (planet.OrbitObject == -1)
+                return go;
+                
+            GameObject orbitIndicatorGameObject = Instantiate(orbitPrefab, orbitParent);
+            float orbitRadiusWorld =
+                AUToWorld((float)planet.OrbitRadius.To(Length.UnitType.AstronomicalUnits)) * 4;
+            orbitIndicatorGameObject.transform.localScale = Vector3.one * orbitRadiusWorld;
+
+            return go;
+        }
 
         public float AUToWorld(float orbitRadiusAU)
         {
@@ -168,5 +203,69 @@ namespace Bserg.View.Space
         public string[] GetNames() => prefab.planetScriptables.Select(p => p.Name).ToArray();
         public long[] GetPopulations() => prefab.planetScriptables.Select(p => p.Population).ToArray();
         public float[] GetPopulationLevels() => prefab.planetScriptables.Select(p => Util.LongToLevel(p.Population)).ToArray();
+    }
+
+
+    /// <summary>
+    /// Contains information of what planet orbits what
+    /// The sun will have its children be the planets
+    /// The earth will have its children be the moon, and other satellites
+    /// </summary>
+    public readonly struct OrbitData
+    {
+        private static readonly OrbitData EMPTY = new OrbitData(-1);
+        public readonly int PlanetID;
+        public readonly List<OrbitData> Children;
+
+        public OrbitData(int planetID)
+        {
+            PlanetID = planetID;
+            Children = new List<OrbitData>();
+        }
+
+        /// <summary>
+        /// Adds planetID to any child that has id equal to orbitID
+        /// </summary>
+        /// <param name="planetID"></param>
+        /// <param name="orbitID"></param>
+        /// <returns>true if have added succesfully</returns>
+        public bool Add(int planetID, int orbitID)
+        {
+            if (PlanetID == orbitID)
+            {
+                Children.Add(new OrbitData(planetID));
+                return true;
+            }
+            
+            for (int i = 0; i < Children.Count; i++)
+                if (Children[i].Add(planetID, orbitID))
+                    return true;
+            return false;
+        }
+
+
+        /// <summary>
+        /// Gets planet with id
+        /// </summary>
+        /// <param name="planetID"></param>
+        /// <param name="result"> the result</param>
+        /// <returns>if it exists</returns>
+        public bool Get(int planetID, out OrbitData result)
+        {
+            if (planetID == PlanetID)
+            {
+                result = this;
+                return true;
+            }
+            
+            for (int i = 0; i < Children.Count; i++)
+            {
+                if (Children[i].Get(planetID, out result))
+                    return true;
+            }
+
+            result = EMPTY;
+            return false;
+        }
     }
 }
