@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Bserg.Controller.UI
+namespace Bserg.Controller.World
 {
     public class WorldUI
     {
@@ -51,7 +51,7 @@ namespace Bserg.Controller.UI
         /// </summary>
         /// <param name="planetPositions"></param>
         /// <param name="planets"></param>
-        public void DrawUI(Vector3[] planetPositions, List<Model.Space.Planet> planets)
+        public void Update(Vector3[] planetPositions, List<Model.Space.Planet> planets)
         {
             int n = planets.Count;
             AdjustPool(n);

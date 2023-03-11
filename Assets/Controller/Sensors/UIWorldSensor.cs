@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Bserg.Controller.Core;
+using Bserg.Controller.UI;
+using Bserg.Controller.World;
 using Bserg.Model.Core;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Bserg.Controller.UI
+namespace Bserg.Controller.Sensors
 {
-    public class UIController
+    public class UIWorldReadonlyDriver
     {
         public Camera Camera;
         // Controllers
@@ -17,7 +19,7 @@ namespace Bserg.Controller.UI
         
         private List<Model.Space.Planet> allPlanets, outerPlanets;
 
-        public UIController(Core.Controller controller, UIDocument uiDocument)
+        public UIWorldReadonlyDriver(Core.Controller controller, UIDocument uiDocument)
         {
             Camera = Camera.main;
             // Sub controllers
@@ -49,7 +51,7 @@ namespace Bserg.Controller.UI
                 planetPositions[i] = planetController.GetPlanetPositionAtTickF(game, i + (showInner ? 0 : 4), game.Ticks + dt);
             
             
-            WorldUI.DrawUI(planetPositions, planets);
+            WorldUI.Update(planetPositions, planets);
         }
 
         

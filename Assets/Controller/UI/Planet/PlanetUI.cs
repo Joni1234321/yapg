@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Material;
+using Bserg.Controller.Sensors;
 using Bserg.Controller.Tools;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Level;
@@ -18,7 +19,7 @@ namespace Bserg.Controller.UI.Planet
 
         private VisualTreeAsset elementRound, elementSquareAsset;
 
-        public PlanetUI(VisualElement ui, BuildUI buildUI) : base(ui)
+        public PlanetUI(VisualElement ui, BuildUI buildUI, BuildSensor sensor) : base(ui)
         {
             // Load materials
             elementRound = Resources.Load<VisualTreeAsset>("View/Material/element-round");
@@ -35,10 +36,10 @@ namespace Bserg.Controller.UI.Planet
             groups = ui.Q<VisualElement>("groups");
             groups.Clear();
             
-            planetPopulation = buildUI.CreateLevelGroup("Population", false, true, "Pop");
-            planetFood = buildUI.CreateLevelGroup("Food");
-            planetHousing = buildUI.CreateLevelGroup("Housing");
-            planetLand = buildUI.CreateLevelGroup("Land");
+            planetPopulation = buildUI.CreateLevelGroup("Population", _ => sensor.ChangeRecipe(Recipe.Get("Population")),false, true, "Pop");
+            planetFood = buildUI.CreateLevelGroup("Food", _ => sensor.ChangeRecipe(Recipe.Get("Food")));
+            planetHousing = buildUI.CreateLevelGroup("Housing", _ => sensor.ChangeRecipe(Recipe.Get("Housing")));
+            planetLand = buildUI.CreateLevelGroup("Land", _ => sensor.ChangeRecipe(Recipe.Get("Land")));
             
             groups.Add(planetPopulation);
             groups.Add(planetHousing);

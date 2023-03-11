@@ -1,4 +1,5 @@
 ﻿using Bserg.Controller.Overlays;
+using Bserg.Controller.Sensors;
 using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Political;
@@ -31,7 +32,7 @@ namespace Bserg.Controller.Core
         public PlanetController PlanetController;
         public SpaceflightController SpaceflightController;
 
-        public UIController UIController;
+        public UIWorldReadonlyDriver UIWorldReadonlyDriver;
         public UIDocument uiDocument;
 
         
@@ -64,13 +65,13 @@ namespace Bserg.Controller.Core
         void Start()
         {
             // UI
-            UIController = new UIController(this, uiDocument);
+            UIWorldReadonlyDriver = new UIWorldReadonlyDriver(this, uiDocument);
             // Set earth as planet
-            UIController.UIPlanetController.SetPlanet(3);
+            UIWorldReadonlyDriver.UIPlanetController.SetPlanet(3);
             
             // Overlays
-            NormalOverlay = new NormalOverlay(UIController, PlanetController);
-            TradeOverlay = new TradeOverlay(Game, this, UIController);
+            NormalOverlay = new NormalOverlay(UIWorldReadonlyDriver, PlanetController);
+            TradeOverlay = new TradeOverlay(Game, this, UIWorldReadonlyDriver);
             SetActiveOverlay(NormalOverlay);
 
         }
@@ -83,7 +84,7 @@ namespace Bserg.Controller.Core
             if (TickController.Update(Game))
             {
                 activeOverlay.OnTick(Game, SelectionController.HoverPlanetID, SelectionController.SelectedPlanetID);
-                UIController.OnTick(Game);
+                UIWorldReadonlyDriver.OnTick(Game);
             }
             
             float dt = TickController.DeltaTick;
@@ -93,7 +94,7 @@ namespace Bserg.Controller.Core
             CameraController.OnUpdate(Game, PlanetController, dt);
 
             // UI LAST
-            UIController.OnUpdate(Game, PlanetController, dt);
+            UIWorldReadonlyDriver.OnUpdate(Game, PlanetController, dt);
 
 
             // No need to update if paused, unless one time
@@ -118,7 +119,7 @@ namespace Bserg.Controller.Core
 
         public void OnGameSpeedChange()
         {
-            UIController.UITimeController.UpdateGameSpeed(TickController.Running, TickController.GameSpeed);
+            UIWorldReadonlyDriver.UITimeController.UpdateGameSpeed(TickController.Running, TickController.GameSpeed);
         }
 
 

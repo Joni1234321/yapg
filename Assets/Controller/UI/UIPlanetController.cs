@@ -1,4 +1,6 @@
+using Bserg.Controller.Drivers;
 using Bserg.Controller.Material;
+using Bserg.Controller.Sensors;
 using Bserg.Controller.Tools;
 using Bserg.Controller.UI.Planet;
 using Bserg.Model.Core;
@@ -21,21 +23,27 @@ namespace Bserg.Controller.UI
 
         private PlanetLevels planetLevels;
         private int previousPopulation;
+        private BuildSensor buildSensor;
+        private BuildDriver buildDriver;
         
         public UIPlanetController(UIDocument uiDocument, Game game)
         {
             this.uiDocument = uiDocument;
             planetLevels = game.PlanetLevels;
             
+            
             LevelStyle.Load();
             ElementStyle.Load();
             
             MigrationUI = new MigrationUI(GetUI("migration-view"));
             TransferUI = new TransferUI(GetUI("transfer-view"));
-            BuildUI = new BuildUI(GetUI("build-view"), game.PlanetLevels, game.LevelProgress, game.BuildOperator);
+            BuildUI = new BuildUI(GetUI("build-view"));
+            buildSensor = new BuildSensor(BuildUI, game.BuildSystem, game.PlanetLevels, game.LevelProgress);
+            buildDriver = new BuildDriver(game.BuildOperator, buildSensor, game.PlanetLevels);
+            
             LevelUI = new LevelUI(GetUI("level-view"));
             
-            PlanetUI = new PlanetUI(GetUI("planet-view"), BuildUI);
+            PlanetUI = new PlanetUI(GetUI("planet-view"), BuildUI, buildSensor);
         }
 
         public VisualElement GetUI(string name) => uiDocument.rootVisualElement.Q<VisualElement>(name);
@@ -63,12 +71,13 @@ namespace Bserg.Controller.UI
         public void SetPlanet(string name, long spacecraftPoolCount, int planetID, float populationProgress)
         {
             PlanetUI.Update(name, spacecraftPoolCount, planetLevels, planetID, populationProgress);
-            BuildUI.OnTick();
+            buildSensor.OnTick();
+            
             int pop = planetLevels.Get("Population")[planetID];
             if (previousPopulation != pop)
             {
                 previousPopulation = pop;
-                BuildUI.UpdateBuild();
+                buildSensor.RedrawBuildLevels();
             }
         }
 

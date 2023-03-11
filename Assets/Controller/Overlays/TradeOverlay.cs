@@ -1,4 +1,5 @@
-﻿using Bserg.Controller.UI;
+﻿using Bserg.Controller.Sensors;
+using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Counter;
@@ -26,7 +27,7 @@ namespace Bserg.Controller.Overlays
 
         private bool first = true;
         
-        public TradeOverlay(Game game, Core.Controller controller, UIController uiController)
+        public TradeOverlay(Game game, Core.Controller controller, UIWorldReadonlyDriver uiWorldReadonlyDriver)
         {
             this.controller = controller;
             n = game.N;
@@ -46,7 +47,7 @@ namespace Bserg.Controller.Overlays
                 selectors[i].transform.localScale = Vector3.one * Mathf.Log(planet.Size * 2 + Mathf.Exp(1));
             }
 
-            tradeConfig = uiController.UIPlanetController.GetUI("trade-config");
+            tradeConfig = uiWorldReadonlyDriver.UIPlanetController.GetUI("trade-config");
 
             tradeFrom = tradeConfig.Q<VisualElement>("from");
             tradeTo = tradeConfig.Q<VisualElement>("to");
