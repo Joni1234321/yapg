@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Bserg.Controller.World
 {
+    /// <summary>
+    /// Draws the camera and its position
+    /// </summary>
     public class CameraRenderer : WorldRenderer
     {
         // Camera

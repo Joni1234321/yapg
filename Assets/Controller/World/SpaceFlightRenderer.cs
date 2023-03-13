@@ -1,56 +1,71 @@
-﻿using Bserg.Controller.World;
+﻿using System.Collections.Generic;
 using Bserg.Model.Core;
 using Bserg.Model.Core.Systems;
+using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Units;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
-namespace Bserg.Controller.Core
+namespace Bserg.Controller.World
 {
-    public class SpaceflightController
+    /// <summary>
+    /// Draws spaceflights and their orbits
+    /// </summary>
+    public class SpaceFlightRenderer : WorldRenderer
     {
-        private Transform spaceflightParent, flightOrbitParent;
-        private GameObject spacecraftPrefab, flightOrbitPrefab, oneOrbit;
+        
+        private readonly Planet[] planets;
+        private readonly List<Spaceflight> spaceFlights;
+        
+        private readonly Transform spaceflightParent, flightOrbitParent;
+        private readonly GameObject spacecraftPrefab, flightOrbitPrefab, oneOrbit;
+        
         private PlanetRenderer planetRenderer;
 
-        public SpaceflightController(PlanetRenderer planetRenderer)
+
+        public SpaceFlightRenderer(Planet[] planets, List<Spaceflight> spaceFlights, PlanetRenderer planetRenderer)
         {
+            this.planets = planets;
+            this.spaceFlights = spaceFlights;
+            this.planetRenderer = planetRenderer;
+            
             spacecraftPrefab = Resources.Load<GameObject>("View/Shaders/Spacecraft/Spacecraft");
             flightOrbitPrefab = Resources.Load<GameObject>("View/Shaders/Line/FlightOrbit");
             
             spaceflightParent = new GameObject("Spaceflights").transform;
             flightOrbitParent = new GameObject("Orbits").transform;
-            
-            this.planetRenderer = planetRenderer;
+
         }
         
-        public void Update(Game game, float dt)
-        {   
-            ShowSpaceflights(game, game.SpaceflightSystem, dt);
+        public override void OnUpdate(int ticks, float dt)
+        {
+            if (!active)
+                return;
+            
+            ShowSpaceflights(ticks, dt);
+
         }
 
+
         private bool active = true;
+
+        public void SetActive(bool value)
+        {
+            if (active == value)
+                return;
+
+            active = value;
+            spaceflightParent.gameObject.SetActive(active);
+            flightOrbitParent.gameObject.SetActive(active);
+        }
+        
+        
         /// <summary>
         /// Show the current spaceflights and their progress
         /// </summary>
-        public void ShowSpaceflights(Game game, SpaceflightSystem spaceflightSystem, float dt)
+        private void ShowSpaceflights(int ticks, float dt)
         {
-            if (active && !Input.GetKey(KeyCode.Tab))
-            {
-                active = false;
-                spaceflightParent.gameObject.SetActive(false);
-                flightOrbitParent.gameObject.SetActive(false);
-            }
-
-            if (!active && Input.GetKey(KeyCode.Tab))
-            {
-                active = true;
-                spaceflightParent.gameObject.SetActive(true);
-                flightOrbitParent.gameObject.SetActive(true);
-            }
-
-            int flights = spaceflightSystem.Spaceflights.Count;
+            int flights = spaceFlights.Count;
             int missingGameObjects = flights - spaceflightParent.childCount ;
 
             // Add more gameobjects
@@ -69,18 +84,18 @@ namespace Bserg.Controller.Core
 
             for (int i = 0; i < flights; i++)
             {
-                Spaceflight flight = spaceflightSystem.Spaceflights[i];
+                Spaceflight flight = spaceFlights[i];
                 
                 // Destination percentage traveled
-                float distanceTraveled = (float)((game.Ticks + dt) - flight.DepartureTick) / (flight.DestinationTick - flight.DepartureTick);
+                float distanceTraveled = ((ticks + dt) - flight.DepartureTick) / (flight.DestinationTick - flight.DepartureTick);
                 float startAngle = planetRenderer.GetPlanetAngleAtTicksF(flight.DepartureID, flight.DepartureTick) % (2 * Mathf.PI);
                 
                 // Means it has reached target
                 if (distanceTraveled > 1)
                     continue;
     
-                float r1 = (float)game.Planets[flight.DepartureID].OrbitRadius.To(Length.UnitType.AstronomicalUnits);
-                float r2 = (float)game.Planets[flight.DestinationID].OrbitRadius.To(Length.UnitType.AstronomicalUnits);
+                float r1 = (float)planets[flight.DepartureID].OrbitRadius.To(Length.UnitType.AstronomicalUnits);
+                float r2 = (float)planets[flight.DestinationID].OrbitRadius.To(Length.UnitType.AstronomicalUnits);
 
                 float a = (r1 + r2) * .5f;
                 float c = GetLinearEccentricity(a, Mathf.Min(r1, r2));
@@ -103,31 +118,33 @@ namespace Bserg.Controller.Core
                 flightOrbitParent.GetChild(i).transform.eulerAngles = new Vector3(0, 0, startAngle * Mathf.Rad2Deg - 90);
             }
         }
-
-        /// <summary>
-        /// Returns the distance from center of ellipse to focus point
-        /// </summary>
-        /// <param name="semiMajorAxis">a</param>
-        /// <param name="closestDistanceToOrbitingObject">distance to Focus point</param>
-        /// <returns></returns>
-        float GetLinearEccentricity(float semiMajorAxis, float closestDistanceToOrbitingObject)
-        {
-            //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
-            return Mathf.Abs(semiMajorAxis - closestDistanceToOrbitingObject);
-        } 
+          
+          
+          /// <summary>
+          /// Returns the distance from center of ellipse to focus point
+          /// </summary>
+          /// <param name="semiMajorAxis">a</param>
+          /// <param name="closestDistanceToOrbitingObject">distance to Focus point</param>
+          /// <returns></returns>
+          float GetLinearEccentricity(float semiMajorAxis, float closestDistanceToOrbitingObject)
+          {
+              //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
+              return Mathf.Abs(semiMajorAxis - closestDistanceToOrbitingObject);
+          } 
         
-        /// <summary>
-        /// Returns b of the ellipse
-        /// </summary>
-        /// <param name="semiMajorAxis">a</param>
-        /// <param name="linearEccentricity">c</param>
-        /// <returns></returns>
-        float GetSemiMinorAxis(float semiMajorAxis, float linearEccentricity)
-        {
-            //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
-            // b^2 = a^2 - c^2
-            return Mathf.Sqrt(semiMajorAxis * semiMajorAxis - linearEccentricity * linearEccentricity);
+          /// <summary>
+          /// Returns b of the ellipse
+          /// </summary>
+          /// <param name="semiMajorAxis">a</param>
+          /// <param name="linearEccentricity">c</param>
+          /// <returns></returns>
+          float GetSemiMinorAxis(float semiMajorAxis, float linearEccentricity)
+          {
+              //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
+              // b^2 = a^2 - c^2
+              return Mathf.Sqrt(semiMajorAxis * semiMajorAxis - linearEccentricity * linearEccentricity);
 
-        }
+          }
+
     }
 }

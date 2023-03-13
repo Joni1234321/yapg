@@ -5,21 +5,25 @@ namespace Bserg.Controller.Core
     /// <summary>
     /// Manages input, and calls their hotkeys
     /// </summary>
-    public class InputController
+    public partial class Controller
     {
-        public void OnUpdate (Controller controller)
+        public void HandleInput ()
         {
             if (Input.GetKeyDown(KeyCode.Space))
-                controller.TimeDriver.ToggleGameRunning();
+                TimeDriver.ToggleGameRunning();
             if (Input.GetKeyDown(KeyCode.Plus) || Input.GetKeyDown(KeyCode.KeypadPlus))
-                controller.TimeDriver.IncreaseGameSpeed(1);
+                TimeDriver.IncreaseGameSpeed(1);
             if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
-                controller.TimeDriver.IncreaseGameSpeed(-1);
+                TimeDriver.IncreaseGameSpeed(-1);
             
             if (Input.GetKeyDown(KeyCode.E))
-                controller.CameraDriver.EnterPlanetView();
+                CameraDriver.EnterPlanetView();
             if (Input.GetKeyDown(KeyCode.Q))
-                controller.CameraDriver.EnterSolarSystemView();
+                CameraDriver.EnterSolarSystemView();
+
+            
+            SpaceFlightRenderer.SetActive(Input.GetKey(KeyCode.Tab));
+
         }
     }
 }

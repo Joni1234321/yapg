@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
 {
-    public class Controller : MonoBehaviour
+    public partial class Controller : MonoBehaviour
     {
 
         public const int UI_LAYER = 5, CLICKABLE_LAYER = 7;
@@ -34,10 +34,9 @@ namespace Bserg.Controller.Core
         public TimeSensor TimeSensor;
         public TimeDriver TimeDriver;
         
-        public InputController InputController;
         public MouseController MouseController;
 
-        public SpaceflightController SpaceflightController;
+        public SpaceFlightRenderer SpaceFlightRenderer;
 
         public PlanetRenderer PlanetRenderer;
         public WorldSensor WorldSensor;
@@ -61,12 +60,11 @@ namespace Bserg.Controller.Core
             Game = new Game(names, populationLevels, bodies, planets);
 
             
-            InputController = new InputController();
             MouseController = new MouseController();
             
             PlanetRenderer = new PlanetRenderer(Game.Planets, Game.OrbitalTransferSystem, systemGenerator);
             
-            SpaceflightController = new SpaceflightController(PlanetRenderer);
+            SpaceFlightRenderer = new SpaceFlightRenderer(Game.Planets, Game.SpaceflightSystem.Spaceflights, PlanetRenderer);
 
             CameraRenderer = new CameraRenderer(PlanetRenderer);
             CameraDriver = new CameraDriver(CameraRenderer);
@@ -114,7 +112,7 @@ namespace Bserg.Controller.Core
             
             float dt = TimeDriver.DeltaTick;
 
-            InputController.OnUpdate(this);
+            HandleInput();
             MouseController.OnUpdate(Game, activeOverlay, dt);
 
             UpdateRenderers(Game.Ticks, dt);
@@ -130,7 +128,6 @@ namespace Bserg.Controller.Core
             else
                 firstTickAfterPause = true;
             
-            SpaceflightController.Update(Game, dt);
             
         }
 
@@ -141,6 +138,7 @@ namespace Bserg.Controller.Core
             WorldSensor.PlanetRenderer.OnUpdate(ticks, dt);
             PlanetRenderer.OnUpdate(ticks, dt);
             CameraRenderer.OnUpdate(ticks, dt);
+            SpaceFlightRenderer.OnUpdate(ticks, dt);
         }
         /// <summary>
         /// Activates the new overlay, and deactivates the old

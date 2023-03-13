@@ -21,7 +21,6 @@ namespace Bserg.Controller.Core
             uiDocument = GameObject.Find("UIDocument").GetComponent<UIDocument>();
         }
 
-
         void CheckIfHoverOrSelectChange(Game game, Overlay activeOverlay)
         {
             int newHoverPlanetID = GetHoverPlanetID(game);
