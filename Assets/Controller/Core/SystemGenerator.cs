@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
-using Bserg.Controller.Core;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
+using Bserg.View.Space;
 using Model.Utilities;
 using UnityEngine;
 
-
-namespace Bserg.View.Space
+namespace Bserg.Controller.Core
 {
     public class SystemGenerator : MonoBehaviour
     {
@@ -15,7 +14,7 @@ namespace Bserg.View.Space
         public Transform orbitParent;
         public SystemPrefab prefab;
         private static readonly int Emmision = Shader.PropertyToID("_Emmision");
-        Material material;
+        UnityEngine.Material material;
 
         public int offsetFromSun;
         public float distanceMult = 1f, sizeMult = 1f;
@@ -24,7 +23,7 @@ namespace Bserg.View.Space
         public OrbitData Orbits;
         private void OnEnable()
         {
-            material = Resources.Load<Material>("View/Shaders/MarsMaterial");
+            material = Resources.Load<UnityEngine.Material>("View/Shaders/MarsMaterial");
         }
 
 

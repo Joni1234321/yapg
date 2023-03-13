@@ -136,10 +136,15 @@ namespace Bserg.Controller.Core
         {
             CameraRenderer.OnUpdate(ticks, dt);
 
-            WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
-            
-            WorldSensor.PlanetRenderer.OnUpdate(ticks, dt);
-            PlanetRenderer.OnUpdate(ticks, dt);
+            if (systemGenerator.Orbits.Get(CameraRenderer.FocusPlanetID, out OrbitData orbitData))
+            {
+                List<int> ids = new(orbitData.Children.Count + 1) { orbitData.PlanetID };
+                for (int i = 0; i < orbitData.Children.Count; i++)
+                    ids.Add(orbitData.Children[i].PlanetID);
+                //CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets
+                PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? ids : outerPlanets);
+                PlanetRenderer.OnUpdate(ticks, dt);
+            }
             SpaceFlightRenderer.OnUpdate(ticks, dt);
         }
         /// <summary>

@@ -12,8 +12,8 @@ namespace Bserg.Controller.World
         private readonly Transform transform;
 
         private readonly PlanetRenderer planetRenderer;
-        
-        private int focusPlanetID;
+
+        public int FocusPlanetID { get; private set; }
         private float animationTime;
         
         public float TargetSize = 10;
@@ -34,7 +34,7 @@ namespace Bserg.Controller.World
         {
             animationTime += Time.deltaTime;
             UpdateZoom();
-            Vector3 planetPosition = planetRenderer.GetPlanetPositionAtTickF(focusPlanetID, ticks + dt);
+            Vector3 planetPosition = planetRenderer.GetPlanetPositionAtTickF(FocusPlanetID, ticks + dt);
             
             UpdatePosition(planetPosition);
         }
@@ -48,7 +48,7 @@ namespace Bserg.Controller.World
         public void ChangeFocus(int planetID, float size)
         {
             animationTime = 0;
-            focusPlanetID = planetID;
+            FocusPlanetID = planetID;
             TargetSize = size;
         }
         

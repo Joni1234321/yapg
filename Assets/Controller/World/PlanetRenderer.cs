@@ -43,8 +43,7 @@ namespace Bserg.Controller.World
             DrawGameObjects(ticks, dt);
             
             // Only draw visible uis
-            planetPositions[0] = GetPlanetPositionAtTickF(0, ticks + dt);
-            for (int i = 1; i < planetPositions.Length; i++)
+            for (int i = 0; i < planetPositions.Length; i++)
                 planetPositions[i] = GetPlanetPositionAtTickF(visiblePlanets[i], ticks + dt);
 
             PlanetUIDrawer.Draw(planetPositions, planets, visiblePlanets);
@@ -54,9 +53,6 @@ namespace Bserg.Controller.World
         // ReSharper disable Unity.PerformanceAnalysis
         private void DrawGameObjects(int ticks, float dt)
         {
-            if (!SystemGenerator.Orbits.Get(SelectionHelper.SelectedPlanetID, out OrbitData orbitData))
-                Debug.LogError("Couldnt Find Selected Planet ID");
-
             for (int planetID = 0; planetID < planets.Length; planetID++)
             {
                 // Planet GO
@@ -81,6 +77,7 @@ namespace Bserg.Controller.World
             Vector3 localPosition = SystemGenerator.GetPlanetPosition(
                 (float)planets[planetID].OrbitRadius.To(Length.UnitType.AstronomicalUnits),
                 GetPlanetAngleAtTicksF(planetID, ticks));
+            
             int orbitID = planets[planetID].OrbitObject;
             if (orbitID == -1)
                 return localPosition;
