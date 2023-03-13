@@ -46,6 +46,15 @@ namespace Bserg.Controller.World
             planetPositions[0] = GetPlanetPositionAtTickF(0, ticks + dt);
             for (int i = 1; i < planetPositions.Length; i++)
                 planetPositions[i] = GetPlanetPositionAtTickF(visiblePlanets[i], ticks + dt);
+
+            // Add orbit offset
+            for (int i = 0; i < visiblePlanets.Count; i++)
+            {
+                Planet planet = planets[visiblePlanets[i]];
+                if (planet.OrbitObject != -1)
+                    planetPositions[i] += planetPositions[visiblePlanets.IndexOf(planet.OrbitObject)];
+            }
+            
             PlanetUIDrawer.Draw(planetPositions, planets, visiblePlanets);
         }
 
