@@ -90,3 +90,17 @@ MonoBehaviour:
     WeightEarthMass: 0.0123
     RadiusAU: 0.002569
     OrbitObject: 3
+  - Name: Phobos
+    Population: 0
+    Color: {r: 0.5660378, g: 0.3130189, b: 0.3130189, a: 1}
+    Size: 0.000176941
+    WeightEarthMass: 0.00000000178477
+    RadiusAU: 0.0000626881
+    OrbitObject: 4
+  - Name: Deimos
+    Population: 0
+    Color: {r: 0.277, g: 0.27346364, b: 0.06481801, a: 1}
+    Size: 0.000097316
+    WeightEarthMass: 0.000000000247179
+    RadiusAU: 0.0001568137
+    OrbitObject: 4

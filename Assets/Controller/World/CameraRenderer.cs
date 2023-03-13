@@ -17,7 +17,7 @@ namespace Bserg.Controller.World
         private float animationTime;
         
         public float TargetSize = 10;
-        private readonly float closestZoom = 0.002f, farthestZoom = 400f;
+        private readonly float closestZoom = 0.0002f, farthestZoom = 400f;
         Vector3 vel;
 
         
@@ -79,14 +79,14 @@ namespace Bserg.Controller.World
         {
             Vector3 current = transform.position;
             target = new Vector3(target.x, target.y, -100);
-            if (animationTime < .3f)
+            if (animationTime > 0.3f)
             {
-                transform.position = Vector3.SmoothDamp(current, target, ref vel, .3f);
+                if ( animationTime < .5f)
+                    transform.position = Vector3.SmoothDamp(current, target, ref vel, .15f);
+                else
+                    transform.position = target;
             }
-            else
-            {
-                transform.position = target;
-            }
+
         }
         
         /// <summary>

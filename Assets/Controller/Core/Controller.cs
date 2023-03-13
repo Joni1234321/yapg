@@ -94,7 +94,7 @@ namespace Bserg.Controller.Core
             NormalOverlay = new NormalOverlay(UIPlanetController, PlanetRenderer);
             TradeOverlay = new TradeOverlay(Game, this, UIPlanetController);
             SetActiveOverlay(NormalOverlay);
-            WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
+            WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 80f ? allPlanets : outerPlanets);
 
         }
 
@@ -138,11 +138,16 @@ namespace Bserg.Controller.Core
 
             if (systemGenerator.Orbits.Get(CameraRenderer.FocusPlanetID, out OrbitData orbitData))
             {
-                List<int> ids = new(orbitData.Children.Count + 1) { orbitData.PlanetID };
+                List<int> visibleIds = new(orbitData.Children.Count + 1);
                 for (int i = 0; i < orbitData.Children.Count; i++)
-                    ids.Add(orbitData.Children[i].PlanetID);
+                    visibleIds.Add(orbitData.Children[i].PlanetID);
+                visibleIds.Add(orbitData.PlanetID);
+                // Add all its orbiting planets and so on
+                while (Game.Planets[visibleIds[^1]].OrbitObject != -1)
+                    visibleIds.Add(Game.Planets[visibleIds[^1]].OrbitObject); 
+                
                 //CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets
-                PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? ids : outerPlanets);
+                PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? visibleIds : outerPlanets);
                 PlanetRenderer.OnUpdate(ticks, dt);
             }
             SpaceFlightRenderer.OnUpdate(ticks, dt);

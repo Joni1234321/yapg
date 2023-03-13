@@ -2378,7 +2378,7 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector4MaterialSlot",
     "m_ObjectId": "2cddbf5c39954637893a39cb991124ba",
     "m_Id": 0,
-    "m_DisplayName": "Emmision",
+    "m_DisplayName": "Emission",
     "m_SlotType": 1,
     "m_Hidden": false,
     "m_ShaderOutputName": "Out",
@@ -8272,10 +8272,10 @@
     "m_Guid": {
         "m_GuidSerialized": "3f0e78de-7b62-40ae-964b-b7cc742260e5"
     },
-    "m_Name": "Emmision",
+    "m_Name": "Emission",
     "m_DefaultRefNameVersion": 1,
-    "m_RefNameGeneratedByDisplayName": "Emmision",
-    "m_DefaultReferenceName": "_Emmision",
+    "m_RefNameGeneratedByDisplayName": "Emission",
+    "m_DefaultReferenceName": "_Emission",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Bserg.Controller.Core;
 using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Units;
@@ -110,9 +111,9 @@ namespace Bserg.Controller.World
                 spaceflightParent.GetChild(i).transform.position = planetRenderer.SystemGenerator.GetPositionInOrbit(r1, r2, a, e, distanceTraveled, offsetAngle);
                 
                 // Orbit
-                float diff = planetRenderer.SystemGenerator.AUToWorld(r1 - a);
+                float diff = SystemGenerator.AUToWorld(r1 - a);
                 flightOrbitParent.GetChild(i).transform.position = new Vector3(diff * Mathf.Cos(startAngle), diff * Mathf.Sin(startAngle), 0);
-                flightOrbitParent.GetChild(i).transform.localScale = planetRenderer.SystemGenerator.AUToWorld(4) * new Vector3(b, a, 1);
+                flightOrbitParent.GetChild(i).transform.localScale = SystemGenerator.AUToWorld(4) * new Vector3(b, a, 1);
                 flightOrbitParent.GetChild(i).transform.eulerAngles = new Vector3(0, 0, startAngle * Mathf.Rad2Deg - 90);
             }
         }

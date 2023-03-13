@@ -17,7 +17,7 @@ namespace Bserg.Controller.Drivers
             if (!SelectionHelper.SelectedPlanetValid)
                 return;
 
-            cameraRenderer.ChangeFocus(SelectionHelper.SelectedPlanetID, 0.01f);
+            cameraRenderer.ChangeFocus(SelectionHelper.SelectedPlanetID, 0.1f);
         }
 
         public void EnterSolarSystemView()

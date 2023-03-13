@@ -13,14 +13,14 @@ namespace Bserg.Controller.Core
         public GameObject planetPrefab, orbitPrefab;
         public Transform orbitParent;
         public SystemPrefab prefab;
-        private static readonly int Emmision = Shader.PropertyToID("_Emmision");
+        private static readonly int Emmision = Shader.PropertyToID("_Emission");
         UnityEngine.Material material;
-
-        public int offsetFromSun;
-        public float distanceMult = 1f, sizeMult = 1f;
 
         public Transform[] planetTransforms;
         public OrbitData Orbits;
+        private static readonly int Width = Shader.PropertyToID("_Width");
+        private static readonly int FixedSize = Shader.PropertyToID("_FixedSize");
+
         private void OnEnable()
         {
             material = Resources.Load<UnityEngine.Material>("View/Shaders/MarsMaterial");
@@ -94,12 +94,20 @@ namespace Bserg.Controller.Core
                 AUToWorld((float)planet.OrbitRadius.To(Length.UnitType.AstronomicalUnits)) * 4;
             orbitIndicatorGameObject.transform.localScale = Vector3.one * orbitRadiusWorld;
 
+            if (Application.isPlaying && planet.OrbitObject > 0)
+            {
+                orbitIndicatorGameObject.GetComponent<MeshRenderer>().material.SetColor(Emmision, planet.Color);            
+                orbitIndicatorGameObject.GetComponent<MeshRenderer>().material.SetFloat(Width, 0.003f);            
+                //orbitIndicatorGameObject.GetComponent<MeshRenderer>().material.SetInt(FixedSize, 0);            
+            }
             return go;
         }
 
-        public float AUToWorld(float orbitRadiusAU)
+
+        private const float SIZE_MULTIPLIER = 10f;
+        public static float AUToWorld(float orbitRadiusAU)
         {
-            return orbitRadiusAU * distanceMult;
+            return orbitRadiusAU * SIZE_MULTIPLIER;
         }
 
         /// <summary>
@@ -187,7 +195,9 @@ namespace Bserg.Controller.Core
 
 
 
-        public static Vector3 GetRealPlanetSize(float size) => Vector3.one * (size * .01f);
+        const float EARTH_RADIUS_TO_AU = 4.26352E-5f;
+        private const float OLD_SCALE = 0.005f;
+        public static Vector3 GetRealPlanetSize(float size) => Vector3.one * (AUToWorld(size) * EARTH_RADIUS_TO_AU * 10);
 
         public static Vector3 GetIconPlanetSize(float size) =>
             Vector3.one * (2-1/(1+size));

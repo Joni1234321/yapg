@@ -16,7 +16,7 @@ namespace Bserg.Controller.Drivers
         public int GameSpeed { private set; get; }
         public bool Running { private set; get; }
         
-        private static readonly float[] TICK_TIME = { 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
+        private static readonly float[] TICK_TIME = { 100f / GameTick.TICKS_PER_MONTH, 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
 
 
         public TimeDriver (TimeSensor sensor)

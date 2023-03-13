@@ -60,7 +60,12 @@ namespace Bserg.Controller.World
 
                 // Orbit GO
                 if (planetID != 0)
-                    SystemGenerator.orbitParent.GetChild(planetID - 1).transform.localEulerAngles = new Vector3(0,0,Mathf.Rad2Deg * GetPlanetAngleAtTicksF(planetID, ticks + dt));
+                {
+                    Transform orbitTransform = SystemGenerator.orbitParent.GetChild(planetID - 1).transform;
+                    orbitTransform.position =
+                        SystemGenerator.planetTransforms[planets[planetID].OrbitObject].position;
+                    orbitTransform.localEulerAngles = new Vector3(0,0,Mathf.Rad2Deg * GetPlanetAngleAtTicksF(planetID, ticks + dt));
+                }
             }
         }        
 
