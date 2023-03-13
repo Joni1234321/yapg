@@ -17,9 +17,9 @@ namespace Bserg.Controller.Core
                 controller.TimeDriver.IncreaseGameSpeed(-1);
             
             if (Input.GetKeyDown(KeyCode.E))
-                controller.CameraController.EnterPlanetView();
+                controller.CameraDriver.EnterPlanetView();
             if (Input.GetKeyDown(KeyCode.Q))
-                controller.CameraController.EnterSolarSystemView();
+                controller.CameraDriver.EnterSolarSystemView();
         }
     }
 }

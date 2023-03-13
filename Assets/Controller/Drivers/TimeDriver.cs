@@ -1,10 +1,14 @@
-﻿using Bserg.Controller.UI;
+﻿using Bserg.Controller.Sensors;
+using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Units;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Drivers
 {
+    /// <summary>
+    /// Contains data about the game in between ticks
+    /// </summary>
     public class TimeDriver
     {
         public readonly TimeSensor Sensor;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Overlays;
+using Bserg.Controller.World;
 using Bserg.Model.Core;
 using Bserg.View.Space;
 using UnityEngine;
@@ -24,29 +25,29 @@ namespace Bserg.Controller.Core
         void CheckIfHoverOrSelectChange(Game game, Overlay activeOverlay)
         {
             int newHoverPlanetID = GetHoverPlanetID(game);
-            int oldHoverPlanetID = SelectionController.HoverPlanetID;
-            int oldSelectedPlanetID = SelectionController.SelectedPlanetID;
-            bool oldHoverValid = SelectionController.HoverPlanetID > -1;
+            int oldHoverPlanetID = SelectionHelper.HoverPlanetID;
+            int oldSelectedPlanetID = SelectionHelper.SelectedPlanetID;
+            bool oldHoverValid = SelectionHelper.HoverPlanetID > -1;
             bool newHoverValid = newHoverPlanetID > -1;
-            bool oldSelectedValid = SelectionController.SelectedPlanetID > -1;
+            bool oldSelectedValid = SelectionHelper.SelectedPlanetID > -1;
 
 
             // Hover change
-            if (newHoverPlanetID != SelectionController.HoverPlanetID)
+            if (newHoverPlanetID != SelectionHelper.HoverPlanetID)
             {
-                SelectionController.HoverPlanetID = newHoverPlanetID;
+                SelectionHelper.HoverPlanetID = newHoverPlanetID;
                 if (oldHoverValid)
-                    activeOverlay.PlanetHoverExit(game, oldHoverPlanetID, SelectionController.SelectedPlanetID);
+                    activeOverlay.PlanetHoverExit(game, oldHoverPlanetID, SelectionHelper.SelectedPlanetID);
 
                 if (newHoverValid)
-                    activeOverlay.PlanetHoverEnter(game, newHoverPlanetID, SelectionController.SelectedPlanetID);
+                    activeOverlay.PlanetHoverEnter(game, newHoverPlanetID, SelectionHelper.SelectedPlanetID);
             }
 
 
             // Selected Change
-            if (WorldMouseButtonDown(0) && newHoverPlanetID != SelectionController.SelectedPlanetID)
+            if (WorldMouseButtonDown(0) && newHoverPlanetID != SelectionHelper.SelectedPlanetID)
             {
-                SelectionController.SelectedPlanetID = newHoverPlanetID;
+                SelectionHelper.SelectedPlanetID = newHoverPlanetID;
 
                 if (oldSelectedValid)
                     activeOverlay.PlanetSelectedExit(game, oldSelectedPlanetID);
@@ -64,15 +65,15 @@ namespace Bserg.Controller.Core
         void UpdateFocus(Game game, Overlay activeOverlay)
         {
             // Hover
-            if (SelectionController.HoverPlanetValid)
+            if (SelectionHelper.HoverPlanetValid)
             {
-                if (SelectionController.SelectedPlanetValid) activeOverlay.UpdateHoverAndSelected(game, SelectionController.HoverPlanetID, SelectionController.SelectedPlanetID);
-                else activeOverlay.UpdateHover(game, SelectionController.HoverPlanetID);
+                if (SelectionHelper.SelectedPlanetValid) activeOverlay.UpdateHoverAndSelected(game, SelectionHelper.HoverPlanetID, SelectionHelper.SelectedPlanetID);
+                else activeOverlay.UpdateHover(game, SelectionHelper.HoverPlanetID);
             }
             // No hover then use old selected Planet
             else
             {
-                if (SelectionController.SelectedPlanetValid) activeOverlay.UpdateSelected(game, SelectionController.SelectedPlanetID);
+                if (SelectionHelper.SelectedPlanetValid) activeOverlay.UpdateSelected(game, SelectionHelper.SelectedPlanetID);
                 else activeOverlay.UpdateFocusNone();
             }
         }
@@ -86,8 +87,8 @@ namespace Bserg.Controller.Core
             // Deselect
             if (WorldMouseButtonDown(1))
             {
-                activeOverlay.PlanetSelectedExit(game, SelectionController.SelectedPlanetID);
-                SelectionController.SelectedPlanetID = -1;
+                activeOverlay.PlanetSelectedExit(game, SelectionHelper.SelectedPlanetID);
+                SelectionHelper.SelectedPlanetID = -1;
             }
 
             CheckIfHoverOrSelectChange(game, activeOverlay);
@@ -105,7 +106,7 @@ namespace Bserg.Controller.Core
         {
             int layerMask = (1 << Controller.CLICKABLE_LAYER) | (1 << Controller.UI_LAYER);
 
-            if (Physics.Raycast(CameraController.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
+            if (Physics.Raycast(CameraRenderer.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
                     layerMask))
             {
                 if (hit.collider.gameObject.layer == Controller.UI_LAYER)

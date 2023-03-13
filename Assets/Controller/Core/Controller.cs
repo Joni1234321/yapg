@@ -4,6 +4,7 @@ using Bserg.Controller.Overlays;
 using Bserg.Controller.Sensors;
 using Bserg.Controller.UI;
 using Bserg.Controller.UI.Planet;
+using Bserg.Controller.World;
 using Bserg.Model.Core;
 using Bserg.Model.Political;
 using Bserg.Model.Space;
@@ -19,8 +20,9 @@ namespace Bserg.Controller.Core
         public const int UI_LAYER = 5, CLICKABLE_LAYER = 7;
         public SystemGenerator systemGenerator;
         public Game Game;
-        
-        public CameraController CameraController;
+
+        public CameraRenderer CameraRenderer;
+        public CameraDriver CameraDriver;
 
         // Overlays
         private Overlay activeOverlay;
@@ -28,16 +30,17 @@ namespace Bserg.Controller.Core
         public TradeOverlay TradeOverlay;
 
         public UIPlanetController UIPlanetController;
+        
         public TimeSensor TimeSensor;
         public TimeDriver TimeDriver;
         
         public InputController InputController;
         public MouseController MouseController;
 
-        public PlanetHelper PlanetHelper;
         public SpaceflightController SpaceflightController;
 
-        public UIWorldSensor UIWorldSensor;
+        public PlanetRenderer PlanetRenderer;
+        public WorldSensor WorldSensor;
         public UIDocument uiDocument;
 
 
@@ -45,8 +48,8 @@ namespace Bserg.Controller.Core
 
         void Awake()
         {
-            SelectionController.SelectedPlanetID = -1;
-            SelectionController.HoverPlanetID = -1;
+            SelectionHelper.SelectedPlanetID = -1;
+            SelectionHelper.HoverPlanetID = -1;
             
             Planet[] planets = systemGenerator.GetPlanets();
             string[] names = systemGenerator.GetNames();
@@ -57,15 +60,16 @@ namespace Bserg.Controller.Core
                 
             Game = new Game(names, populationLevels, bodies, planets);
 
-            CameraController = new CameraController();
-            
             
             InputController = new InputController();
             MouseController = new MouseController();
-
-            PlanetHelper = new PlanetHelper(systemGenerator);
-            SpaceflightController = new SpaceflightController(PlanetHelper);
             
+            PlanetRenderer = new PlanetRenderer(Game.Planets, Game.OrbitalTransferSystem, systemGenerator);
+            
+            SpaceflightController = new SpaceflightController(PlanetRenderer);
+
+            CameraRenderer = new CameraRenderer(PlanetRenderer);
+            CameraDriver = new CameraDriver(CameraRenderer);
             
             allPlanets = new();
             outerPlanets = new();
@@ -80,7 +84,7 @@ namespace Bserg.Controller.Core
         void Start()
         {
             // UI
-            UIWorldSensor = new UIWorldSensor(this, uiDocument);
+            WorldSensor = new WorldSensor(PlanetRenderer);
             TimeSensor = new TimeSensor(Game, new TimeUI(uiDocument.rootVisualElement.Q<VisualElement>("time-view")));
             TimeDriver = new TimeDriver(TimeSensor);
             UIPlanetController = new UIPlanetController(uiDocument, Game);
@@ -89,10 +93,10 @@ namespace Bserg.Controller.Core
             UIPlanetController.SetFocusedPlanet(3);
             
             // Overlays
-            NormalOverlay = new NormalOverlay(UIPlanetController, PlanetHelper);
+            NormalOverlay = new NormalOverlay(UIPlanetController, PlanetRenderer);
             TradeOverlay = new TradeOverlay(Game, this, UIPlanetController);
             SetActiveOverlay(NormalOverlay);
-            UIWorldSensor.PlanetRenderer.SetVisiblePlanets(CameraController.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
+            WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
 
         }
 
@@ -103,8 +107,8 @@ namespace Bserg.Controller.Core
 
             if (TimeDriver.Update(Game))
             {
-                activeOverlay.OnTick(Game, SelectionController.HoverPlanetID, SelectionController.SelectedPlanetID);
-                UIWorldSensor.OnTick();
+                activeOverlay.OnTick(Game, SelectionHelper.HoverPlanetID, SelectionHelper.SelectedPlanetID);
+                WorldSensor.OnTick();
                 TimeSensor.OnTick();
             }
             
@@ -112,12 +116,8 @@ namespace Bserg.Controller.Core
 
             InputController.OnUpdate(this);
             MouseController.OnUpdate(Game, activeOverlay, dt);
-            CameraController.OnUpdate(Game, PlanetHelper, dt);
 
-            // UI LAST
-            UIWorldSensor.PlanetRenderer.SetVisiblePlanets(CameraController.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
-            UIWorldSensor.PlanetRenderer.OnUpdate(Game.Ticks, dt);
-
+            UpdateRenderers(Game.Ticks, dt);
 
             // No need to update if paused, unless one time
             if (!TimeDriver.Running)
@@ -130,11 +130,18 @@ namespace Bserg.Controller.Core
             else
                 firstTickAfterPause = true;
             
-            PlanetHelper.Update(Game, dt);
             SpaceflightController.Update(Game, dt);
             
         }
 
+
+        private void UpdateRenderers(int ticks, float dt)
+        {
+            WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
+            WorldSensor.PlanetRenderer.OnUpdate(ticks, dt);
+            PlanetRenderer.OnUpdate(ticks, dt);
+            CameraRenderer.OnUpdate(ticks, dt);
+        }
         /// <summary>
         /// Activates the new overlay, and deactivates the old
         /// </summary>

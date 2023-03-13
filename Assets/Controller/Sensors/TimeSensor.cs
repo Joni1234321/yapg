@@ -1,11 +1,7 @@
-﻿using Bserg.Controller.Core;
-using Bserg.Controller.Sensors;
-using Bserg.Controller.UI.Planet;
+﻿using Bserg.Controller.UI.Planet;
 using Bserg.Model.Core;
-using Bserg.Model.Units;
-using UnityEngine.UIElements;
 
-namespace Bserg.Controller.UI
+namespace Bserg.Controller.Sensors
 {
     /// <summary>
     /// Controls the ui for time

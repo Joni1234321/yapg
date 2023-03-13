@@ -5,20 +5,14 @@ using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Sensors
 {
-    public class UIWorldSensor : GameSensor
+    public class WorldSensor : GameSensor
     {
         // Renders
         public PlanetRenderer PlanetRenderer;
-
-        private Game game;
         
-        public UIWorldSensor(Core.Controller controller, UIDocument uiDocument)
+        public WorldSensor(PlanetRenderer planetRenderer)
         {
-            uiDocument.rootVisualElement.Q<VisualElement>("trade-menu").Q<VisualElement>("button-settle")
-                .RegisterCallback<ClickEvent>(_ => controller.SetActiveOverlay(controller.TradeOverlay));
-
-            PlanetRenderer = new PlanetRenderer(controller.Game.Planets, controller.Game.OrbitalTransferSystem, controller.PlanetHelper);
-            game = controller.Game;
+            PlanetRenderer = planetRenderer;
         }
 
         public override void OnTick()

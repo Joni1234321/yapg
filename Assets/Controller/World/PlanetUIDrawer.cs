@@ -64,7 +64,7 @@ namespace Bserg.Controller.World
                 Planet planet = planets[ids[i]];
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
                 Vector3 iconSize = SystemGenerator.GetIconPlanetSize(planet.Size);
-                pool[i].transform.position = CameraController.Camera.WorldToScreenPoint(position);
+                pool[i].transform.position = CameraRenderer.Camera.WorldToScreenPoint(position);
                 labels[i].text = planet.Name;
                 icons[i].transform.localScale = iconSize;
                 icons[i].color = planet.Color;

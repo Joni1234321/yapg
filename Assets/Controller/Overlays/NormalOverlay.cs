@@ -1,6 +1,5 @@
-﻿using Bserg.Controller.Core;
-using Bserg.Controller.Sensors;
-using Bserg.Controller.UI;
+﻿using Bserg.Controller.UI;
+using Bserg.Controller.World;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
 using Bserg.View.Space;
@@ -12,12 +11,12 @@ namespace Bserg.Controller.Overlays
     {
         private GameObject selector;
         private UIPlanetController uiPlanetController;
-        private PlanetHelper planetHelper;
-        public NormalOverlay(UIPlanetController uiPlanetController, PlanetHelper planetHelper)
+        private PlanetRenderer planetRenderer;
+        public NormalOverlay(UIPlanetController uiPlanetController, PlanetRenderer planetRenderer)
         {
             selector = GameObject.Find("Selector");
             this.uiPlanetController = uiPlanetController;
-            this.planetHelper = planetHelper;
+            this.planetRenderer = planetRenderer;
 
             Disable();
         }
@@ -83,11 +82,10 @@ namespace Bserg.Controller.Overlays
         }
 
 
-        
-
         /// <summary>
         /// Moves the selector to outerring at the selected planet
         /// </summary>
+        /// <param name="game"></param>
         /// <param name="planetID"></param>
         private void ShowSelectorAt(Game game, int planetID)
         {
@@ -96,7 +94,7 @@ namespace Bserg.Controller.Overlays
             
             Planet planet = game.GetPlanet(planetID);
             
-            selector.transform.position = planetHelper.GetPlanetPositionAtTickF(game.Planets, game.OrbitalTransferSystem, planetID, game.Ticks + DeltaTick);;
+            selector.transform.position = planetRenderer.GetPlanetPositionAtTickF(planetID, game.Ticks + DeltaTick);;
             selector.transform.localScale = SystemGenerator.GetIconPlanetSize(planet.Size);
         }
 

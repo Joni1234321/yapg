@@ -3,7 +3,7 @@
     /// <summary>
     /// Contain information about the currently selected / hover planet
     /// </summary>
-    public static class SelectionController
+    public static class SelectionHelper
     {
         private static int hoverPlanetID = -1, selectedPlanetID = -1;
 
