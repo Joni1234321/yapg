@@ -18,23 +18,23 @@ namespace Bserg.Controller.UI.Planet
         public bool IsProgressBar;
 
 
-        public BuildUI(VisualElement ui) : base(ui)
+        public BuildUI(VisualElement root) : base(root)
         {
-            inputList = ui.Q<VisualElement>("input-list");
-            inputSection = ui.Q<VisualElement>("input");
-            outputList = ui.Q<VisualElement>("output-list");
-            inputRemainingList = ui.Q<VisualElement>("input-remaining");
+            inputList = root.Q<VisualElement>("input-list");
+            inputSection = root.Q<VisualElement>("input");
+            outputList = root.Q<VisualElement>("output-list");
+            inputRemainingList = root.Q<VisualElement>("input-remaining");
             
             
-            Upgrade = ui.Q<VisualElement>("upgrade");
-            Downgrade = ui.Q<VisualElement>("downgrade");
+            Upgrade = root.Q<VisualElement>("upgrade");
+            Downgrade = root.Q<VisualElement>("downgrade");
             
             
             inputs = inputList.Query<LevelGroupControl>().ToList();
             outputs = outputList.Query<LevelGroupControl>().ToList();
             inputRemaining = inputRemainingList.Query<LevelControl>().ToList();
 
-            outputProgress = ui.Q<ProgressControl>("output-progress");
+            outputProgress = root.Q<ProgressControl>("output-progress");
             
         }
 

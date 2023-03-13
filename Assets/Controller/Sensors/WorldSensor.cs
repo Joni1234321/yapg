@@ -7,10 +7,6 @@ namespace Bserg.Controller.Sensors
 {
     public class UIWorldSensor : GameSensor
     {
-        // Controllers
-        public UIPlanetController UIPlanetController;
-        public UITimeController UITimeController;
-        
         // Renders
         public PlanetRenderer PlanetRenderer;
 
@@ -27,7 +23,6 @@ namespace Bserg.Controller.Sensors
 
         public override void OnTick()
         {
-            UITimeController.UpdateGameTime(game.Ticks);
         }
     }
 }

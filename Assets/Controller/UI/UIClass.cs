@@ -5,11 +5,11 @@ namespace Bserg.Controller.UI
 {
     public abstract class UIClass
     {
-        public VisualElement UI;
+        public VisualElement Root;
 
-        protected UIClass(VisualElement ui)
+        protected UIClass(VisualElement root)
         {
-            UI = ui;
+            Root = root;
             userInterfaces.Add(this);
         }
         
@@ -62,7 +62,7 @@ namespace Bserg.Controller.UI
             
             int n = userInterfaces.Count;
             for (int i = 0; i < n; i++)
-                userInterfaces[i].UI.style.display = DisplayStyle.None;
+                userInterfaces[i].Root.style.display = DisplayStyle.None;
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Bserg.Controller.UI
 
             int n = userInterfaces.Count;
             for (int i = 0; i < n; i++)
-                userInterfaces[i].UI.style.display = DisplayStyle.Flex;
+                userInterfaces[i].Root.style.display = DisplayStyle.Flex;
         }
         
 

@@ -8,9 +8,9 @@ namespace Bserg.Controller.UI.Planet
         private VisualElement migrationList;
         private FieldControl migrationTotalField;
 
-        public MigrationUI (VisualElement ui) : base(ui) {
-            migrationList = ui.Q<VisualElement>("migration-list");
-            migrationTotalField = ui.Q<FieldControl>("migration-total");
+        public MigrationUI (VisualElement root) : base(root) {
+            migrationList = root.Q<VisualElement>("migration-list");
+            migrationTotalField = root.Q<FieldControl>("migration-total");
         }
         
         /// <summary>

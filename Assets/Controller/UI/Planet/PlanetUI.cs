@@ -19,21 +19,21 @@ namespace Bserg.Controller.UI.Planet
 
         private VisualTreeAsset elementRound, elementSquareAsset;
 
-        public PlanetUI(VisualElement ui, BuildUI buildUI, BuildSensor sensor) : base(ui)
+        public PlanetUI(VisualElement root, BuildUI buildUI, BuildSensor sensor) : base(root)
         {
             // Load materials
             elementRound = Resources.Load<VisualTreeAsset>("View/Material/element-round");
             elementSquareAsset = Resources.Load<VisualTreeAsset>("View/Material/element-square");
 
             // View
-            nameLabel = ui.Q<Label>("name");
+            nameLabel = root.Q<Label>("name");
             
             // Population
-            populationLabel = ui.Q<Label>("population");
+            populationLabel = root.Q<Label>("population");
                 
-            spacecraftPoolLabel = ui.Q<Label>("spacecraft-pool");
+            spacecraftPoolLabel = root.Q<Label>("spacecraft-pool");
 
-            groups = ui.Q<VisualElement>("groups");
+            groups = root.Q<VisualElement>("groups");
             groups.Clear();
             
             planetPopulation = buildUI.CreateLevelGroup("Population", _ => sensor.ChangeRecipe(Recipe.Get("Population")),false, true, "Pop");
@@ -46,7 +46,7 @@ namespace Bserg.Controller.UI.Planet
             groups.Add(planetFood);
             groups.Add(planetLand);
             
-            elementList = ui.Q<VisualElement>("element-list");
+            elementList = root.Q<VisualElement>("element-list");
         }
 
 

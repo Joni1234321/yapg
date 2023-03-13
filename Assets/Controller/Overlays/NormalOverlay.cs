@@ -1,5 +1,6 @@
 ﻿using Bserg.Controller.Core;
 using Bserg.Controller.Sensors;
+using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
 using Bserg.View.Space;
@@ -10,12 +11,12 @@ namespace Bserg.Controller.Overlays
     public class NormalOverlay : Overlay
     {
         private GameObject selector;
-        private UIWorldSensor uiWorldSensor;
+        private UIPlanetController uiPlanetController;
         private PlanetHelper planetHelper;
-        public NormalOverlay(UIWorldSensor uiWorldSensor, PlanetHelper planetHelper)
+        public NormalOverlay(UIPlanetController uiPlanetController, PlanetHelper planetHelper)
         {
             selector = GameObject.Find("Selector");
-            this.uiWorldSensor = uiWorldSensor;
+            this.uiPlanetController = uiPlanetController;
             this.planetHelper = planetHelper;
 
             Disable();
@@ -105,14 +106,14 @@ namespace Bserg.Controller.Overlays
         private void HideSelector()
         {
             selector.gameObject.SetActive(false);
-            uiWorldSensor.UIPlanetController.SetFocusedPlanet(-1);
+            uiPlanetController.SetFocusedPlanet(-1);
         }
 
         private void UpdatePlanetData(Game game, int planetID)
         {
-            uiWorldSensor.UIPlanetController.SetFocusedPlanet(planetID);
+            uiPlanetController.SetFocusedPlanet(planetID);
 
-            uiWorldSensor.UIPlanetController.SetFocusedPlanet(
+            uiPlanetController.SetFocusedPlanet(
                 game.PlanetNames[planetID],
                 game.SpaceflightSystem.SpacecraftPools[planetID].Count,
                 planetID,

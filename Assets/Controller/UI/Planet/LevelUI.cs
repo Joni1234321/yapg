@@ -9,9 +9,9 @@ namespace Bserg.Controller.UI.Planet
     {
         private VisualElement levelList;
 
-        public LevelUI(VisualElement ui) : base(ui)
+        public LevelUI(VisualElement root) : base(root)
         {
-            levelList = ui.Q<VisualElement>("level-list");
+            levelList = root.Q<VisualElement>("level-list");
         }
         
         public void UpdateLevels(List<LevelCount> levelCounts)

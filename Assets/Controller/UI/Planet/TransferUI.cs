@@ -11,9 +11,9 @@ namespace Bserg.Controller.UI.Planet
     public class TransferUI : UIClass
     {
         private VisualElement transferList;
-        public TransferUI (VisualElement ui) : base(ui)
+        public TransferUI (VisualElement root) : base(root)
         {
-            transferList = ui.Q<VisualElement>("transfer-list");
+            transferList = root.Q<VisualElement>("transfer-list");
         }
         
         /// <summary>
