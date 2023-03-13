@@ -7,10 +7,11 @@ namespace Bserg.Controller.UI
     {
         public VisualElement Root;
 
-        protected UIClass(VisualElement root)
+        protected UIClass(VisualElement root, bool alwaysVisible = false)
         {
             Root = root;
-            userInterfaces.Add(this);
+            if (!alwaysVisible)
+                userInterfaces.Add(this);
         }
         
         /// <summary>

@@ -74,7 +74,7 @@ namespace Bserg.Controller.Core
             for (int i = 0; i < planets.Length; i++)
             {
                 allPlanets.Add(i);
-                if (i == 0 || i > 4)
+                if (i == 0 || (i > 4 && i < 10))
                     outerPlanets.Add(i);
             }
         }

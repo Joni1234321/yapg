@@ -52,7 +52,9 @@ namespace Bserg.Controller.World
             {
                 Planet planet = planets[visiblePlanets[i]];
                 if (planet.OrbitObject != -1)
+                {
                     planetPositions[i] += planetPositions[visiblePlanets.IndexOf(planet.OrbitObject)];
+                }
             }
             
             PlanetUIDrawer.Draw(planetPositions, planets, visiblePlanets);

@@ -80,8 +80,8 @@ namespace Bserg.View.Space
             go.GetComponent<MeshRenderer>().material = material;
                 
             go.transform.localScale = GetRealPlanetSize(planet.Size);
-            go.GetComponent<SphereCollider>().radius = GetIconPlanetSize(planet.Size).x / go.transform.localScale.x;
-
+            //go.GetComponent<SphereCollider>().radius = GetIconPlanetSize(planet.Size).x / go.transform.localScale.x;
+            go.GetComponent<SphereCollider>().radius = .6f;
             // Only change color during play mode
             if (Application.isPlaying)
                 go.GetComponent<MeshRenderer>().material.SetColor(Emmision, planet.Color);
@@ -189,11 +189,11 @@ namespace Bserg.View.Space
 
 
 
-        public float reduceSize = .01f;
-        public Vector3 GetRealPlanetSize(float size) => Vector3.one * size * reduceSize;
+        public static Vector3 GetRealPlanetSize(float size) => Vector3.one * (size * .01f);
 
         public static Vector3 GetIconPlanetSize(float size) =>
             Vector3.one * (2-1/(1+size));
+            
         
         public Planet[] GetPlanets()
         {

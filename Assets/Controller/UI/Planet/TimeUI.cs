@@ -11,7 +11,7 @@ namespace Bserg.Controller.UI.Planet
         public readonly Button GameSpeedButton;
         private readonly Label gameTimeLabel;
         
-        public TimeUI(VisualElement root) : base(root)
+        public TimeUI(VisualElement root) : base(root, true)
         {
             // View
             gameTimeLabel = root.Q<Label>("time");

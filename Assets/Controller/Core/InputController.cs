@@ -21,7 +21,17 @@ namespace Bserg.Controller.Core
             if (Input.GetKeyDown(KeyCode.Q))
                 CameraDriver.EnterSolarSystemView();
 
-            
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                SelectionHelper.SelectedPlanetID = (Game.Planets.Length + SelectionHelper.SelectedPlanetID - 1) % Game.Planets.Length;
+                CameraDriver.EnterPlanetView();
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                SelectionHelper.SelectedPlanetID = (Game.Planets.Length + SelectionHelper.SelectedPlanetID + 1) % Game.Planets.Length;
+                CameraDriver.EnterPlanetView();
+            }
+
             SpaceFlightRenderer.SetActive(Input.GetKey(KeyCode.Tab));
 
         }
