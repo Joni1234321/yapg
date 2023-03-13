@@ -47,16 +47,6 @@ namespace Bserg.Controller.World
             for (int i = 1; i < planetPositions.Length; i++)
                 planetPositions[i] = GetPlanetPositionAtTickF(visiblePlanets[i], ticks + dt);
 
-            // Add orbit offset
-            for (int i = 0; i < visiblePlanets.Count; i++)
-            {
-                Planet planet = planets[visiblePlanets[i]];
-                if (planet.OrbitObject != -1)
-                {
-                    planetPositions[i] += planetPositions[visiblePlanets.IndexOf(planet.OrbitObject)];
-                }
-            }
-            
             PlanetUIDrawer.Draw(planetPositions, planets, visiblePlanets);
         }
 
@@ -71,10 +61,6 @@ namespace Bserg.Controller.World
             {
                 // Planet GO
                 SystemGenerator.planetTransforms[planetID].position = GetPlanetPositionAtTickF( planetID, ticks + dt);
-                int orbitID = planets[planetID].OrbitObject;
-                
-                if (orbitID != -1)
-                    SystemGenerator.planetTransforms[planetID].position += SystemGenerator.planetTransforms[orbitID].transform.position;
 
                 // Orbit GO
                 if (planetID != 0)
@@ -86,21 +72,31 @@ namespace Bserg.Controller.World
         /// <summary>
         /// Returns the position of the planet at a given tick and delta
         /// </summary>
-        /// <param name="planets"></param>
-        /// <param name="orbitalTransferSystem"></param>
         /// <param name="planetID"></param>
         /// <param name="ticks"></param>
         /// <returns></returns>
         public Vector3 GetPlanetPositionAtTickF (int planetID, float ticks)
         {
-            return SystemGenerator.GetPlanetPosition((float)planets[planetID].OrbitRadius.To(Length.UnitType.AstronomicalUnits), GetPlanetAngleAtTicksF(planetID, ticks));
+            // Position in orbit
+            Vector3 localPosition = SystemGenerator.GetPlanetPosition(
+                (float)planets[planetID].OrbitRadius.To(Length.UnitType.AstronomicalUnits),
+                GetPlanetAngleAtTicksF(planetID, ticks));
+            int orbitID = planets[planetID].OrbitObject;
+            if (orbitID == -1)
+                return localPosition;
+
+            Vector3 relativePosition =
+                SystemGenerator.GetPlanetPosition((float)planets[orbitID].OrbitRadius
+                    .To(Length.UnitType.AstronomicalUnits),
+                    GetPlanetAngleAtTicksF(orbitID, ticks));
+            
+            return relativePosition + localPosition;
         }
 
 
         /// <summary>
         /// Return angles in radians
         /// </summary>
-        /// <param name="orbitalTransferSystem"></param>
         /// <param name="planetID"></param>
         /// <param name="ticks"></param>
         /// <returns></returns>

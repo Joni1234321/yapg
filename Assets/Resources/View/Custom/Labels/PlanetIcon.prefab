@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7174486998849501330}
   - component: {fileID: 7174486998849501328}
   - component: {fileID: -2209577641657338637}
+  - component: {fileID: 8819629346372999376}
   m_Layer: 5
   m_Name: PlanetIcon
   m_TagString: Untagged
@@ -73,3 +74,16 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &8819629346372999376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7174486998849501333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bc0ae8b983126f4591d5a88f1cbf627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planetID: 0

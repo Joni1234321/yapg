@@ -21,6 +21,7 @@ namespace Bserg.Controller.World
         //private List<RectTransform> rectTransforms;
         private List<TextMeshProUGUI> labels;
         private List<RawImage> images, icons;
+        private List<PlanetIDScript> idScripts;
         
         private int activeGameObjectsLength;
         
@@ -42,6 +43,7 @@ namespace Bserg.Controller.World
             labels = new List<TextMeshProUGUI>(N);
             images = new List<RawImage>(N);
             icons = new List<RawImage>(N);
+            idScripts = new List<PlanetIDScript>(N);
 
             for (int i = 0; i < N; i++)
                 AddPlanetLabel();
@@ -62,6 +64,7 @@ namespace Bserg.Controller.World
             for (int i = 0; i < n; i++)
             {
                 Planet planet = planets[ids[i]];
+                idScripts[i].planetID = ids[i];
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
                 Vector3 iconSize = SystemGenerator.GetIconPlanetSize(planet.Size);
                 pool[i].transform.position = CameraRenderer.Camera.WorldToScreenPoint(position);
@@ -117,6 +120,7 @@ namespace Bserg.Controller.World
             GameObject iconGo = Object.Instantiate(IconPrefab, center);
             icons.Add(iconGo.GetComponent<RawImage>());
             
+            idScripts.Add(iconGo.GetComponent<PlanetIDScript>());
             //iconGo.SetActive(false);
             
             go.SetActive(false);

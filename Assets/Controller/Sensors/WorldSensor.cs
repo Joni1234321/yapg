@@ -1,7 +1,4 @@
-﻿using Bserg.Controller.UI;
-using Bserg.Controller.World;
-using Bserg.Model.Core;
-using UnityEngine.UIElements;
+﻿using Bserg.Controller.World;
 
 namespace Bserg.Controller.Sensors
 {

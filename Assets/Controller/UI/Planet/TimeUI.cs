@@ -1,5 +1,4 @@
-﻿using Bserg.Controller.Core;
-using Bserg.Model.Units;
+﻿using Bserg.Model.Units;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.UI.Planet

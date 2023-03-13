@@ -1,8 +1,4 @@
-﻿using Bserg.Controller.Core;
-using Bserg.Model.Core;
-using Bserg.Model.Core.Systems;
-using Bserg.Model.Space;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Bserg.Controller.World
 {
@@ -13,14 +9,15 @@ namespace Bserg.Controller.World
     {
         // Camera
         public static Camera Camera;
-        private Transform transform;
+        private readonly Transform transform;
 
-        private PlanetRenderer planetRenderer;
+        private readonly PlanetRenderer planetRenderer;
         
         private int focusPlanetID;
         private float animationTime;
         
-        private float closestZoom = 0.002f, farthestZoom = 400f, targetSize = 10;
+        public float TargetSize = 10;
+        private readonly float closestZoom = 0.002f, farthestZoom = 400f;
         Vector3 vel;
 
         
@@ -38,6 +35,7 @@ namespace Bserg.Controller.World
             animationTime += Time.deltaTime;
             UpdateZoom();
             Vector3 planetPosition = planetRenderer.GetPlanetPositionAtTickF(focusPlanetID, ticks + dt);
+            
             UpdatePosition(planetPosition);
         }
         
@@ -51,7 +49,7 @@ namespace Bserg.Controller.World
         {
             animationTime = 0;
             focusPlanetID = planetID;
-            targetSize = size;
+            TargetSize = size;
         }
         
         /// <summary>
@@ -96,15 +94,11 @@ namespace Bserg.Controller.World
         /// </summary>
         private void UpdateZoom()
         {
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
-                targetSize *= 1.2f; 
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                targetSize *= .80f;
 
             float currentSize = Camera.orthographicSize;
-            targetSize = Mathf.Clamp(targetSize, closestZoom, farthestZoom);
+            TargetSize = Mathf.Clamp(TargetSize, closestZoom, farthestZoom);
             
-            Camera.orthographicSize = Mathf.Clamp(NextSmoothStep(currentSize, targetSize), closestZoom, farthestZoom);
+            Camera.orthographicSize = Mathf.Clamp(NextSmoothStep(currentSize, TargetSize), closestZoom, farthestZoom);
         }
 
 

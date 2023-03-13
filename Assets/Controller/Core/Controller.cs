@@ -134,10 +134,12 @@ namespace Bserg.Controller.Core
 
         private void UpdateRenderers(int ticks, float dt)
         {
+            CameraRenderer.OnUpdate(ticks, dt);
+
             WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
+            
             WorldSensor.PlanetRenderer.OnUpdate(ticks, dt);
             PlanetRenderer.OnUpdate(ticks, dt);
-            CameraRenderer.OnUpdate(ticks, dt);
             SpaceFlightRenderer.OnUpdate(ticks, dt);
         }
         /// <summary>

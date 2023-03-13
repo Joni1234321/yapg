@@ -1,5 +1,4 @@
-﻿using Bserg.Controller.Sensors;
-using Bserg.Controller.UI;
+﻿using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Counter;

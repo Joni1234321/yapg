@@ -1,6 +1,5 @@
 ﻿using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
-using UnityEngine;
 
 namespace Bserg.Model.Core.Operators
 {

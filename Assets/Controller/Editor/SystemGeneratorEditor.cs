@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using Bserg.View.Space;
 using UnityEditor;
 using UnityEditor.UIElements;

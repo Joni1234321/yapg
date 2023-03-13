@@ -1,10 +1,14 @@
-﻿namespace Bserg.Controller.Core
+﻿using Bserg.Controller.Overlays;
+
+namespace Bserg.Controller.Core
 {
     /// <summary>
     /// Contain information about the currently selected / hover planet
     /// </summary>
     public static class SelectionHelper
     {
+        public static Overlay ActiveOverlay;
+        
         private static int hoverPlanetID = -1, selectedPlanetID = -1;
 
         public static bool HoverPlanetValid { get; private set; } = false;
@@ -17,7 +21,7 @@
             {
                 if (hoverPlanetID == value)
                     return;
-
+                
                 hoverPlanetID = value;
                 HoverPlanetValid = value != -1;
             }
@@ -33,7 +37,13 @@
 
                 selectedPlanetID = value; 
                 SelectedPlanetValid = value != -1;
+                
+                if (SelectedPlanetValid)
+                    OnNewValidSelect?.Invoke(SelectedPlanetID);
             }
         }
+        
+        public delegate void OnClick(int planetID);
+        public static event OnClick OnNewValidSelect;
     }
 }

@@ -31,6 +31,12 @@ namespace Bserg.Controller.Core
                 SelectionHelper.SelectedPlanetID = (Game.Planets.Length + SelectionHelper.SelectedPlanetID + 1) % Game.Planets.Length;
                 CameraDriver.EnterPlanetView();
             }
+            
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+                CameraRenderer.TargetSize *= 1.2f; 
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+                CameraRenderer.TargetSize *= .80f;
+
 
             SpaceFlightRenderer.SetActive(Input.GetKey(KeyCode.Tab));
 

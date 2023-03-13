@@ -2,8 +2,8 @@
 using Bserg.Controller.Overlays;
 using Bserg.Controller.World;
 using Bserg.Model.Core;
-using Bserg.View.Space;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
@@ -14,7 +14,6 @@ namespace Bserg.Controller.Core
     public class MouseController
     {
         UIDocument uiDocument;
-
 
         public MouseController()
         {
@@ -112,13 +111,14 @@ namespace Bserg.Controller.Core
                     Debug.Log("Hit UI");
                 return hit.collider.GetComponent<PlanetIDScript>().planetID;
             }
+
             
-            return -1;
+            return PlanetIDScript.UIHoverID;
         }
 
 
         /// <summary>
-        /// Returns wether the mouse has been hit while not over a ui object
+        /// Returns whether the mouse has been hit while not over a ui object
         /// </summary>
         /// <param name="button"></param>
         /// <returns></returns>
