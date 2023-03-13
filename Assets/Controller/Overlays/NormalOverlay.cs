@@ -1,8 +1,8 @@
 ﻿using Bserg.Controller.Core;
 using Bserg.Controller.Sensors;
-using Bserg.Controller.UI;
 using Bserg.Model.Core;
 using Bserg.Model.Space;
+using Bserg.View.Space;
 using UnityEngine;
 
 namespace Bserg.Controller.Overlays
@@ -10,13 +10,13 @@ namespace Bserg.Controller.Overlays
     public class NormalOverlay : Overlay
     {
         private GameObject selector;
-        private UIWorldReadonlyDriver uiWorldReadonlyDriver;
-        private PlanetController planetController;
-        public NormalOverlay(UIWorldReadonlyDriver uiWorldReadonlyDriver, PlanetController planetController)
+        private UIWorldSensor uiWorldSensor;
+        private PlanetHelper planetHelper;
+        public NormalOverlay(UIWorldSensor uiWorldSensor, PlanetHelper planetHelper)
         {
             selector = GameObject.Find("Selector");
-            this.uiWorldReadonlyDriver = uiWorldReadonlyDriver;
-            this.planetController = planetController;
+            this.uiWorldSensor = uiWorldSensor;
+            this.planetHelper = planetHelper;
 
             Disable();
         }
@@ -95,8 +95,8 @@ namespace Bserg.Controller.Overlays
             
             Planet planet = game.GetPlanet(planetID);
             
-            selector.transform.position = planetController.GetPlanetPositionAtTickF(game, planetID, game.Ticks + DeltaTick);;
-            selector.transform.localScale = planetController.SystemGenerator.GetIconPlanetSize(planet.Size);
+            selector.transform.position = planetHelper.GetPlanetPositionAtTickF(game.Planets, game.OrbitalTransferSystem, planetID, game.Ticks + DeltaTick);;
+            selector.transform.localScale = SystemGenerator.GetIconPlanetSize(planet.Size);
         }
 
         /// <summary>
@@ -105,14 +105,14 @@ namespace Bserg.Controller.Overlays
         private void HideSelector()
         {
             selector.gameObject.SetActive(false);
-            uiWorldReadonlyDriver.UIPlanetController.SetPlanet(-1);
+            uiWorldSensor.UIPlanetController.SetFocusedPlanet(-1);
         }
 
         private void UpdatePlanetData(Game game, int planetID)
         {
-            uiWorldReadonlyDriver.UIPlanetController.SetPlanet(planetID);
+            uiWorldSensor.UIPlanetController.SetFocusedPlanet(planetID);
 
-            uiWorldReadonlyDriver.UIPlanetController.SetPlanet(
+            uiWorldSensor.UIPlanetController.SetFocusedPlanet(
                 game.PlanetNames[planetID],
                 game.SpaceflightSystem.SpacecraftPools[planetID].Count,
                 planetID,

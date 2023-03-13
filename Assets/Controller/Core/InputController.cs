@@ -20,8 +20,6 @@ namespace Bserg.Controller.Core
                 controller.CameraController.EnterPlanetView();
             if (Input.GetKeyDown(KeyCode.Q))
                 controller.CameraController.EnterSolarSystemView();
-
-
         }
     }
 }

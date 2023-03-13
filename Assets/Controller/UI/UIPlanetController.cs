@@ -39,7 +39,7 @@ namespace Bserg.Controller.UI
             TransferUI = new TransferUI(GetUI("transfer-view"));
             BuildUI = new BuildUI(GetUI("build-view"));
             buildSensor = new BuildSensor(BuildUI, game.BuildSystem, game.PlanetLevels, game.LevelProgress);
-            buildDriver = new BuildDriver(game.BuildOperator, buildSensor, game.PlanetLevels);
+            buildDriver = new BuildDriver(game.BuildOperator, buildSensor);
             
             LevelUI = new LevelUI(GetUI("level-view"));
             
@@ -52,7 +52,7 @@ namespace Bserg.Controller.UI
         /// Called whenever the selected or visualised planet has changed
         /// </summary>
         /// <param name="planetID"></param>
-        public void SetPlanet(int planetID)
+        public void SetFocusedPlanet(int planetID)
         {
             if (planetID < 0)
             {
@@ -68,7 +68,7 @@ namespace Bserg.Controller.UI
         }
         
         
-        public void SetPlanet(string name, long spacecraftPoolCount, int planetID, float populationProgress)
+        public void SetFocusedPlanet(string name, long spacecraftPoolCount, int planetID, float populationProgress)
         {
             PlanetUI.Update(name, spacecraftPoolCount, planetLevels, planetID, populationProgress);
             buildSensor.OnTick();

@@ -1,16 +1,19 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Core;
+using Bserg.Model.Space;
+using Bserg.View.Space;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Bserg.Controller.World
 {
-    public class WorldUI
+    /// <summary>
+    /// Renders the ui for the planets
+    /// it uses a pool system
+    /// </summary>
+    public class PlanetUIDrawer
     {
-        public PlanetController PlanetController;
-        private CameraController cameraController;
-            
         public readonly Transform Parent;
         public readonly GameObject ParentPrefab, LabelPrefab, ImagePrefab, IconPrefab;
         
@@ -22,17 +25,15 @@ namespace Bserg.Controller.World
         private int activeGameObjectsLength;
         
 
-        public WorldUI(PlanetController planetController, CameraController cameraController, Transform parent)
+        public PlanetUIDrawer()
         {
-            PlanetController = planetController;
-            this.cameraController = cameraController;
+            Parent = GameObject.Find("PlanetLabels").transform;
             
             ParentPrefab = Resources.Load<GameObject>("View/Custom/Labels/PlanetParent");
             LabelPrefab = Resources.Load<GameObject>("View/Custom/Labels/PlanetLabel");
             ImagePrefab = Resources.Load<GameObject>("View/Custom/Labels/PlanetImage");
             IconPrefab = Resources.Load<GameObject>("View/Custom/Labels/PlanetIcon");
             
-            Parent = parent;
             
             const int N = 30;
 
@@ -51,20 +52,22 @@ namespace Bserg.Controller.World
         /// </summary>
         /// <param name="planetPositions"></param>
         /// <param name="planets"></param>
-        public void Update(Vector3[] planetPositions, List<Model.Space.Planet> planets)
+        /// <param name="ids"></param>
+        public void Draw(Vector3[] planetPositions, Planet[] planets, List<int> ids)
         {
-            int n = planets.Count;
+            int n = ids.Count;
             AdjustPool(n);
 
             // Draw labels on planets
             for (int i = 0; i < n; i++)
             {
+                Planet planet = planets[ids[i]];
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
-                Vector3 iconSize = PlanetController.SystemGenerator.GetIconPlanetSize(planets[i].Size);
-                pool[i].transform.position = cameraController.Camera.WorldToScreenPoint(position);
-                labels[i].text = planets[i].Name;
+                Vector3 iconSize = SystemGenerator.GetIconPlanetSize(planet.Size);
+                pool[i].transform.position = CameraController.Camera.WorldToScreenPoint(position);
+                labels[i].text = planet.Name;
                 icons[i].transform.localScale = iconSize;
-                icons[i].color = planets[i].Color;
+                icons[i].color = planet.Color;
             }
         }
 
@@ -91,6 +94,7 @@ namespace Bserg.Controller.World
                 DisableLabel();
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         /// <summary>
         /// Creates a new label gameObject
         /// </summary>
@@ -110,7 +114,6 @@ namespace Bserg.Controller.World
             imageImage.rectTransform.offsetMax = new Vector2(imageImage.rectTransform.offsetMax.x, 0);
             images.Add(imageImage);
             
-            RectTransform t = images[0].rectTransform;            
             GameObject iconGo = Object.Instantiate(IconPrefab, center);
             icons.Add(iconGo.GetComponent<RawImage>());
             
@@ -132,6 +135,7 @@ namespace Bserg.Controller.World
         {
             pool[activeGameObjectsLength++].SetActive(true);
         }
+
     }
 
 }

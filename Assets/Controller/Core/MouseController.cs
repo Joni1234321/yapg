@@ -12,13 +12,11 @@ namespace Bserg.Controller.Core
     /// </summary>
     public class MouseController
     {
-        private CameraController cameraController;
         UIDocument uiDocument;
 
 
-        public MouseController(CameraController cameraController)
+        public MouseController()
         {
-            this.cameraController = cameraController;
             uiDocument = GameObject.Find("UIDocument").GetComponent<UIDocument>();
         }
 
@@ -107,7 +105,7 @@ namespace Bserg.Controller.Core
         {
             int layerMask = (1 << Controller.CLICKABLE_LAYER) | (1 << Controller.UI_LAYER);
 
-            if (Physics.Raycast(cameraController.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
+            if (Physics.Raycast(CameraController.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
                     layerMask))
             {
                 if (hit.collider.gameObject.layer == Controller.UI_LAYER)

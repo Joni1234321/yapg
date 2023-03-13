@@ -192,7 +192,7 @@ namespace Bserg.View.Space
         public float reduceSize = .01f;
         public Vector3 GetRealPlanetSize(float size) => Vector3.one * size * reduceSize;
 
-        public Vector3 GetIconPlanetSize(float size) =>
+        public static Vector3 GetIconPlanetSize(float size) =>
             Vector3.one * (2-1/(1+size));
         
         public Planet[] GetPlanets()

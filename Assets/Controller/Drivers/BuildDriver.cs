@@ -1,6 +1,5 @@
 ﻿using Bserg.Controller.Sensors;
 using Bserg.Model.Core.Operators;
-using Bserg.Model.Space;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,13 +9,11 @@ namespace Bserg.Controller.Drivers
     {
         public readonly BuildSensor Sensor;
         public readonly BuildOperator Operator;
-        private readonly PlanetLevels planetLevels;
 
-        public BuildDriver(BuildOperator buildOperator, BuildSensor buildSensor, PlanetLevels planetLevels)
+        public BuildDriver(BuildOperator buildOperator, BuildSensor buildSensor)
         {
             Operator = buildOperator;
             Sensor = buildSensor;
-            this.planetLevels = planetLevels;            
             
             buildSensor.UI.Upgrade.RegisterCallback<ClickEvent>(_ => Upgrade());
             buildSensor.UI.Downgrade.RegisterCallback<ClickEvent>(_ => Downgrade());

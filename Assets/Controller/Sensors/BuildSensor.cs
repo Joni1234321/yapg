@@ -1,12 +1,14 @@
-﻿using Bserg.Controller.UI;
-using Bserg.Controller.UI.Planet;
+﻿using Bserg.Controller.UI.Planet;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Sensors
-{
-    public class BuildSensor : UIClass
+{ 
+    /// <summary>
+    /// Sensor for build system
+    /// </summary>
+    public class BuildSensor : GameSensor
     {
 
         public readonly BuildUI UI;
@@ -19,7 +21,7 @@ namespace Bserg.Controller.Sensors
         
         private readonly PlanetLevelsGeneric<float> planetProgress;
 
-        public BuildSensor(BuildUI buildUI, BuildSystem buildSystem, PlanetLevels planetLevels, PlanetLevelsGeneric<float> planetProgress) : base(new VisualElement())
+        public BuildSensor(BuildUI buildUI, BuildSystem buildSystem, PlanetLevels planetLevels, PlanetLevelsGeneric<float> planetProgress)
         { 
             
             PlanetLevels = planetLevels;
@@ -31,12 +33,17 @@ namespace Bserg.Controller.Sensors
             ChangeRecipe(Recipe.Get("Food"), false);
         }
 
-        public void OnTick()
+        public override void OnTick()
         {
             if (UI.IsProgressBar)
                 UI.ChangeProgressValue(planetProgress.Get(CurrentRecipe.Output[0].Name)[CurrentPlanetID] * 100);
         }
         
+        /// <summary>
+        /// Changes the currently focused recipe
+        /// </summary>
+        /// <param name="newRecipe"></param>
+        /// <param name="update"></param>
         public void ChangeRecipe(Recipe newRecipe, bool update = true)
         {
             CurrentRecipe = newRecipe;
@@ -44,22 +51,27 @@ namespace Bserg.Controller.Sensors
             if (update) RedrawBuildLevels();
         }
 
-        
-        protected override void OnNewSelectedPlanet(int planetID)
+    
+        protected override void OnNewFocusedPlanet(int planetID)
         {
+            // Get the current recipe for the selected planet
             CurrentPlanetID = planetID;
             RedrawBuildLevels();
         }
         
-        protected override void OnDeselectPlanet()
+        protected override void OnNoPlanetFocuesed()
         {
+            // Just set current to 0, to indicate none is selected
             RedrawBuildLevels(CurrentRecipe, 0);
         }
 
 
+        /// <summary>
+        /// Draw the ui with the given recipe
+        /// </summary>
+        /// <param name="recipe"></param>
         public void DrawRecipe(Recipe recipe)
         {
-            // ChangeRecipe(Recipe.Get(style.Name))
             EventCallback<ClickEvent>[] inputCallbacks = new EventCallback<ClickEvent>[recipe.Input.Length];
             EventCallback<ClickEvent>[] outputCallbacks = new EventCallback<ClickEvent>[recipe.Output.Length];
             

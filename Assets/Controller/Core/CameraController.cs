@@ -5,7 +5,7 @@ namespace Bserg.Controller.Core
 {
     public class CameraController
     {
-        public Camera Camera;
+        public static Camera Camera;
         private Transform transform;
 
         private int focusPlanetID;
@@ -30,6 +30,7 @@ namespace Bserg.Controller.Core
             targetSize = Mathf.Clamp(targetSize, closestZoom, farthestZoom);
             
             Camera.orthographicSize = Mathf.Clamp(NextSmoothStep(currentSize, targetSize), closestZoom, farthestZoom);
+            
         }
         Vector3 vel;
 
@@ -84,11 +85,11 @@ namespace Bserg.Controller.Core
             targetSize = 10;
         }
 
-        public void OnUpdate(Game game, PlanetController planetController, float dt)
+        public void OnUpdate(Game game, PlanetHelper planetHelper, float dt)
         {
             animationTime += Time.deltaTime;
             UpdateZoom();
-            Vector3 planetPosition = planetController.GetPlanetPositionAtTickF(game, focusPlanetID, game.Ticks + dt);
+            Vector3 planetPosition = planetHelper.GetPlanetPositionAtTickF(game.Planets, game.OrbitalTransferSystem, focusPlanetID, game.Ticks + dt);
             UpdatePosition(planetPosition);
         } 
         

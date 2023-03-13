@@ -11,9 +11,9 @@ namespace Bserg.Controller.Core
     {
         private Transform spaceflightParent, flightOrbitParent;
         private GameObject spacecraftPrefab, flightOrbitPrefab, oneOrbit;
-        private PlanetController planetController;
+        private PlanetHelper planetHelper;
 
-        public SpaceflightController(PlanetController planetController)
+        public SpaceflightController(PlanetHelper planetHelper)
         {
             spacecraftPrefab = Resources.Load<GameObject>("View/Shaders/Spacecraft/Spacecraft");
             flightOrbitPrefab = Resources.Load<GameObject>("View/Shaders/Line/FlightOrbit");
@@ -21,7 +21,7 @@ namespace Bserg.Controller.Core
             spaceflightParent = new GameObject("Spaceflights").transform;
             flightOrbitParent = new GameObject("Orbits").transform;
             
-            this.planetController = planetController;
+            this.planetHelper = planetHelper;
         }
         
         public void Update(Game game, float dt)
@@ -72,7 +72,7 @@ namespace Bserg.Controller.Core
                 
                 // Destination percentage traveled
                 float distanceTraveled = (float)((game.Ticks + dt) - flight.DepartureTick) / (flight.DestinationTick - flight.DepartureTick);
-                float startAngle = planetController.GetPlanetAngleAtTicksF(game, flight.DepartureID, flight.DepartureTick) % (2 * Mathf.PI);
+                float startAngle = planetHelper.GetPlanetAngleAtTicksF(game.OrbitalTransferSystem, flight.DepartureID, flight.DepartureTick) % (2 * Mathf.PI);
                 
                 // Means it has reached target
                 if (distanceTraveled > 1)
@@ -85,7 +85,7 @@ namespace Bserg.Controller.Core
                 float c = GetLinearEccentricity(a, Mathf.Min(r1, r2));
                 float b = GetSemiMinorAxis(a, c);
                 float offsetAngle =
-                    planetController.GetPlanetAngleAtTicksF(game, flight.DepartureID, flight.DepartureTick);
+                    planetHelper.GetPlanetAngleAtTicksF(game.OrbitalTransferSystem, flight.DepartureID, flight.DepartureTick);
                 
                 // 
                 // Eccentricity
@@ -93,12 +93,12 @@ namespace Bserg.Controller.Core
                 // Calculate true anomaly
                 // https://en.wikipedia.org/wiki/True_anomaly
 
-                spaceflightParent.GetChild(i).transform.position = planetController.SystemGenerator.GetPositionInOrbit(r1, r2, a, e, distanceTraveled, offsetAngle);
+                spaceflightParent.GetChild(i).transform.position = planetHelper.SystemGenerator.GetPositionInOrbit(r1, r2, a, e, distanceTraveled, offsetAngle);
                 
                 // Orbit
-                float diff = planetController.SystemGenerator.AUToWorld(r1 - a);
+                float diff = planetHelper.SystemGenerator.AUToWorld(r1 - a);
                 flightOrbitParent.GetChild(i).transform.position = new Vector3(diff * Mathf.Cos(startAngle), diff * Mathf.Sin(startAngle), 0);
-                flightOrbitParent.GetChild(i).transform.localScale = planetController.SystemGenerator.AUToWorld(4) * new Vector3(b, a, 1);
+                flightOrbitParent.GetChild(i).transform.localScale = planetHelper.SystemGenerator.AUToWorld(4) * new Vector3(b, a, 1);
                 flightOrbitParent.GetChild(i).transform.eulerAngles = new Vector3(0, 0, startAngle * Mathf.Rad2Deg - 90);
             }
         }

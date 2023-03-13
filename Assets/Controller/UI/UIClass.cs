@@ -27,7 +27,7 @@ namespace Bserg.Controller.UI
         {
             int n = userInterfaces.Count;
             for (int i = 0; i < n; i++)
-                userInterfaces[i].OnNewSelectedPlanet(planetID);
+                userInterfaces[i].OnNewFocusedPlanet(planetID);
         }
 
         /// <summary>
@@ -37,14 +37,14 @@ namespace Bserg.Controller.UI
         {
             int n = userInterfaces.Count;
             for (int i = 0; i < n; i++)
-                userInterfaces[i].OnDeselectPlanet();
+                userInterfaces[i].OnNoPlanetFocuesed();
         }
         
-        protected virtual void OnNewSelectedPlanet(int planetID)
+        protected virtual void OnNewFocusedPlanet(int planetID)
         {
         }
 
-        protected virtual void OnDeselectPlanet()
+        protected virtual void OnNoPlanetFocuesed()
         {
         }
 

@@ -1,14 +1,8 @@
 ﻿using System.Collections.Generic;
-using Bserg.Controller.Drivers;
-using Bserg.Controller.Overlays;
-using Bserg.Controller.Sensors;
 using Bserg.Controller.Tools;
-using Bserg.Model.Core.Operators;
-using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Level;
 using Bserg.View.Custom.Progress;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.UI.Planet
@@ -69,7 +63,7 @@ namespace Bserg.Controller.UI.Planet
 
 
         /// <summary>
-        /// Redraws recipe
+        /// Redraws recipe items
         /// </summary>
         /// <param name="recipe"></param>
         /// <param name="inputCallbacks">callback when click on input</param>

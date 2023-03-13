@@ -27,6 +27,7 @@ namespace Bserg.Model.Core.Systems
             
             return GetHighestLevel(ConsumptionMasks.Get(name)[planetID] - currentConsumptionMask, production);
         }
+        // ReSharper disable Unity.PerformanceAnalysis
         public int GetHighestLevel(uint consumptionMask, int production)
         {
             // Edge case
@@ -56,7 +57,6 @@ namespace Bserg.Model.Core.Systems
             }
 
             
-            // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
             Debug.LogError("HIGHEST LEVEL METHOD HAS FAILED, ITERATED THROUGH ALL");
             return production - BIT_SIZE;
         }

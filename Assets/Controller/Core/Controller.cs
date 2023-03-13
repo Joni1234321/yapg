@@ -1,4 +1,5 @@
-﻿using Bserg.Controller.Overlays;
+﻿using System.Collections.Generic;
+using Bserg.Controller.Overlays;
 using Bserg.Controller.Sensors;
 using Bserg.Controller.UI;
 using Bserg.Model.Core;
@@ -24,18 +25,24 @@ namespace Bserg.Controller.Core
         public NormalOverlay NormalOverlay;
         public TradeOverlay TradeOverlay;
 
+        public UIPlanetController UIPlanetController;
+        public UITimeController UITimeController;
+
+        
         public TickController TickController;
         
         public InputController InputController;
         public MouseController MouseController;
 
-        public PlanetController PlanetController;
+        public PlanetHelper PlanetHelper;
         public SpaceflightController SpaceflightController;
 
-        public UIWorldReadonlyDriver UIWorldReadonlyDriver;
+        public UIWorldSensor UIWorldSensor;
         public UIDocument uiDocument;
 
-        
+
+        private List<int> allPlanets, outerPlanets;
+
         void Awake()
         {
             SelectionController.SelectedPlanetID = -1;
@@ -55,23 +62,36 @@ namespace Bserg.Controller.Core
             TickController = new TickController(this);
             
             InputController = new InputController();
-            MouseController = new MouseController(CameraController);
+            MouseController = new MouseController();
 
-            PlanetController = new PlanetController(systemGenerator);
-            SpaceflightController = new SpaceflightController(PlanetController);
+            PlanetHelper = new PlanetHelper(systemGenerator);
+            SpaceflightController = new SpaceflightController(PlanetHelper);
             
+            
+            allPlanets = new();
+            outerPlanets = new();
+            for (int i = 0; i < planets.Length; i++)
+            {
+                allPlanets.Add(i);
+                if (i == 0 || i > 4)
+                    outerPlanets.Add(i);
+            }
+            UIWorldSensor.PlanetRenderer.SetVisiblePlanets(CameraController.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
         }
 
         void Start()
         {
             // UI
-            UIWorldReadonlyDriver = new UIWorldReadonlyDriver(this, uiDocument);
+            UIWorldSensor = new UIWorldSensor(this, uiDocument);
+            UIPlanetController = new UIPlanetController(uiDocument, Game);
+            UITimeController = new UITimeController(TickController, uiDocument.rootVisualElement.Q<VisualElement>("time-view"));
+
             // Set earth as planet
-            UIWorldReadonlyDriver.UIPlanetController.SetPlanet(3);
+            UIWorldSensor.UIPlanetController.SetFocusedPlanet(3);
             
             // Overlays
-            NormalOverlay = new NormalOverlay(UIWorldReadonlyDriver, PlanetController);
-            TradeOverlay = new TradeOverlay(Game, this, UIWorldReadonlyDriver);
+            NormalOverlay = new NormalOverlay(UIWorldSensor, PlanetHelper);
+            TradeOverlay = new TradeOverlay(Game, this, UIWorldSensor);
             SetActiveOverlay(NormalOverlay);
 
         }
@@ -84,17 +104,18 @@ namespace Bserg.Controller.Core
             if (TickController.Update(Game))
             {
                 activeOverlay.OnTick(Game, SelectionController.HoverPlanetID, SelectionController.SelectedPlanetID);
-                UIWorldReadonlyDriver.OnTick(Game);
+                UIWorldSensor.OnTick();
             }
             
             float dt = TickController.DeltaTick;
 
             InputController.OnUpdate(this);
             MouseController.OnUpdate(Game, activeOverlay, dt);
-            CameraController.OnUpdate(Game, PlanetController, dt);
+            CameraController.OnUpdate(Game, PlanetHelper, dt);
 
             // UI LAST
-            UIWorldReadonlyDriver.OnUpdate(Game, PlanetController, dt);
+            UIWorldSensor.PlanetRenderer.SetVisiblePlanets(CameraController.Camera.orthographicSize < 40f ? allPlanets : outerPlanets);
+            UIWorldSensor.PlanetRenderer.OnUpdate(Game.Ticks, dt);
 
 
             // No need to update if paused, unless one time
@@ -108,7 +129,7 @@ namespace Bserg.Controller.Core
             else
                 firstTickAfterPause = true;
             
-            PlanetController.Update(Game, dt);
+            PlanetHelper.Update(Game, dt);
             SpaceflightController.Update(Game, dt);
             
         }
@@ -119,7 +140,7 @@ namespace Bserg.Controller.Core
 
         public void OnGameSpeedChange()
         {
-            UIWorldReadonlyDriver.UITimeController.UpdateGameSpeed(TickController.Running, TickController.GameSpeed);
+            UIWorldSensor.UITimeController.UpdateGameSpeed(TickController.Running, TickController.GameSpeed);
         }
 
 
