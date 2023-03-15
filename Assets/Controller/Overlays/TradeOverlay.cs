@@ -103,7 +103,7 @@ namespace Bserg.Controller.Overlays
                 tradeToLabel.text = game.PlanetNames[toID];
                 // Complete
                 for (int i = 0; i < tradeParallel.ValueInt; i++)
-                    game.SettleSystem.SettleOrders.Add(new SettleOrder(fromID,toID, 500, tradeSerial.ValueInt));
+                    game.SettleSystem.SettleOrders.Add(new SettleOrder(fromID,toID, tradeSerial.ValueInt));
     
                 controller.SetActiveOverlay(controller.NormalOverlay);
                 return;

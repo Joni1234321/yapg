@@ -20,13 +20,5 @@ namespace Bserg.Model.Space.SpaceMovement
             DestinationID = destinationID;
             Spacecrafts = new List<Spacecraft>();
         }
-
-        public long TotalPopulation()
-        {
-            long total = 0;
-            for (int i = 0; i < Spacecrafts.Count; i++)
-                total += Spacecrafts[i].MaxPopulation;
-            return total;
-        }
     }
 }

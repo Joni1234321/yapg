@@ -22,6 +22,7 @@ namespace Bserg.Model.Core
         // Planet
         public Planet[] Planets { get; }
         public string[] PlanetNames;
+        public bool[] Inhabited;
         
         // Population
         public PlanetLevels PlanetLevels;
@@ -47,6 +48,7 @@ namespace Bserg.Model.Core
         {
             N = planetNames.Length;
             PlanetNames = planetNames;
+            Inhabited = new bool[N];
             Planets = planets;
             
             Recipe.Load();
@@ -84,7 +86,8 @@ namespace Bserg.Model.Core
                 planetLandLevels[i] = 50;
                 planetPopulationLevels[i] = (int)givenPopulationLevels[i];
                 LevelProgress.Get("Population")[i] = givenPopulationLevels[i] - planetPopulationLevels[i];
-
+                if (planetPopulationLevels[i] > 0)
+                    Inhabited[i] = true;
                 BuildOperator.SetRecipeLevel(Recipe.Get("Housing"), planetPopulationLevels[i] + (planetPopulationLevels[i] > 15 ? 1 : 0), i);
                 if (planetPopulationLevels[i] > 1)
                     BuildOperator.SetRecipeLevel(Recipe.Get("Food"), planetPopulationLevels[i] + 1, i);

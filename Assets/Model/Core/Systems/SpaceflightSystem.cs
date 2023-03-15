@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bserg.Model.Space.SpaceMovement;
+using Model.Utilities;
+using UnityEngine;
 
 namespace Bserg.Model.Core.Systems
 {
@@ -24,7 +26,8 @@ namespace Bserg.Model.Core.Systems
             for (int i = 0; i < Game.N; i++) SpacecraftPools[i] = new Stack<Spacecraft>();
             for (int i = 0; i < 4000; i++)
             {
-                SpacecraftPools[3].Push(new Spacecraft(2000));
+                // Can take 256 people each
+                SpacecraftPools[3].Push(new Spacecraft(8));
             }
 
             // Idle
@@ -77,18 +80,17 @@ namespace Bserg.Model.Core.Systems
             switch (currentStep.Type)
             {
                 case Spacecraft.StepType.Unload:
-                    Game.PlanetPopulationProgress[planetID] += spacecraft.MaxPopulation;
+                    Game.PlanetPopulationProgress[planetID] += Util.LevelProgress(Game.PlanetLevels.Get("Population")[planetID], spacecraft.Population);
                     spacecraft.Population = 0;
                     break;
                 case Spacecraft.StepType.Load:
-                    long neededPopulation = spacecraft.MaxPopulation - spacecraft.Population;
                     // Can max load down to 1000 people on planet TODO: UPDATE TO SOMETHING MORE SOPHISTICATED
                     //long validPopulationOnPlanet = Mathl.Min(Game.PlanetPopulationLevels[planetID] - 9, 0);
                     //long populationLoaded = Mathl.Min(neededPopulation, validPopulationOnPlanet);
-                                
+                    
                     // Load
-                    Game.PlanetPopulationProgress[planetID] -= 0;
-                    spacecraft.Population += 0;
+                    Game.PlanetPopulationProgress[planetID] -= Util.LevelProgress(Game.PlanetLevels.Get("Population")[planetID], spacecraft.MaxPopulation);
+                    spacecraft.Population = spacecraft.MaxPopulation;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -30,7 +30,7 @@ namespace Bserg.Model.Core.Systems
             for (int i = 0; i < Game.N; i++)
             {  
                 // Only applies to planets with populations
-                if (populationLevels[i] == 0)
+                if (!Game.Inhabited[i])
                     continue;
                 
                 // Death rate

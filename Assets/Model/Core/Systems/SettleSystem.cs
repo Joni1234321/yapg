@@ -16,9 +16,10 @@ namespace Bserg.Model.Core.Systems
         public SettleSystem(Game game) : base(game)
         {
             SettleOrders = new List<SettleOrder>();
-            SettleOrders.Add(new SettleOrder(3, 4, 500, 6));
-            SettleOrders.Add(new SettleOrder(3, 2, 500, 6));
-            SettleOrders.Add(new SettleOrder(3, 1, 500, 6));
+            SettleOrders.Add(new SettleOrder(3, 4, 6));
+            SettleOrders.Add(new SettleOrder(3, 2, 6));
+            SettleOrders.Add(new SettleOrder(3, 1, 6));
+            //SettleOrders.Add(new SettleOrder(3, 10, 100));
         }
 
         public void System()
@@ -27,7 +28,8 @@ namespace Bserg.Model.Core.Systems
             {
                 var order = SettleOrders[i];
                 // If can move then do
-                if (ValidDeparture(order.DepartureID, order.PopulationPerTrip))
+                //if (ValidDeparture(order.DepartureID, order.PopulationPerTrip))
+                if (true)
                 {
                     // No spacecraft available
                     if (!Game.SpaceflightSystem.TakeSpacecraft(order.DepartureID, out var spacecraft))

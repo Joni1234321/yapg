@@ -35,10 +35,11 @@ namespace Bserg.Model.Space.SpaceMovement
     /// </summary>
     public struct Spacecraft
     {
-        public long Population, MaxPopulation;
+        public readonly int MaxPopulation;
+        public int Population;
         public Queue<Step> Steps;
         
-        public Spacecraft(long maxPopulation)
+        public Spacecraft(int maxPopulation)
         {
             Steps = new Queue<Step>();
             Population = 0;

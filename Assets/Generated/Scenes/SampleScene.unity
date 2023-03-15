@@ -352,6 +352,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Colo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.83137256, g: 0.7897646, b: 0.24313724, a: 1}
+    - _Emission: {r: 0.00390625, g: 0.003431386, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmision: {r: 1, g: 0.019607844, b: 0, a: 1}
     - _Seed: {r: 1.4, g: -4.1, b: 0, a: 0}
@@ -480,6 +481,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Colo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.17727776, g: 0.48900002, b: 0.14300944, a: 1}
+    - _Emission: {r: 0.00390625, g: 0.003431386, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmision: {r: 0, g: 0.24999997, b: 0.054077618, a: 1}
     - _Seed: {r: 21.02, g: 3, b: 0, a: 0}
@@ -551,10 +553,7 @@ MonoBehaviour:
     type: 3}
   orbitParent: {fileID: 441180879}
   prefab: {fileID: 11400000, guid: 5ef8267f42337c64b8cb6f97de4f7a0c, type: 2}
-  offsetFromSun: 1
-  distanceMult: 7
-  sizeMult: 4
-  reduceSize: 0.01
+  planetTransforms: []
 --- !u!1 &287141762
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +783,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Colo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.6792453, g: 0.6581417, b: 0.63759345, a: 1}
+    - _Emission: {r: 0.00390625, g: 0.003431386, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmision: {r: 1, g: 0.019607844, b: 0, a: 1}
     - _Seed: {r: 1.4, g: -4.1, b: 0, a: 0}
@@ -1206,6 +1206,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.9921569, g: 0.9490197, b: 0.027450982, a: 1}
+    - _Emission: {r: 0.00390625, g: 0.003431386, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmision: {r: 3.0479212, g: 1.9308821, b: 0, a: 0}
     - _Seed: {r: 1, g: 1, b: 0, a: 0}
@@ -3901,6 +3902,7 @@ Material:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Colo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.83137256, g: 0.33934838, b: 0.24313724, a: 1}
+    - _Emission: {r: 0.00390625, g: 0.003431386, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmision: {r: 1, g: 0.019607844, b: 0, a: 1}
     - _Seed: {r: 1.4, g: -4.1, b: 0, a: 0}

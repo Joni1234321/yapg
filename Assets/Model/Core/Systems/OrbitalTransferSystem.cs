@@ -32,28 +32,27 @@ namespace Bserg.Model.Core.Systems
                 // Function doesnt work for satellites
                 HohmannDeltaV[planetDeparture, planetDestination] = (float)OrbitalMechanics.GetHohmannDeltaV(mu, Game.Planets[planetDeparture].OrbitRadius, Game.Planets[planetDestination].OrbitRadius);
             }
-            HohmannTransfers = CalculateHohmannTransfers(Game.Planets[0], Game.Planets);
+            HohmannTransfers = CalculateHohmannTransfers(Game.Planets);
         }
         
         /// <summary>
         /// Calculates all the hohmann transfers windows
         /// </summary>
-        /// <param name="orbit">The object they orbit</param>
         /// <param name="planets"> Planets to calculate </param>
         /// <returns>Returns n*n array, first coordiante is departure, second is arrival</returns>
-        HohmannTransfer<float>[,] CalculateHohmannTransfers(Planet orbit, Planet[] planets)
+        HohmannTransfer<float>[,] CalculateHohmannTransfers(Planet[] planets)
         {
-            // Orbit values
-            StandardGravitationalParameter mu = new StandardGravitationalParameter(orbit.Mass);
-            
             // Planets
             int n = planets.Length;
             HohmannTransfer<float>[,] transfers = new HohmannTransfer<float>[n, n];
 
             for (int i = 0; i < n; i++)
             {
+                int orbitID = Game.Planets[i].OrbitObject;
+                StandardGravitationalParameter muDeparture = new StandardGravitationalParameter(Game.Planets[orbitID == -1 ? 0 : orbitID].Mass);
+                
                 Planet departure = planets[i];
-                Time departureOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(mu, departure.OrbitRadius);
+                Time departureOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(muDeparture, departure.OrbitRadius);
 
                 for (int j = 0; j < n; j++)
                 {
@@ -66,11 +65,13 @@ namespace Bserg.Model.Core.Systems
 
                     // Calculate
                     Planet destination = planets[j];
-                    Time destinationOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(mu, destination.OrbitRadius);
+                    int departureOrbitID = Game.Planets[j].OrbitObject;
+                    StandardGravitationalParameter muDestination = new StandardGravitationalParameter(Game.Planets[departureOrbitID == -1 ? 0 : departureOrbitID].Mass);
+                    Time destinationOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(muDestination, destination.OrbitRadius);
                     Time window = 
                         OrbitalMechanics.GetSynodicPeriod(departureOrbitalPeriod, destinationOrbitalPeriod);
                     Time duration =
-                        OrbitalMechanics.HohmannTransferDuration(mu, departure.OrbitRadius, destination.OrbitRadius);
+                        OrbitalMechanics.HohmannTransferDuration(muDeparture, departure.OrbitRadius, destination.OrbitRadius);
                     double deltaAngleAtLaunch =
                         OrbitalMechanics.HohmannAngleDifferenceAtLaunch(destinationOrbitalPeriod, duration);
                     Time timeUntilFirstWindow = OrbitalMechanics.GetTimeUntilAngleDifference(deltaAngleAtLaunch, departureOrbitalPeriod, destinationOrbitalPeriod); 

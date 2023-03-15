@@ -80,3 +80,10 @@ COOLER UI, ALL CIRCLES ON THE SIDE. if click ALT. THEN THEY ALL POP OUT WITH DET
 
 Also i really like the idea that everyithing is given in levels (Logarithmic) so a billion pop is a level 9 pop. But maybe it should even be a logistic curve
 A logistic curve [https://en.wikipedia.org/wiki/Logistic_function] is a S Shaped curve, so one that grows slowly in the beginning (Colonization) then grows quickly (Habitation), but then flattens out (Overpopulation / Saturation)
+
+Nukes (nuke a place -2 to a category [population, housing] [Energy, industry], [infrastructure, military]) 
+Also geneva convention kinda style, that specifies the rules of warfare
+Such as nukes, like they are only allowed on barren worlds, not terraformed ones
+Glassing a planet only available on small planets that are also sparsely populated and not terrafromed ( maybe moons )
+And Meteoring a planet, thereby destroying them, only allowed on smalle celestial objects such as asteroids
+

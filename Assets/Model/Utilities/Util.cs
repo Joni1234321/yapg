@@ -34,5 +34,20 @@ namespace Model.Utilities
             return (long)Mathf.Pow(10, level * LOG_BASE);
         }
 
+
+        /// <summary>
+        /// Returns the amount of level progress gained by adding levelincrease to planetlevel
+        /// Example: adding a level 3 population to a planet with a level 3 population, results in a level 4 population so levelprogress here is 1 entire point
+        /// adding a level 2 to level 3 is .5 points
+        /// adding a level 4 to level 3 is 2 points
+        /// </summary>
+        /// <param name="planetLevel"></param>
+        /// <param name="levelIncrease"></param>
+        /// <returns></returns>
+        public static float LevelProgress(int planetLevel, int levelIncrease)
+        {
+            return Mathf.Pow(2, levelIncrease - planetLevel);
+        } 
+
     }
 }
