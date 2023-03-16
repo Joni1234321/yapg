@@ -1,6 +1,8 @@
-﻿using UnityEngine;
+﻿
+using Unity.Mathematics;
+using UnityEngine;
 
-namespace Model.Utilities
+namespace Bserg.Model.Utilities
 {
     public static class Util
     {
@@ -8,7 +10,7 @@ namespace Model.Utilities
         //const float BASE = 2.15443469003f;
         private const float BASE = 2f;
         const float INVERSE_BASE = 1f / BASE;
-        static readonly float LOG_BASE = Mathf.Log10(BASE), INVERSE_LOG_BASE = 1f / LOG_BASE;
+        static readonly float LOG_BASE = math.log10(BASE), INVERSE_LOG_BASE = 1f / LOG_BASE;
         
         /// <summary>
         /// Converts real value to level
@@ -19,7 +21,7 @@ namespace Model.Utilities
         {
             if (val == 0)
                 return 0;
-            return Mathf.Log10(val) * INVERSE_LOG_BASE;
+            return math.log10(val) * INVERSE_LOG_BASE;
         }
         /// <summary>
         /// Converts level to real value
@@ -31,7 +33,7 @@ namespace Model.Utilities
             if (level == 0)
                 return 0;
             
-            return (long)Mathf.Pow(10, level * LOG_BASE);
+            return (long)math.pow(10, level * LOG_BASE);
         }
 
 
@@ -46,7 +48,7 @@ namespace Model.Utilities
         /// <returns></returns>
         public static float LevelProgress(int planetLevel, int levelIncrease)
         {
-            return Mathf.Pow(2, levelIncrease - planetLevel);
+            return math.pow(2, levelIncrease - planetLevel);
         } 
 
     }

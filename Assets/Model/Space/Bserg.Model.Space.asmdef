@@ -2,7 +2,11 @@
     "name": "Bserg.Model.Space",
     "rootNamespace": "Bserg",
     "references": [
-        "GUID:19e9c6a58d609714298741a783398edd"
+        "GUID:19e9c6a58d609714298741a783398edd",
+        "GUID:734d92eba21c94caba915361bd5ac177",
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:2665a8d13d1b3f18800f46e256720795"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

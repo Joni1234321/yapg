@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
+using Bserg.Model.Utilities;
 using Bserg.View.Space;
 using Model.Utilities;
 using UnityEngine;

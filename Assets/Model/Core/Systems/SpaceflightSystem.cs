@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bserg.Model.Space.SpaceMovement;
+using Bserg.Model.Utilities;
 using Model.Utilities;
 using UnityEngine;
 

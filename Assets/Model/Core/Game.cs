@@ -3,7 +3,13 @@ using Bserg.Model.Core.Operators;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Political;
+using Bserg.Model.Shared.Components;
+using Bserg.Model.Shared.SystemGroups;
+using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
+using Unity.Collections;
+using Unity.Entities;
+using Unity.Mathematics;
 using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Model.Core
@@ -34,7 +40,7 @@ namespace Bserg.Model.Core
         public Player Player;
 
         public OrbitalTransferSystem OrbitalTransferSystem;
-        
+            
         public PopulationGrowthSystem PopulationGrowthSystem;
         public BuildSystem BuildSystem;
         public BuildOperator BuildOperator;
@@ -52,6 +58,26 @@ namespace Bserg.Model.Core
             Planets = planets;
             
             Recipe.Load();
+
+
+            // Spawn objects
+            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            for (int i = 0; i < N; i++)
+            {
+                Planet p = planets[i];
+                Entity e = entityManager.CreateEntity();
+                entityManager.AddComponentData(e, new PlanetPrefabData
+                {
+                    Name = p.Name,
+                    Population = (long)givenPopulationLevels[i],
+                    Color = new float4(p.Color.r, p.Color.g, p.Color.b, p.Color.a),
+                    Size = p.Size,
+                    WeightEarthMass = p.Mass.To(Mass.UnitType.EarthMass),
+                    RadiusAU = p.OrbitRadius.To(Length.UnitType.AstronomicalUnits),
+                    OrbitObject = p.OrbitObject
+                });
+            }
+            
             
             // Population
             PlanetLevels = new PlanetLevels(N);
@@ -110,16 +136,19 @@ namespace Bserg.Model.Core
         /// </summary>
         public void DoTick()
         {
-
+            TickSystemGroup.Tick();
             OnTick?.Invoke();
             if (Ticks % GameTick.TICKS_PER_MONTH == 0)
             {
+                TickMonthSystemGroup.Tick();
                 OnTickMonth?.Invoke();
                 if (Ticks % GameTick.TICKS_PER_QUARTER == 0)
                 {
+                    TickQuarterSystemGroup.Tick();
                     OnTickQuarter?.Invoke();
                     if (Ticks % GameTick.TICKS_PER_YEAR == 0)
                     {
+                        TickYearSystemGroup.Tick();
                         OnTickYear?.Invoke();
                     }
                 }
@@ -153,7 +182,7 @@ namespace Bserg.Model.Core
         /// </summary>
         private void TickYear()
         {
-            PopulationGrowthSystem.System();
+            //PopulationGrowthSystem.System();
         }
         
         public Planet GetPlanet(int planetID)
