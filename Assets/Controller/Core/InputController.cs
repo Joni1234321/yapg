@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Bserg.Model.Space.Components;
+using UnityEngine;
 
 namespace Bserg.Controller.Core
 {
@@ -37,9 +38,32 @@ namespace Bserg.Controller.Core
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
                 CameraRenderer.TargetSize *= .80f;
 
+            if (Input.GetKeyDown(KeyCode.H))
+                    CreateSpacecraft();
+
 
             SpaceFlightRenderer.SetActive(Input.GetKey(KeyCode.Tab));
 
+        }
+
+
+        private void CreateSpacecraft()
+        {
+            
+            bool result = Spacecraft.CreateSpacecraft(Game.EntityManager,
+                new Spacecraft.FlightStep
+                {
+                    DestinationPlanet = Game.Entities[3],
+                    Action = Spacecraft.ActionType.Load
+                },
+                new Spacecraft.FlightStep
+                {
+                    DestinationPlanet = Game.Entities[4],
+                    Action = Spacecraft.ActionType.Unload
+                },
+                10000
+            );
+            Debug.Log($"Spacecraft {result}");
         }
     }
 }

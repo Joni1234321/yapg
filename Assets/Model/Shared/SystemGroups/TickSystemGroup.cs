@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Bserg.Model.Shared.Components;
+using Unity.Burst;
 using Unity.Entities;
 using UnityEngine;
 
@@ -6,23 +7,34 @@ namespace Bserg.Model.Shared.SystemGroups
 {
     public class TickSystemGroup : ComponentSystemGroup
     {
-        private static int remainingTicks = 0;
+        [BurstCompile]
+        protected override void OnCreate()
+        {
+            base.OnCreate();
+        }
+
+        private static bool doTick;
         [BurstCompile]
         protected override void OnUpdate()
         {
-            if (remainingTicks == 0)
-                return;
-
-            while (remainingTicks > 0)
+            if (doTick)
             {
                 base.OnUpdate();
-                remainingTicks--;
+                doTick = false;
             }
         }
 
-        public static void Tick()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Successful tick queue</returns>
+        public static bool TryTick()
         {
-            remainingTicks++;
+            if (doTick)
+                return false;
+            
+            doTick = true;
+            return true;
         } 
     }
     

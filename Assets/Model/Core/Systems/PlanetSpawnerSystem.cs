@@ -2,8 +2,6 @@
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
-using Bserg.Model.Utilities;
-using Model.Utilities;
 
 using Unity.Burst;
 using Unity.Burst.CompilerServices;
@@ -21,7 +19,7 @@ namespace Bserg.Model.Core.Systems
         private EntityQuery prefabQuery;
         public void OnCreate(ref SystemState state)
         {
-            prefabQuery = state.GetEntityQuery(typeof(PlanetPrefabData));
+            prefabQuery = state.GetEntityQuery(typeof(Planet.PrefabData));
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
         }
 
@@ -30,19 +28,14 @@ namespace Bserg.Model.Core.Systems
         {
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             if (Hint.Likely(prefabQuery.CalculateEntityCount() == 0))
                 return;
 
-            ConvertPrefabData(ref state);
-        }
-        
-        void ConvertPrefabData (ref SystemState state)
-        {
-
-            var bufferSystem = state.World.GetExistingSystemManaged<BeginSimulationEntityCommandBufferSystem>();
-            EntityCommandBuffer ecb = bufferSystem.CreateCommandBuffer();
+            var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
+            EntityCommandBuffer ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
 
             var deps = new ConvertJob
             {
@@ -52,6 +45,7 @@ namespace Bserg.Model.Core.Systems
             state.Dependency = JobHandle.CombineDependencies(state.Dependency, deps);
             deps.Complete();
             Debug.Log($"Converted {prefabQuery.CalculateEntityCount()}");
+            
         }
     }
 
@@ -65,42 +59,50 @@ namespace Bserg.Model.Core.Systems
 
         public EntityCommandBuffer.ParallelWriter ParallelWriter;
 
-        public void Execute([EntityIndexInQuery] int chunkIndex, Entity e, in PlanetPrefabData data)
+        public void Execute([ChunkIndexInQuery] int i, Entity e, in Planet.PrefabData data)
         {
             // TODO: Spawn GameObject
-            Entity planet = ParallelWriter.CreateEntity(chunkIndex);
+            // Entity e = ParallelWriter.CreateEntity(i);
 
             #if UNITY_EDITOR
-            ParallelWriter.SetName(chunkIndex, planet, data.Name);
+            ParallelWriter.SetName(i, e, data.Name);
             #endif
             
             // Tag
-            ParallelWriter.AddComponent(chunkIndex, planet, new PlanetTag());
+            ParallelWriter.AddComponent(i, e, new Planet.Tag());
             
             // Data
-            ParallelWriter.AddComponent(chunkIndex, planet, new PlanetData
+            ParallelWriter.AddComponent(i, e, new Planet.Data
             {
                 Color = data.Color,
                 Size = data.Size,
                 Mass = new Mass(data.WeightEarthMass, Mass.UnitType.EarthMass),
                 OrbitRadius = new Length(data.RadiusAU, Length.UnitType.AstronomicalUnits),
             });
-            ParallelWriter.AddComponent(chunkIndex, planet, new PlanetName { Name = data.Name });
+            ParallelWriter.AddComponent(i, e, new Planet.Name { Text = data.Name });
             
             // Orbit
-            ParallelWriter.AddComponent(chunkIndex, planet, new PlanetOrbit { OrbitID = data.OrbitObject });
+            ParallelWriter.AddComponent(i, e, new PlanetOrbit { OrbitID = data.OrbitObject });
 
             // Population
             if (data.Population > 0)
-                ParallelWriter.AddComponent(chunkIndex, planet, new PlanetActiveTag());
-            ParallelWriter.AddComponent(chunkIndex, planet, new PopulationLevel { Level = (int)data.Population });
-            ParallelWriter.AddComponent(chunkIndex, planet, new PopulationProgress { Progress = data.Population - (int)data.Population });
+                ParallelWriter.AddComponent(i, e, new PlanetActiveTag());
+            ParallelWriter.AddComponent(i, e, new PopulationLevel { Level = (int)data.Population });
+            ParallelWriter.AddComponent(i, e, new PopulationProgress { Progress = data.Population - (int)data.Population });
+            
+            // Levels
+            ParallelWriter.AddComponent(i, e, new HousingLevel { Level = 50 });
+            ParallelWriter.AddComponent(i, e, new FoodLevel { Level = 0 });
+            ParallelWriter.AddComponent(i, e, new HousingLevel { Level = 0 });
             
             // Growth System
-            ParallelWriter.AddComponent(chunkIndex, planet, new PopulationGrowth { BirthRate = 0.02f, DeathRate = 0.005f } );
+            ParallelWriter.AddComponent(i, e, new PopulationGrowth { BirthRate = 0.02f, DeathRate = 0.005f } );
+            
+            // Spacecraft System
+            ParallelWriter.AddComponent(i, e, new SpacecraftPool { Available = data.Population > 30 ? 4000 : 0});
             
             // Destroy old
-            ParallelWriter.DestroyEntity(chunkIndex, e);
+            ParallelWriter.RemoveComponent<Planet.PrefabData>(i, e);
         }
     }
 

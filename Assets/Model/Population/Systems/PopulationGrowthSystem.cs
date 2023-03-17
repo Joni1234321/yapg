@@ -3,10 +3,17 @@ using Bserg.Model.Shared.Components;
 using Bserg.Model.Shared.SystemGroups;
 using Unity.Burst;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Bserg.Model.Population.Systems
 {
+    /// <summary>
+    /// Handle population growth and decline
+    /// UPDATE TO TAKE CARE OF PEOPLE WHO CAN MAKE BIRTH AND PEOPLE WHO CAN DIE
+    /// ALSO FACTOR IN WORK AND SUCH
+    /// ALSO AVERAGE AGE
+    /// </summary>
     [UpdateInGroup(typeof(TickYearSystemGroup))]
     internal partial struct PopulationGrowthSystem : ISystem
     {
@@ -20,15 +27,26 @@ namespace Bserg.Model.Population.Systems
     }
 
     
+    /// <summary>
+    /// Grows the populationlevel of the planet
+    /// </summary>
     [BurstCompile]
     internal partial struct GrowthJob : IJobEntity
     {
         public void Execute(in PlanetActiveTag _,
             in PopulationGrowth growth,
+            in HousingLevel housingLevel,
+            in PopulationLevel populationLevel, 
             ref PopulationProgress populationProgress)
         {
+            // Birth rate Affected down to 25% by not enough housing
+            float modifier = 1f;
+            int housingDiff = populationLevel.Level - housingLevel.Level;
+            if (housingDiff > 0)
+                modifier *= 1f / math.min(housingDiff, 4);
+
             // New population
-            populationProgress.Progress += growth.BirthRate - growth.DeathRate;
+            populationProgress.Progress += growth.BirthRate * modifier - growth.DeathRate;
         }
     }
     

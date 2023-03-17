@@ -26,7 +26,9 @@ namespace Bserg.Model.Core
         
         //TODO: MAKE HOHMANN TRANSFERS IN FLOATS, AND EACH WINDOW HAS TO CALCULATE IT IN TICKS
         // Planet
-        public Planet[] Planets { get; }
+        public EntityManager EntityManager;
+        public readonly Entity[] Entities;
+        public Space.Planet[] Planets { get; }
         public string[] PlanetNames;
         public bool[] Inhabited;
         
@@ -49,8 +51,10 @@ namespace Bserg.Model.Core
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
         
+        EntityQuery gameticksQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicks));
 
-        public Game(string[] planetNames, float[] givenPopulationLevels, PoliticalBody[] planetPoliticalBodies, Planet[] planets)
+        
+        public Game(string[] planetNames, float[] givenPopulationLevels, PoliticalBody[] planetPoliticalBodies, Space.Planet[] planets)
         {
             N = planetNames.Length;
             PlanetNames = planetNames;
@@ -61,12 +65,13 @@ namespace Bserg.Model.Core
 
 
             // Spawn objects
-            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            Entities = new Entity[N];
             for (int i = 0; i < N; i++)
             {
-                Planet p = planets[i];
-                Entity e = entityManager.CreateEntity();
-                entityManager.AddComponentData(e, new PlanetPrefabData
+                Space.Planet p = planets[i];
+                Entities[i] = EntityManager.CreateEntity();
+                EntityManager.AddComponentData(Entities[i], new Shared.Components.Planet.PrefabData
                 {
                     Name = p.Name,
                     Population = (long)givenPopulationLevels[i],
@@ -77,7 +82,7 @@ namespace Bserg.Model.Core
                     OrbitObject = p.OrbitObject
                 });
             }
-            
+
             
             // Population
             PlanetLevels = new PlanetLevels(N);
@@ -122,12 +127,11 @@ namespace Bserg.Model.Core
             
             
             // Dude
+            World.DefaultGameObjectInjectionWorld.EntityManager.CreateSingleton(new GameTicks { Ticks = Ticks });
             OnTickMonth += TickMonth;
             OnTickYear += TickYear;
             OnTickQuarter += TickQuarter;
         }
-
-        private Stack<int> toDelete = new(64);
 
 
         
@@ -136,7 +140,10 @@ namespace Bserg.Model.Core
         /// </summary>
         public void DoTick()
         {
-            TickSystemGroup.Tick();
+            
+            if (!TickSystemGroup.TryTick())
+                return;
+            
             OnTick?.Invoke();
             if (Ticks % GameTick.TICKS_PER_MONTH == 0)
             {
@@ -158,8 +165,10 @@ namespace Bserg.Model.Core
             
             // Increment time
             Ticks++;
+            gameticksQuery.GetSingletonRW<GameTicks>().ValueRW.Ticks = Ticks;
         }
 
+        
         /// <summary>
         /// Called every in game month
         /// </summary>
@@ -185,7 +194,7 @@ namespace Bserg.Model.Core
             //PopulationGrowthSystem.System();
         }
         
-        public Planet GetPlanet(int planetID)
+        public Space.Planet GetPlanet(int planetID)
         {
             if (planetID == -1)
                 return null;

@@ -44,7 +44,7 @@ namespace Bserg.Model.Utilities
         /// adding a level 4 to level 3 is 2 points
         /// </summary>
         /// <param name="planetLevel"></param>
-        /// <param name="levelIncrease"></param>
+        /// <param name="levelIncrease">is the amount of levels that are going to be added to the current level</param>
         /// <returns></returns>
         public static float LevelProgress(int planetLevel, int levelIncrease)
         {
