@@ -4,7 +4,7 @@ using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Entities;
 
-namespace Bserg.Model.Space.Systems
+namespace Bserg.Model.Space.Systems.Jobs
 {
     /// <summary>
     /// Land on planet

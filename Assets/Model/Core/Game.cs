@@ -1,16 +1,15 @@
 ﻿using System.Collections.Generic;
 using Bserg.Model.Core.Operators;
 using Bserg.Model.Core.Systems;
-using Bserg.Model.Space;
 using Bserg.Model.Political;
+using Bserg.Model.Population.Components;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Shared.SystemGroups;
+using Bserg.Model.Space;
 using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Model.Core
 {
@@ -28,7 +27,7 @@ namespace Bserg.Model.Core
         // Planet
         public EntityManager EntityManager;
         public readonly Entity[] Entities;
-        public Space.Planet[] Planets { get; }
+        public PlanetOld[] Planets { get; }
         public string[] PlanetNames;
         public bool[] Inhabited;
         
@@ -54,7 +53,11 @@ namespace Bserg.Model.Core
         EntityQuery gameticksQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicks));
 
         
-        public Game(string[] planetNames, float[] givenPopulationLevels, PoliticalBody[] planetPoliticalBodies, Space.Planet[] planets)
+        public Game(string[] planetNames,
+            float[] givenPopulationLevels,
+            PoliticalBody[] planetPoliticalBodies,
+            PlanetOld[] planets,
+            OrbitData orbits)
         {
             N = planetNames.Length;
             PlanetNames = planetNames;
@@ -63,26 +66,37 @@ namespace Bserg.Model.Core
             
             Recipe.Load();
 
-
             // Spawn objects
             EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            Entities = new Entity[N];
-            for (int i = 0; i < N; i++)
+            Queue<(OrbitData, Entity, int)> queue = new ();
+            queue.Enqueue((orbits, Entity.Null, 0));
+            
+            // Builds children recursively // BUILD CHILDREN BECAUSE FIRST ELEMENT HAS ID -1 for WORLD
+            while (queue.Count != 0)
             {
-                Space.Planet p = planets[i];
-                Entities[i] = EntityManager.CreateEntity();
-                EntityManager.AddComponentData(Entities[i], new Shared.Components.Planet.PrefabData
+                (OrbitData orbit, Entity parent, int layer) = queue.Dequeue();
+                
+                // Build orbit for each child
+                foreach (OrbitData child in orbit.Children)
                 {
-                    Name = p.Name,
-                    Population = (long)givenPopulationLevels[i],
-                    Color = new float4(p.Color.r, p.Color.g, p.Color.b, p.Color.a),
-                    Size = p.Size,
-                    WeightEarthMass = p.Mass.To(Mass.UnitType.EarthMass),
-                    RadiusAU = p.OrbitRadius.To(Length.UnitType.AstronomicalUnits),
-                    OrbitObject = p.OrbitObject
-                });
-            }
+                    PlanetOld p = planets[child.PlanetID];
+                    Planet.PrefabData data = new Planet.PrefabData
+                    {
+                        Name = p.Name,
+                        Population = (long)givenPopulationLevels[child.PlanetID],
+                        Color = new float4(p.Color.r, p.Color.g, p.Color.b, p.Color.a),
+                        Size = p.Size,
+                        WeightEarthMass = p.Mass.To(Mass.UnitType.EarthMass),
+                        RadiusAU = p.OrbitRadius.To(Length.UnitType.AstronomicalUnits),
+                        OrbitObject = p.OrbitObject
+                    };
 
+                    Entity e = CreatePlanetEntity(EntityManager, parent, layer, data);
+                    queue.Enqueue((child, e, layer + 1));
+                }
+                
+            }
+            
             
             // Population
             PlanetLevels = new PlanetLevels(N);
@@ -194,7 +208,7 @@ namespace Bserg.Model.Core
             //PopulationGrowthSystem.System();
         }
         
-        public Space.Planet GetPlanet(int planetID)
+        public PlanetOld GetPlanet(int planetID)
         {
             if (planetID == -1)
                 return null;
@@ -249,6 +263,68 @@ namespace Bserg.Model.Core
             int eventNTimesBefore = (int)((Ticks + 1 - tickOffset) / tickPeriod);
             float tickAtLastEvent =  eventNTimesBefore * tickPeriod + tickOffset;
             return tickPeriod + tickAtLastEvent;
+        }
+
+
+
+        Entity CreatePlanetEntity(EntityManager entityManager, Entity parent, int layer, Planet.PrefabData data)
+        {
+            Entity e = entityManager.CreateEntity();
+
+            #if UNITY_EDITOR
+            entityManager.SetName(e, data.Name);
+            #endif
+            
+            // Tag
+            entityManager.AddComponentData(e, new Planet.Tag());
+            
+            // Data
+            Mass mass = new Mass(data.WeightEarthMass, Mass.UnitType.EarthMass);
+            Length radius = new Length(data.RadiusAU, Length.UnitType.AstronomicalUnits);
+            entityManager.AddComponentData(e, new Planet.Data
+            {
+                Color = data.Color,
+                Size = data.Size,
+                Mass = mass,
+                OrbitRadius = radius,
+            });
+            entityManager.AddComponentData(e, new Planet.Name { Text = data.Name });
+            
+            // Population
+            if (data.Population > 0)
+                entityManager.AddComponentData(e, new Planet.ActiveTag());
+            entityManager.AddComponentData(e, new PopulationLevel { Level = (int)data.Population });
+            entityManager.AddComponentData(e, new PopulationProgress { Progress = data.Population - (int)data.Population });
+            
+            // Levels
+            entityManager.AddComponentData(e, new HousingLevel { Level = 50 });
+            entityManager.AddComponentData(e, new FoodLevel { Level = 0 });
+            entityManager.AddComponentData(e, new HousingLevel { Level = 0 });
+            
+            // Growth System
+            entityManager.AddComponentData(e, new PopulationGrowth { BirthRate = 0.02f, DeathRate = 0.005f } );
+            
+            // OrbitSystem
+            entityManager.AddComponentData(e, new StandardGravitationalParameter
+            {
+                Value = StandardGravitationalParameterOld.GRAVITATIONAL_CONSTANT *
+                        mass.To(Mass.UnitType.KiloGrams) });
+            entityManager.AddComponentData(e, new PlanetOrbit { OrbitEntity = parent });
+
+            Time orbitPeriod = Time.Zero();
+            if (parent != Entity.Null)
+            {
+                StandardGravitationalParameter parentGravitation =
+                    entityManager.GetComponentData<StandardGravitationalParameter>(parent);
+                orbitPeriod = OrbitalMechanics.GetOrbitalPeriod(parentGravitation, radius);
+            }
+            entityManager.AddComponentData(e, new OrbitPeriod { TicksF = GameTick.ToTickF(orbitPeriod) });
+
+
+            // Spacecraft System
+            entityManager.AddComponentData(e, new SpacecraftPool { Available = data.Population > 30 ? 4000 : 0});
+
+            return e;
         }
     }
 

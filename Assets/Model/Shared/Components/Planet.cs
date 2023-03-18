@@ -33,6 +33,13 @@ namespace Bserg.Model.Shared.Components
         {
 
         }
+        /// <summary>
+        /// Planet is active when it is being colonized
+        /// </summary>
+        public struct ActiveTag : IComponentData
+        {
+        
+        }
 
         public struct Data : IComponentData
         {

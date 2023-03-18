@@ -30,10 +30,11 @@ namespace Bserg.Model.Population.Systems
     /// <summary>
     /// Grows the populationlevel of the planet
     /// </summary>
+    [WithAll(typeof(Planet.ActiveTag))]
     [BurstCompile]
     internal partial struct GrowthJob : IJobEntity
     {
-        public void Execute(in PlanetActiveTag _,
+        public void Execute(
             in PopulationGrowth growth,
             in HousingLevel housingLevel,
             in PopulationLevel populationLevel, 
@@ -55,13 +56,13 @@ namespace Bserg.Model.Population.Systems
     /// Degrades all whose progress is lower than 1
     /// Maybe do generic or some crap
     /// </summary>
+    [WithAll(typeof(Planet.ActiveTag))]
     [BurstCompile]
     internal partial struct ProgressHelper : IJobEntity
     {
         // TODO: Auto Upgrade all, including population
         // TODO: Auto Downgrade all, including population
-        public void Execute(in PlanetActiveTag _, 
-            ref PopulationProgress progress, 
+        public void Execute(ref PopulationProgress progress, 
             ref PopulationLevel level)
         {
             while (progress.Progress >= 1)

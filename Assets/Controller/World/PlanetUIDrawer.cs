@@ -55,7 +55,7 @@ namespace Bserg.Controller.World
         /// <param name="planetPositions"></param>
         /// <param name="planets"></param>
         /// <param name="ids"></param>
-        public void Draw(Vector3[] planetPositions, Planet[] planets, List<int> ids)
+        public void Draw(Vector3[] planetPositions, PlanetOld[] planets, List<int> ids)
         {
             int n = ids.Count;
             AdjustPool(n);
@@ -63,14 +63,14 @@ namespace Bserg.Controller.World
             // Draw labels on planets
             for (int i = 0; i < n; i++)
             {
-                Planet planet = planets[ids[i]];
+                PlanetOld planetOld = planets[ids[i]];
                 idScripts[i].planetID = ids[i];
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
-                Vector3 iconSize = SystemGenerator.GetIconPlanetSize(planet.Size);
+                Vector3 iconSize = SystemGenerator.GetIconPlanetSize(planetOld.Size);
                 pool[i].transform.position = CameraRenderer.Camera.WorldToScreenPoint(position);
-                labels[i].text = planet.Name;
+                labels[i].text = planetOld.Name;
                 icons[i].transform.localScale = iconSize;
-                icons[i].color = planet.Color;
+                icons[i].color = planetOld.Color;
             }
         }
 

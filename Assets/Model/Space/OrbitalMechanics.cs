@@ -1,4 +1,5 @@
-﻿using Bserg.Model.Units;
+﻿using Bserg.Model.Space.Components;
+using Bserg.Model.Units;
 using Math = System.Math;
 using Time = Bserg.Model.Units.Time;
 
@@ -13,12 +14,18 @@ namespace Bserg.Model.Space
         /// <param name="mu">Mu of the thing they orbit</param>
         /// <param name="radius">radius or semimajor axis of an ellipse</param>
         /// <returns>Returns time for planet to orbit the object given Mu </returns>
+        public static Time GetOrbitalPeriod(StandardGravitationalParameterOld mu, Length radius)
+        {
+            StandardGravitationalParameter newMu = new StandardGravitationalParameter { Value = mu.val };
+            return GetOrbitalPeriod(newMu, radius);
+        }
+
         public static Time GetOrbitalPeriod(StandardGravitationalParameter mu, Length radius)
         {
             const double TWO_PI = 2 * Math.PI;
             
             // Maybe make fast inverse sqr root
-            double k = TWO_PI / Math.Sqrt(mu.val);
+            double k = TWO_PI / Math.Sqrt(mu.Value);
 
             double r = radius.To(Length.UnitType.Meters);
             return new Time(k * r * Math.Sqrt(r), Time.UnitType.Seconds);
@@ -46,7 +53,7 @@ namespace Bserg.Model.Space
         /// <param name="radius1">Distance to the thing they orbit 1</param>
         /// <param name="radius2">Distance to the thing they orbit 2</param>
         /// <returns></returns>
-        public static Time HohmannTransferDuration(StandardGravitationalParameter mu, Length radius1, Length radius2)
+        public static Time HohmannTransferDuration(StandardGravitationalParameterOld mu, Length radius1, Length radius2)
         {
             // new orbit is between 1 and 2, therefore its the average radius of the two
             // https://www.youtube.com/watch?v=O_EsXfVN988
@@ -105,7 +112,7 @@ namespace Bserg.Model.Space
         }
 
 
-        public static double GetHohmannDeltaV(StandardGravitationalParameter mu, Length departureRadius, Length destinationRadius)
+        public static double GetHohmannDeltaV(StandardGravitationalParameterOld mu, Length departureRadius, Length destinationRadius)
         {
             double r1 = departureRadius.To(Length.UnitType.Meters);
             double r2 = destinationRadius.To(Length.UnitType.Meters);
@@ -122,16 +129,16 @@ namespace Bserg.Model.Space
     /// https://en.wikipedia.org/wiki/Standard_gravitational_parameter
     /// </summary>
     /// <returns></returns>
-    public struct StandardGravitationalParameter
+    public struct StandardGravitationalParameterOld
     {
         /// <summary>
         /// Given in N * M^2 * KG^(-2)
         /// </summary>
-        private const double GRAVITATIONAL_CONSTANT = 0.000_000_000_066_743;
+        public const double GRAVITATIONAL_CONSTANT = 0.000_000_000_066_743;
 
         public double val;
 
-        public StandardGravitationalParameter(Mass mass)
+        public StandardGravitationalParameterOld(Mass mass)
         {
             val = GRAVITATIONAL_CONSTANT * mass.To(Mass.UnitType.KiloGrams);
         }

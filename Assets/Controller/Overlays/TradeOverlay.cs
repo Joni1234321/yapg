@@ -40,10 +40,10 @@ namespace Bserg.Controller.Overlays
                 selectors[i] = Object.Instantiate(selectorPrefab, selectorParent);
                 renderers[i] = selectors[i].GetComponent<MeshRenderer>();
                 
-                Planet planet = game.Planets[i];
+                PlanetOld planetOld = game.Planets[i];
                 
-                selectors[i].transform.position = planet.StartingPosition;
-                selectors[i].transform.localScale = Vector3.one * Mathf.Log(planet.Size * 2 + Mathf.Exp(1));
+                selectors[i].transform.position = planetOld.StartingPosition;
+                selectors[i].transform.localScale = Vector3.one * Mathf.Log(planetOld.Size * 2 + Mathf.Exp(1));
             }
 
             tradeConfig = uiPlanetController.GetUI("trade-config");

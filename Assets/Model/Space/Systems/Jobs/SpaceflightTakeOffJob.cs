@@ -1,12 +1,11 @@
-﻿using Bserg.Model.Space;
-using Bserg.Model.Space.Components;
+﻿using Bserg.Model.Space.Components;
 using Unity.Burst;
 using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.Assertions;
 
-namespace Bserg.Model.Space.Systems
+namespace Bserg.Model.Space.Systems.Jobs
 {
     /// <summary>
     /// Take off from planet

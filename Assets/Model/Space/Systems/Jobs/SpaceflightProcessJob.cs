@@ -7,7 +7,7 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine.Assertions;
 
-namespace Bserg.Model.Space.Systems
+namespace Bserg.Model.Space.Systems.Jobs
 {
     /// <summary>
     /// Process ships that has landed
@@ -74,9 +74,7 @@ namespace Bserg.Model.Space.Systems
 
             // If already at planet, then process again next tick
             if (flightPlan.CurrentFlightStep.DestinationPlanet == currentPlanet)
-            {
                 return;
-            }
             
             // Fly to space
             Ecb.RemoveComponent<Spacecraft.ProcessingTag>(e);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Bserg.Model.Space
 {
-    public class Planet
+    public class PlanetOld
     {
         public readonly Vector3 StartingPosition;
         public readonly string Name;
@@ -16,7 +16,7 @@ namespace Bserg.Model.Space
         public float OuterRadius => (Size + 2f) / 2f;
         public readonly long CarryingCapacity;
         
-        public Planet(Vector3 startingPosition, string name, Color color, float size, Mass mass, Length orbitRadius, int orbitObject)
+        public PlanetOld(Vector3 startingPosition, string name, Color color, float size, Mass mass, Length orbitRadius, int orbitObject)
         {
             StartingPosition = startingPosition;
             Name = name;

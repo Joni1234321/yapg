@@ -93,11 +93,11 @@ namespace Bserg.Controller.Overlays
             selector.gameObject.SetActive(true);
             UpdatePlanetData(game, planetID);
             
-            Planet planet = game.GetPlanet(planetID);
+            PlanetOld planetOld = game.GetPlanet(planetID);
             
             selector.transform.position = planetRenderer.GetPlanetPositionAtTickF(planetID, game.Ticks + DeltaTick);;
             //selector.transform.localScale = SystemGenerator.GetIconPlanetSize(planet.Size);
-            selector.transform.localScale = SystemGenerator.GetRealPlanetSize(planet.Size) * .5f;
+            selector.transform.localScale = SystemGenerator.GetRealPlanetSize(planetOld.Size) * .5f;
         }
 
         /// <summary>

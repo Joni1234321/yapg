@@ -50,14 +50,14 @@ namespace Bserg.Controller.Core
             SelectionHelper.SelectedPlanetID = -1;
             SelectionHelper.HoverPlanetID = -1;
             
-            Planet[] planets = systemGenerator.GetPlanets();
+            PlanetOld[] planets = systemGenerator.GetPlanets();
             string[] names = systemGenerator.GetNames();
             float[] populationLevels = systemGenerator.GetPopulationLevels();
 
             PoliticalBody[] bodies = new PoliticalBody[planets.Length];
 
                 
-            Game = new Game(names, populationLevels, bodies, planets);
+            Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
             
             MouseController = new MouseController();

@@ -16,11 +16,11 @@ namespace Bserg.Model.Core.Systems
         public OrbitalTransferSystem(Game game) : base(game)
         {
             // Orbits
-            StandardGravitationalParameter mu = new StandardGravitationalParameter(Game.Planets[0].Mass);
+            StandardGravitationalParameterOld mu = new StandardGravitationalParameterOld(Game.Planets[0].Mass);
             OrbitalPeriodsInTicks = new float[Game.N];
             HohmannDeltaV = new float[Game.N,Game.N];
             for (int i = 1; i < Game.N; i++) 
-                OrbitalPeriodsInTicks[i] = GameTick.ToTickF(OrbitalMechanics.GetOrbitalPeriod(new StandardGravitationalParameter(Game.Planets[Game.Planets[i].OrbitObject].Mass), Game.Planets[i].OrbitRadius));
+                OrbitalPeriodsInTicks[i] = GameTick.ToTickF(OrbitalMechanics.GetOrbitalPeriod(new StandardGravitationalParameterOld(Game.Planets[Game.Planets[i].OrbitObject].Mass), Game.Planets[i].OrbitRadius));
             for (int planetDeparture = 0; planetDeparture < Game.N; planetDeparture++)
             for (int planetDestination = 0; planetDestination < Game.N; planetDestination++)
             {
@@ -40,7 +40,7 @@ namespace Bserg.Model.Core.Systems
         /// </summary>
         /// <param name="planets"> Planets to calculate </param>
         /// <returns>Returns n*n array, first coordiante is departure, second is arrival</returns>
-        HohmannTransfer<float>[,] CalculateHohmannTransfers(Planet[] planets)
+        HohmannTransfer<float>[,] CalculateHohmannTransfers(PlanetOld[] planets)
         {
             // Planets
             int n = planets.Length;
@@ -49,9 +49,9 @@ namespace Bserg.Model.Core.Systems
             for (int i = 0; i < n; i++)
             {
                 int orbitID = Game.Planets[i].OrbitObject;
-                StandardGravitationalParameter muDeparture = new StandardGravitationalParameter(Game.Planets[orbitID == -1 ? 0 : orbitID].Mass);
+                StandardGravitationalParameterOld muDeparture = new StandardGravitationalParameterOld(Game.Planets[orbitID == -1 ? 0 : orbitID].Mass);
                 
-                Planet departure = planets[i];
+                PlanetOld departure = planets[i];
                 Time departureOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(muDeparture, departure.OrbitRadius);
 
                 for (int j = 0; j < n; j++)
@@ -64,9 +64,9 @@ namespace Bserg.Model.Core.Systems
                     }
 
                     // Calculate
-                    Planet destination = planets[j];
+                    PlanetOld destination = planets[j];
                     int departureOrbitID = Game.Planets[j].OrbitObject;
-                    StandardGravitationalParameter muDestination = new StandardGravitationalParameter(Game.Planets[departureOrbitID == -1 ? 0 : departureOrbitID].Mass);
+                    StandardGravitationalParameterOld muDestination = new StandardGravitationalParameterOld(Game.Planets[departureOrbitID == -1 ? 0 : departureOrbitID].Mass);
                     Time destinationOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(muDestination, destination.OrbitRadius);
                     Time window = 
                         OrbitalMechanics.GetSynodicPeriod(departureOrbitalPeriod, destinationOrbitalPeriod);

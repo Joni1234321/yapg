@@ -14,14 +14,14 @@ namespace Bserg.Controller.World
     public class PlanetRenderer : WorldRenderer
     {
         public readonly PlanetUIDrawer PlanetUIDrawer;
-        private readonly Planet[] planets;
+        private readonly PlanetOld[] planets;
         private readonly OrbitalTransferSystem orbitalTransferSystem;
         
         public readonly SystemGenerator SystemGenerator;
 
         private List<int> visiblePlanets;
         private Vector3[] planetPositions;
-        public PlanetRenderer(Planet[] planets, OrbitalTransferSystem orbitalTransferSystem, SystemGenerator systemGenerator)
+        public PlanetRenderer(PlanetOld[] planets, OrbitalTransferSystem orbitalTransferSystem, SystemGenerator systemGenerator)
         {
             PlanetUIDrawer = new PlanetUIDrawer();
 

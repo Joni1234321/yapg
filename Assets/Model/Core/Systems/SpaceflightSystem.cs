@@ -170,7 +170,7 @@ namespace Bserg.Model.Core.Systems
         
         /// <summary>
         /// Adds spacecraft to the planned flight, if non exists, then it schedules a Hohmann transfer
-        /// todo update this so it doesnt need to refrence system
+        /// todo update this so it doesnt need to reference system
         /// </summary>
         private void PlanSpaceflight(int departureID, int destinationID, Spacecraft spacecraft)
         {

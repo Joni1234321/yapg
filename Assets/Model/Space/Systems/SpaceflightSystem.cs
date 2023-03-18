@@ -1,6 +1,7 @@
 ﻿using Bserg.Model.Shared.Components;
 using Bserg.Model.Shared.SystemGroups;
 using Bserg.Model.Space.Components;
+using Bserg.Model.Space.Systems.Jobs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;

@@ -13,7 +13,7 @@ namespace Bserg.Controller.World
     public class SpaceFlightRenderer : WorldRenderer
     {
         
-        private readonly Planet[] planets;
+        private readonly PlanetOld[] planets;
         private readonly List<Spaceflight> spaceFlights;
         
         private readonly Transform spaceflightParent, flightOrbitParent;
@@ -22,7 +22,7 @@ namespace Bserg.Controller.World
         private PlanetRenderer planetRenderer;
 
 
-        public SpaceFlightRenderer(Planet[] planets, List<Spaceflight> spaceFlights, PlanetRenderer planetRenderer)
+        public SpaceFlightRenderer(PlanetOld[] planets, List<Spaceflight> spaceFlights, PlanetRenderer planetRenderer)
         {
             this.planets = planets;
             this.spaceFlights = spaceFlights;
