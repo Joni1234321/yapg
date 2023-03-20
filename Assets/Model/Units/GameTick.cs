@@ -10,17 +10,17 @@
         }
 
         public static float ToTickF(Time time) => (float)time.To(Time.UnitType.Years) * TICKS_PER_YEAR;
-
-        public static Time ToTime(int tick)
-        {
-            return ToTime((float)tick);
-        }
-
-        public static Time ToTime(float tickF)
-        {
-            return new Time((float)tickF / TICKS_PER_YEAR, Time.UnitType.Years);
-        }
+        public static Time ToTime(float tickF) => new Time(tickF / TICKS_PER_YEAR, Time.UnitType.Years);
         
+        public static float TickAtNextEventF(int ticks, float tickPeriod, float tickOffset = 0)
+        {
+            if (tickPeriod == 0) 
+                return ticks + 1;
+
+            int eventNTimesBefore = (int)((ticks + 1 - tickOffset) / tickPeriod);
+            float tickAtLastEvent =  eventNTimesBefore * tickPeriod + tickOffset;
+            return tickPeriod + tickAtLastEvent;
+        }
 
     }
 }

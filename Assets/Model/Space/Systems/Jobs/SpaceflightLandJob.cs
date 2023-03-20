@@ -10,14 +10,15 @@ namespace Bserg.Model.Space.Systems.Jobs
     /// Land on planet
     /// </summary>
     [BurstCompile]
+    [WithNone(typeof(Spacecraft.DepartureTick))]
     internal partial struct SpaceflightLandJob : IJobEntity
     {
         public EntityCommandBuffer Ecb;
-        [ReadOnly] public int GameTick;
+        [ReadOnly] public int Ticks;
 
         public void Execute(Entity e, in Spacecraft.ArrivalTick arrival)
         {
-            if (Hint.Likely(arrival.Tick != GameTick))
+            if (Hint.Likely(arrival.Tick != Ticks))
                 return;
 
             // Land ship

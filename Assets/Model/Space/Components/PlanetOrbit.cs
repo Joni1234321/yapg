@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using Unity.Collections;
+using Unity.Entities;
 
 namespace Bserg.Model.Space.Components
 {
@@ -18,5 +19,9 @@ namespace Bserg.Model.Space.Components
         public double Value;
     }
     
+    public struct HohmannTransferMap : IComponentData
+    {
+        public NativeHashMap<EntityPair, HohmannTransfer>.ReadOnly Map;
+    }
     
 }

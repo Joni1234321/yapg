@@ -9,12 +9,14 @@ using UnityEngine;
 
 namespace Bserg.Model.Space.Systems
 {
+
+
     /// <summary>
     /// Fly all spaceships
     /// if they are at their destination, send them to pool or send them on new journey
     /// </summary>
     [UpdateInGroup(typeof(TickSystemGroup))]
-    internal partial struct SpaceflightSystem : ISystem
+    public partial struct SpaceflightSystem : ISystem
     {
         private ComponentLookup<PopulationProgress> populationProgresses;
         private ComponentLookup<PopulationLevel> populationLevels;
@@ -25,40 +27,46 @@ namespace Bserg.Model.Space.Systems
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<GameTicks>();
+            state.RequireForUpdate<HohmannTransferMap>();
+            
             populationLevels = state.GetComponentLookup<PopulationLevel>(true);
             populationProgresses = state.GetComponentLookup<PopulationProgress>();
             pools = state.GetComponentLookup<SpacecraftPool>();
         }
 
-        [BurstCompile]
+        //[BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             int tick = SystemAPI.GetSingleton<GameTicks>().Ticks;
+            HohmannTransferMap transfers = SystemAPI.GetSingleton<HohmannTransferMap>();
+            
             state.Dependency.Complete();
 
-            populationLevels.Update(ref state);
-            populationProgresses.Update(ref state);
-            pools.Update(ref state);
-            
+  
             // Land
             EntityCommandBuffer ecb1 = new EntityCommandBuffer(Allocator.TempJob);
-            new SpaceflightProcessJob
+            new SpaceflightLandJob()
             {
                 Ecb = ecb1,
-                GameTick = tick,
-                PopulationLevels = populationLevels,
-                PopulationProgresses = populationProgresses,
-                Pools = pools,
+                Ticks = tick,
             }.Run();
             ecb1.Playback(state.WorldUnmanaged.EntityManager);
             ecb1.Dispose();
             
+            populationLevels.Update(ref state);
+            populationProgresses.Update(ref state);
+            pools.Update(ref state);
+
             // Process
             EntityCommandBuffer ecb2 = new EntityCommandBuffer(Allocator.TempJob);
-            new SpaceflightLandJob()
+            new SpaceflightProcessJob
             {
                 Ecb = ecb2,
-                GameTick = tick,
+                Ticks = tick,
+                PopulationLevels = populationLevels,
+                PopulationProgresses = populationProgresses,
+                Pools = pools,
+                TransferMap = transfers.Map,
             }.Run();
             ecb2.Playback(state.WorldUnmanaged.EntityManager);
             ecb2.Dispose();
@@ -68,7 +76,9 @@ namespace Bserg.Model.Space.Systems
             new SpaceflightTakeOffJob
             {
                 Ecb = ecb3,
-                GameTick = tick,
+                Ticks = tick,
+                TransferMap = transfers.Map,
+
             }.Run();
             ecb3.Playback(state.WorldUnmanaged.EntityManager);
             ecb3.Dispose();

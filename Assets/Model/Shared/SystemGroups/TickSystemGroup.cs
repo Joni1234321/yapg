@@ -24,6 +24,8 @@ namespace Bserg.Model.Shared.SystemGroups
             }
         }
 
+
+        public static bool CanTick() => !doTick;
         /// <summary>
         /// 
         /// </summary>

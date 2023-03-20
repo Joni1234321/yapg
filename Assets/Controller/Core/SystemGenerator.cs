@@ -30,8 +30,8 @@ namespace Bserg.Controller.Core
         public PlanetOld[] CreateSystem()
         {
             PlanetOld[] planets = new PlanetOld[prefab.planetScriptables.Length];
-            Orbits = new OrbitData(-1);
-            
+            Orbits = OrbitData.EMPTY();
+
             // Remove old planets
             int n = transform.childCount;
             for (int i = 0; i < n; i++)

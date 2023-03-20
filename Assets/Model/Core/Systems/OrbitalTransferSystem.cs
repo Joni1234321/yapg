@@ -9,7 +9,6 @@ namespace Bserg.Model.Core.Systems
     public class OrbitalTransferSystem : GameSystem
     {
         public float[] OrbitalPeriodsInTicks;
-        public HohmannTransfer<float>[,] HohmannTransfers;
         public float[,] HohmannDeltaV;
 
         
@@ -32,77 +31,14 @@ namespace Bserg.Model.Core.Systems
                 // Function doesnt work for satellites
                 HohmannDeltaV[planetDeparture, planetDestination] = (float)OrbitalMechanics.GetHohmannDeltaV(mu, Game.Planets[planetDeparture].OrbitRadius, Game.Planets[planetDestination].OrbitRadius);
             }
-            HohmannTransfers = CalculateHohmannTransfers(Game.Planets);
         }
         
-        /// <summary>
-        /// Calculates all the hohmann transfers windows
-        /// </summary>
-        /// <param name="planets"> Planets to calculate </param>
-        /// <returns>Returns n*n array, first coordiante is departure, second is arrival</returns>
-        HohmannTransfer<float>[,] CalculateHohmannTransfers(PlanetOld[] planets)
-        {
-            // Planets
-            int n = planets.Length;
-            HohmannTransfer<float>[,] transfers = new HohmannTransfer<float>[n, n];
-
-            for (int i = 0; i < n; i++)
-            {
-                int orbitID = Game.Planets[i].OrbitObject;
-                StandardGravitationalParameterOld muDeparture = new StandardGravitationalParameterOld(Game.Planets[orbitID == -1 ? 0 : orbitID].Mass);
-                
-                PlanetOld departure = planets[i];
-                Time departureOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(muDeparture, departure.OrbitRadius);
-
-                for (int j = 0; j < n; j++)
-                {
-                    // No time between itself
-                    if (i == j)
-                    {
-                        transfers[i, j] = new HohmannTransfer<float>(0, 0, 0);
-                        continue;
-                    }
-
-                    // Calculate
-                    PlanetOld destination = planets[j];
-                    int departureOrbitID = Game.Planets[j].OrbitObject;
-                    StandardGravitationalParameterOld muDestination = new StandardGravitationalParameterOld(Game.Planets[departureOrbitID == -1 ? 0 : departureOrbitID].Mass);
-                    Time destinationOrbitalPeriod = OrbitalMechanics.GetOrbitalPeriod(muDestination, destination.OrbitRadius);
-                    Time window = 
-                        OrbitalMechanics.GetSynodicPeriod(departureOrbitalPeriod, destinationOrbitalPeriod);
-                    Time duration =
-                        OrbitalMechanics.HohmannTransferDuration(muDeparture, departure.OrbitRadius, destination.OrbitRadius);
-                    double deltaAngleAtLaunch =
-                        OrbitalMechanics.HohmannAngleDifferenceAtLaunch(destinationOrbitalPeriod, duration);
-                    Time timeUntilFirstWindow = OrbitalMechanics.GetTimeUntilAngleDifference(deltaAngleAtLaunch, departureOrbitalPeriod, destinationOrbitalPeriod); 
-                    transfers[i, j] = new HohmannTransfer<float>(GameTick.ToTickF(timeUntilFirstWindow), GameTick.ToTickF(window), GameTick.ToTickF(duration));
-                }
-            }
-
-            // Return
-            return transfers;
-        }
         
+
+
+
     }
+
     
-    /// <summary>
-    /// Hohmann transfer has a launch window and a duration to destination
-    /// </summary>
-    public struct HohmannTransfer<T>
-    {
-        public readonly T Offset, Window, Duration;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="offset">first launch window</param>
-        /// <param name="window">delta time till next launch windows</param>
-        /// <param name="duration">time it takes from launch at departure till destination</param>
-        public HohmannTransfer(T offset, T window, T duration)
-        {
-            Offset = offset;
-            Window = window;
-            Duration = duration;
-        }
-    }
 }

@@ -8,8 +8,12 @@ using Bserg.Model.Shared.SystemGroups;
 using Bserg.Model.Space;
 using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
+using NUnit.Framework;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
+using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Model.Core
 {
@@ -63,6 +67,7 @@ namespace Bserg.Model.Core
             PlanetNames = planetNames;
             Inhabited = new bool[N];
             Planets = planets;
+            Entities = new Entity[N];
             
             Recipe.Load();
 
@@ -79,25 +84,32 @@ namespace Bserg.Model.Core
                 // Build orbit for each child
                 foreach (OrbitData child in orbit.Children)
                 {
-                    PlanetOld p = planets[child.PlanetID];
-                    Planet.PrefabData data = new Planet.PrefabData
+                    PlanetOld childPlanet = planets[child.PlanetID];
+                    Planet.PrefabData childData = new Planet.PrefabData
                     {
-                        Name = p.Name,
+                        Name = childPlanet.Name,
                         Population = (long)givenPopulationLevels[child.PlanetID],
-                        Color = new float4(p.Color.r, p.Color.g, p.Color.b, p.Color.a),
-                        Size = p.Size,
-                        WeightEarthMass = p.Mass.To(Mass.UnitType.EarthMass),
-                        RadiusAU = p.OrbitRadius.To(Length.UnitType.AstronomicalUnits),
-                        OrbitObject = p.OrbitObject
+                        Color = new float4(childPlanet.Color.r, childPlanet.Color.g, childPlanet.Color.b, childPlanet.Color.a),
+                        Size = childPlanet.Size,
+                        WeightEarthMass = childPlanet.Mass.To(Mass.UnitType.EarthMass),
+                        RadiusAU = childPlanet.OrbitRadius.To(Length.UnitType.AstronomicalUnits),
+                        OrbitObject = childPlanet.OrbitObject
                     };
 
-                    Entity e = CreatePlanetEntity(EntityManager, parent, layer, data);
-                    queue.Enqueue((child, e, layer + 1));
+                    Entity childEntity = CreatePlanetEntity(EntityManager, parent, layer, childData);
+                    child.Entity = childEntity;
+                    child.OrbitRadius = childPlanet.OrbitRadius;
+                    Entities[child.PlanetID] = childEntity;
+                    queue.Enqueue((child, childEntity, layer + 1));
                 }
-                
             }
-            
-            
+
+            // Generate transfer map
+            NativeHashMap<EntityPair, HohmannTransfer> map =
+                new NativeHashMap<EntityPair, HohmannTransfer>(N * 10, Allocator.Persistent);
+
+           orbits.GenerateTransfersForChildren(EntityManager, ref map);
+
             // Population
             PlanetLevels = new PlanetLevels(N);
             LevelProgress = new PlanetLevelsGeneric<float>(N);
@@ -142,9 +154,11 @@ namespace Bserg.Model.Core
             
             // Dude
             World.DefaultGameObjectInjectionWorld.EntityManager.CreateSingleton(new GameTicks { Ticks = Ticks });
+            EntityManager.CreateSingleton(new HohmannTransferMap { Map = map.AsReadOnly() });
             OnTickMonth += TickMonth;
             OnTickYear += TickYear;
             OnTickQuarter += TickQuarter;
+
         }
 
 
@@ -154,9 +168,14 @@ namespace Bserg.Model.Core
         /// </summary>
         public void DoTick()
         {
-            
-            if (!TickSystemGroup.TryTick())
+            if (!TickSystemGroup.CanTick())
                 return;
+            
+            // Increment time
+            Ticks++;
+            gameticksQuery.GetSingletonRW<GameTicks>().ValueRW.Ticks = Ticks;
+            bool r = TickSystemGroup.TryTick();
+            Assert.IsTrue(r);
             
             OnTick?.Invoke();
             if (Ticks % GameTick.TICKS_PER_MONTH == 0)
@@ -175,11 +194,8 @@ namespace Bserg.Model.Core
                 }
             }
             
-            SpaceflightSystem.System();
+            //SpaceflightSystem.System();
             
-            // Increment time
-            Ticks++;
-            gameticksQuery.GetSingletonRW<GameTicks>().ValueRW.Ticks = Ticks;
         }
 
         
@@ -222,16 +238,19 @@ namespace Bserg.Model.Core
         /// <param name="tickPeriod">The event happens every n ticks</param>
         /// <param name="tickOffset">The event is offset by n ticks from the start of the game</param>
         /// <returns>The tick</returns>
-        public float TicksUntilNextEventF(float tickPeriod, float tickOffset = 0)
+        public float TicksUntilNextEventF(float tickPeriod, float tickOffset = 0) =>
+            TicksUntilNextEventF(Ticks, tickPeriod, tickOffset);
+        public float TicksUntilNextEventF(Time time, float tickOffset = 0) => 
+            TicksUntilNextEventF(GameTick.ToTickF(time), tickOffset);
+
+        public static float TicksUntilNextEventF(int ticks, float tickPeriod, float tickOffset = 0)
         {
             if (tickPeriod == 0) 
                 return 0;
 
-            float ticksSinceLastEvent = ((Ticks + 1) - tickOffset) % tickPeriod;
+            float ticksSinceLastEvent = ((ticks + 1) - tickOffset) % tickPeriod;
             return tickPeriod - ticksSinceLastEvent;
         }
-        public float TicksUntilNextEventF(Time time, float tickOffset = 0) => TicksUntilNextEventF(GameTick.ToTickF(time), tickOffset);
-
 
         /// <summary>
         /// 
@@ -255,15 +274,11 @@ namespace Bserg.Model.Core
         /// <param name="tickPeriod">Every n ticks it happens</param>
         /// <param name="tickOffset">First event starts at n tick</param>
         /// <returns></returns>
-        public float TickAtNextEventF(float tickPeriod, float tickOffset = 0)
-        {
-            if (tickPeriod == 0) 
-                return Ticks + 1;
+        public float TickAtNextEventF(float tickPeriod, float tickOffset = 0) =>
+            GameTick.TickAtNextEventF(Ticks, tickPeriod, tickOffset);
+        
 
-            int eventNTimesBefore = (int)((Ticks + 1 - tickOffset) / tickPeriod);
-            float tickAtLastEvent =  eventNTimesBefore * tickPeriod + tickOffset;
-            return tickPeriod + tickAtLastEvent;
-        }
+
 
 
 

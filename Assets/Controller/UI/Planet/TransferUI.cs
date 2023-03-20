@@ -1,4 +1,5 @@
 ﻿using Bserg.Model.Core.Systems;
+using Bserg.Model.Space;
 using Bserg.Model.Units;
 using Bserg.View.Custom.Transfer;
 using UnityEngine.UIElements;
@@ -23,7 +24,7 @@ namespace Bserg.Controller.UI.Planet
         /// <param name="planetNames"></param>
         /// <param name="transfers"></param>
         /// <param name="hohmannDeltaV"></param>
-        public void UpdateTransfers(int planetID, string[] planetNames, HohmannTransfer<float>[,] transfers, float[,] hohmannDeltaV)
+        public void UpdateTransfers(int planetID, string[] planetNames, HohmannTransfer[,] transfers, float[,] hohmannDeltaV)
         {
             transferList.Clear();
             
@@ -34,7 +35,7 @@ namespace Bserg.Controller.UI.Planet
             {
                 if (destinationID == planetID) continue;
 
-                HohmannTransfer<float> transfer = transfers[planetID, destinationID];
+                HohmannTransfer transfer = transfers[planetID, destinationID];
                 TransferItemControl transferItem = new TransferItemControl
                 {
                     Title = departureName + " - " + planetNames[destinationID], 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Utilities;
 using Model.Utilities;
@@ -186,7 +187,7 @@ namespace Bserg.Model.Core.Systems
             }
             
             // Create new 
-            HohmannTransfer<float> transfer = Game.OrbitalTransferSystem.HohmannTransfers[departureID, destinationID];
+            HohmannTransfer transfer = new HohmannTransfer(0, 0, 0); //Game.OrbitalTransferSystem.HohmannTransfers[departureID, destinationID];
             float nextWindowTick = (int)Game.TickAtNextEventF(transfer.Window, transfer.Offset);
             Spaceflight flight = new Spaceflight((int)nextWindowTick,  (int)(nextWindowTick + transfer.Duration), departureID,
                 destinationID);

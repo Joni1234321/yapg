@@ -4,6 +4,8 @@ namespace Bserg.Model.Units
 {
     public readonly struct Length
     {
+
+        public static readonly Length ZERO = new Length(0, UnitType.Meters);
         public enum UnitType
         {
             Meters,

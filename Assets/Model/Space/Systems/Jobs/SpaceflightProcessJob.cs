@@ -1,6 +1,7 @@
 ﻿using System;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Space.Components;
+using Bserg.Model.Units;
 using Bserg.Model.Utilities;
 using Unity.Burst;
 using Unity.Collections;
@@ -18,11 +19,13 @@ namespace Bserg.Model.Space.Systems.Jobs
     internal partial struct SpaceflightProcessJob : IJobEntity
     {
         public EntityCommandBuffer Ecb;
-        [ReadOnly] public int GameTick;
+        [ReadOnly] public int Ticks;
 
         public ComponentLookup<PopulationProgress> PopulationProgresses;
         [ReadOnly] public ComponentLookup<PopulationLevel> PopulationLevels;
         public ComponentLookup<SpacecraftPool> Pools;
+
+        [ReadOnly] public NativeHashMap<EntityPair, HohmannTransfer>.ReadOnly TransferMap;
 
         private const int CARGO_MAX = 3;
 
@@ -72,16 +75,27 @@ namespace Bserg.Model.Space.Systems.Jobs
             flightPlan.ActionsLeft--;
             (flightPlan.CurrentFlightStep, flightPlan.NextFlightStep) = (flightPlan.NextFlightStep, flightPlan.CurrentFlightStep);
 
+            Entity nextPlanet = flightPlan.CurrentFlightStep.DestinationPlanet;
             // If already at planet, then process again next tick
-            if (flightPlan.CurrentFlightStep.DestinationPlanet == currentPlanet)
+            if ( nextPlanet == currentPlanet)
                 return;
             
             // Fly to space
             Ecb.RemoveComponent<Spacecraft.ProcessingTag>(e);
-            int departureTick = GameTick + 50;
-            Ecb.AddComponent(e, new Spacecraft.DepartureTick { Tick = departureTick });
+            EntityPair key = new EntityPair
+            {
+                Departure = currentPlanet,
+                Destination = nextPlanet,
+            };
+            HohmannTransfer transfer = TransferMap[key];
+            float departureTick = GameTick.TickAtNextEventF(Ticks, transfer.Window, transfer.Offset);
+            float arrivalTick = (int)(departureTick + transfer.Window);
+            Ecb.AddComponent(e, new Spacecraft.DepartureTick { Tick = (int)departureTick });
+            Ecb.AddComponent(e, new Spacecraft.ArrivalTick { Tick =  (int)arrivalTick});
             
-            Assert.IsTrue(departureTick > GameTick);
+            Assert.IsTrue(departureTick > Ticks);
+            Assert.IsTrue(arrivalTick > departureTick);
+
         }
     }
 }
