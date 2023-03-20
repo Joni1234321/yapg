@@ -16,7 +16,7 @@ namespace Bserg.Model.Space.Systems
     /// if they are at their destination, send them to pool or send them on new journey
     /// </summary>
     [UpdateInGroup(typeof(TickSystemGroup))]
-    public partial struct SpaceflightSystem : ISystem
+    internal partial struct SpaceflightSystem : ISystem
     {
         private ComponentLookup<PopulationProgress> populationProgresses;
         private ComponentLookup<PopulationLevel> populationLevels;
@@ -34,7 +34,7 @@ namespace Bserg.Model.Space.Systems
             pools = state.GetComponentLookup<SpacecraftPool>();
         }
 
-        //[BurstCompile]
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             int tick = SystemAPI.GetSingleton<GameTicks>().Ticks;

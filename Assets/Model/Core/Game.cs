@@ -104,12 +104,37 @@ namespace Bserg.Model.Core
                 }
             }
 
+            
             // Generate transfer map
             NativeHashMap<EntityPair, HohmannTransfer> map =
                 new NativeHashMap<EntityPair, HohmannTransfer>(N * 10, Allocator.Persistent);
 
            orbits.GenerateTransfersForChildren(EntityManager, ref map);
 
+           // Initial settle
+           EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
+           ecb.AppendToBuffer(Entities[3], new Settle.Order
+           {
+               Destination = Entities[4],
+               Parallel = 6,
+               Serial = 50,
+           });
+           ecb.AppendToBuffer(Entities[3], new Settle.Order
+           {
+               Destination = Entities[2],
+               Parallel = 6,
+               Serial = 50,           
+           });
+           ecb.AppendToBuffer(Entities[3], new Settle.Order
+           {
+               Destination = Entities[1],
+               Parallel = 6,
+               Serial = 50,
+           });
+           ecb.Playback(EntityManager);
+           ecb.Dispose();
+           
+           
             // Population
             PlanetLevels = new PlanetLevels(N);
             LevelProgress = new PlanetLevelsGeneric<float>(N);
@@ -212,7 +237,7 @@ namespace Bserg.Model.Core
         /// </summary>
         private void TickQuarter()
         { 
-            SettleSystem.System();
+            //SettleSystem.System();
             MigrationSystem.System();
         }
 
@@ -338,7 +363,10 @@ namespace Bserg.Model.Core
 
             // Spacecraft System
             entityManager.AddComponentData(e, new SpacecraftPool { Available = data.Population > 30 ? 4000 : 0});
-
+            
+            // Settle system
+            entityManager.AddBuffer<Settle.Order>(e);
+            
             return e;
         }
     }
