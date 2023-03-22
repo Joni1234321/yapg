@@ -34,7 +34,7 @@ namespace Bserg.Controller.Core
             foreach (Entity planet in entities)
             {
                 Entity parent = entityManager.GetComponentData<PlanetOrbit>(planet).OrbitEntity;
-                float4 color = entityManager.GetComponentData<Planet.Data>(planet).Color;
+                Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(planet);
                 RenderMeshUtility.AddComponents(planet, entityManager, desc, renderMeshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(0,0));
                 entityManager.AddComponent<DisableRendering>(planet);
                 entityManager.AddComponentData(planet, LocalTransform.FromScale(1f));
@@ -52,9 +52,9 @@ namespace Bserg.Controller.Core
 #endif
                 // Create model
                 RenderMeshUtility.AddComponents(model, entityManager, desc, renderMeshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(0,0));
-                entityManager.AddComponentData(model, LocalTransform.FromScale(.5f));
+                entityManager.AddComponentData(model, LocalTransform.FromScale(SystemGenerator.GetRealPlanetSize(planetData.Size).x));
                 entityManager.AddComponentData(model, new Parent { Value = planet });
-                entityManager.AddComponentData(model, new URPMaterialPropertyEmissionColor { Value = color });
+                entityManager.AddComponentData(model, new URPMaterialPropertyEmissionColor { Value = planetData.Color });
 
 
             }

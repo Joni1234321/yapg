@@ -1,17 +1,16 @@
 ﻿using Bserg.Controller.Components;
+using Bserg.Controller.Core;
 using Bserg.Controller.World;
-using Bserg.Model.Shared.Components;
+using Bserg.Model.Shared.SystemGroups;
 using Bserg.Model.Space.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
-using Unity.Rendering;
 using Unity.Transforms;
-using UnityEngine;
 
 namespace Bserg.Controller.Systems
 {
+    [UpdateInGroup(typeof(DrawSystemGroup))] 
     internal partial struct PlanetControllerSystem : ISystem
     {
         [BurstCompile]
