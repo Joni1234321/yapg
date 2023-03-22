@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Bserg.Controller.Components;
 using Bserg.Controller.Drivers;
 using Bserg.Controller.Overlays;
 using Bserg.Controller.Sensors;
@@ -8,7 +9,7 @@ using Bserg.Controller.World;
 using Bserg.Model.Core;
 using Bserg.Model.Political;
 using Bserg.Model.Space;
-using Bserg.View.Space;
+using Unity.Entities;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,6 +46,11 @@ namespace Bserg.Controller.Core
 
         private List<int> allPlanets, outerPlanets;
 
+        public SystemGeneratorUpdated SystemGeneratorUpdated;
+        public Material material;
+        public Mesh mesh;
+        private EntityQuery gameTicksFQuery;
+        
         void Awake()
         {
             SelectionHelper.SelectedPlanetID = -1;
@@ -59,7 +65,13 @@ namespace Bserg.Controller.Core
                 
             Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
-            
+            EntityManager entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
+            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, material, mesh);
+
+            entityManager.CreateSingleton(new GameTicksF() { });
+            gameTicksFQuery = entityManager.CreateEntityQuery(typeof(GameTicksF));
+
+
             MouseController = new MouseController();
             
             PlanetRenderer = new PlanetRenderer(Game.Planets, Game.OrbitalTransferSystem, systemGenerator);
@@ -77,6 +89,8 @@ namespace Bserg.Controller.Core
                 if (i == 0 || (i > 4 && i < 10))
                     outerPlanets.Add(i);
             }
+
+            
         }
 
         void Start()
@@ -111,7 +125,11 @@ namespace Bserg.Controller.Core
             }
             
             float dt = TimeDriver.DeltaTick;
-
+            // TODO: Move this to system
+            gameTicksFQuery.GetSingletonRW<GameTicksF>().ValueRW.TicksF = Game.Ticks + dt;
+            gameTicksFQuery.GetSingletonRW<GameTicksF>().ValueRW.DeltaTick = dt;
+            
+                
             HandleInput();
             MouseController.OnUpdate(Game, activeOverlay, dt);
 

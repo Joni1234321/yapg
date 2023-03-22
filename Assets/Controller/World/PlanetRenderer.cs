@@ -4,6 +4,7 @@ using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
 using Bserg.View.Space;
+using Unity.Burst;
 using UnityEngine;
 
 namespace Bserg.Controller.World
@@ -44,7 +45,7 @@ namespace Bserg.Controller.World
             
             // Only draw visible uis
             for (int i = 0; i < planetPositions.Length; i++)
-                planetPositions[i] = GetPlanetPositionAtTickF(visiblePlanets[i], ticks + dt);
+                planetPositions[i] = GetLocalPlanetPositionAtTickF(visiblePlanets[i], ticks + dt);
 
             PlanetUIDrawer.Draw(planetPositions, planets, visiblePlanets);
         }
@@ -56,7 +57,7 @@ namespace Bserg.Controller.World
             for (int planetID = 0; planetID < planets.Length; planetID++)
             {
                 // Planet GO
-                SystemGenerator.planetTransforms[planetID].position = GetPlanetPositionAtTickF( planetID, ticks + dt);
+                SystemGenerator.planetTransforms[planetID].position = GetLocalPlanetPositionAtTickF( planetID, ticks + dt);
 
                 // Orbit GO
                 if (planetID != 0)
@@ -76,7 +77,7 @@ namespace Bserg.Controller.World
         /// <param name="planetID"></param>
         /// <param name="ticks"></param>
         /// <returns></returns>
-        public Vector3 GetPlanetPositionAtTickF (int planetID, float ticks)
+        public Vector3 GetLocalPlanetPositionAtTickF (int planetID, float ticks)
         {
             // Position in orbit
             Vector3 localPosition = SystemGenerator.GetPlanetPosition(
@@ -108,6 +109,35 @@ namespace Bserg.Controller.World
             if (orbitalPeriodsInTick == 0)
                 return 0;
             return 2 * Mathf.PI * ticks / orbitalPeriodsInTick;
+        }
+        
+        
+        /// <summary>
+        /// Return angles in radians
+        /// </summary>
+        /// <param name="orbitPeriodTicksF"></param>
+        /// <param name="ticks"></param>
+        /// <returns></returns>
+        public static float GetPlanetAngleAtTicksF(float orbitPeriodTicksF, float ticks)
+        {
+            if (orbitPeriodTicksF == 0)
+                return 0;
+            return 2 * Mathf.PI * ticks / orbitPeriodTicksF;
+        }
+        
+        /// <summary>
+        /// Returns the position of the planet at a given tick and delta
+        /// </summary>
+        /// <param name="planetID"></param>
+        /// <param name="ticks"></param>
+        /// <returns></returns>
+        public static Vector3 GetLocalPlanetPositionAtTickF (float orbitRadiusAU, float orbitalPeriodTicksF, float ticks)
+        {
+            // Position in orbit
+            Vector3 localPosition = SystemGenerator.GetPlanetPosition(
+                orbitRadiusAU,
+                GetPlanetAngleAtTicksF(orbitalPeriodTicksF, ticks));
+            return localPosition;
         }
     }
 }

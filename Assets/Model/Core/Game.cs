@@ -12,7 +12,6 @@ using NUnit.Framework;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 using Time = Bserg.Model.Units.Time;
 
 namespace Bserg.Model.Core
@@ -54,7 +53,7 @@ namespace Bserg.Model.Core
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
         
-        EntityQuery gameticksQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicks));
+        EntityQuery gameTicksQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicks));
 
         
         public Game(string[] planetNames,
@@ -178,7 +177,7 @@ namespace Bserg.Model.Core
             
             
             // Dude
-            World.DefaultGameObjectInjectionWorld.EntityManager.CreateSingleton(new GameTicks { Ticks = Ticks });
+            EntityManager.CreateSingleton(new GameTicks { Ticks = Ticks });
             EntityManager.CreateSingleton(new HohmannTransferMap { Map = map.AsReadOnly() });
             OnTickMonth += TickMonth;
             OnTickYear += TickYear;
@@ -198,7 +197,7 @@ namespace Bserg.Model.Core
             
             // Increment time
             Ticks++;
-            gameticksQuery.GetSingletonRW<GameTicks>().ValueRW.Ticks = Ticks;
+            gameTicksQuery.GetSingletonRW<GameTicks>().ValueRW.Ticks = Ticks;
             bool r = TickSystemGroup.TryTick();
             Assert.IsTrue(r);
             
@@ -345,6 +344,8 @@ namespace Bserg.Model.Core
             entityManager.AddComponentData(e, new PopulationGrowth { BirthRate = 0.02f, DeathRate = 0.005f } );
             
             // OrbitSystem
+            entityManager.AddComponentData(e,
+                new OrbitRadius() { RadiusAU = (float)radius.To(Length.UnitType.AstronomicalUnits) });
             entityManager.AddComponentData(e, new StandardGravitationalParameter
             {
                 Value = StandardGravitationalParameterOld.GRAVITATIONAL_CONSTANT *

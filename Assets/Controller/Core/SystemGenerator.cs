@@ -13,8 +13,8 @@ namespace Bserg.Controller.Core
         public GameObject planetPrefab, orbitPrefab;
         public Transform orbitParent;
         public SystemPrefab prefab;
-        private static readonly int Emmision = Shader.PropertyToID("_Emission");
-        UnityEngine.Material material;
+        private static readonly int Emmision = Shader.PropertyToID("_EmissionColor");
+        Material material;
 
         public Transform[] planetTransforms;
         public OrbitData Orbits;
@@ -23,7 +23,7 @@ namespace Bserg.Controller.Core
 
         private void OnEnable()
         {
-            material = Resources.Load<UnityEngine.Material>("View/Shaders/MarsMaterial");
+            material = Resources.Load<Material>("View/Shaders/MarsMaterial");
         }
 
 
@@ -121,7 +121,7 @@ namespace Bserg.Controller.Core
         /// <param name="offsetXAt0">distance from center to focus (orbit/sun) at 0 degrees </param>
         /// <param name="offsetAngle">how it is rotated</param>
         /// <returns></returns>
-        public Vector3 GetPlanetPosition(float semiMajorAxisAU, float semiMinorAxisAU, float angle, float offsetXAt0 = 0, float offsetAngle = 0)
+        public static Vector3 GetPlanetPosition(float semiMajorAxisAU, float semiMinorAxisAU, float angle, float offsetXAt0 = 0, float offsetAngle = 0)
         {
             // Taken from https://en.wikipedia.org/wiki/Ellipse parameterization of an ellipse
          
@@ -190,7 +190,7 @@ namespace Bserg.Controller.Core
             return GetPositionInOrbit(nu, r, offsetAtX0 , offsetAngle);
         }
 
-        public Vector3 GetPlanetPosition(float orbitRadiusAU, float angle) =>
+        public static Vector3 GetPlanetPosition(float orbitRadiusAU, float angle) =>
             GetPlanetPosition(orbitRadiusAU, orbitRadiusAU, angle);
 
 

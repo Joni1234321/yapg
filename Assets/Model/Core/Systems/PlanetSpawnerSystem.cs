@@ -53,6 +53,7 @@ namespace Bserg.Model.Core.Systems
 
             state.Dependency = JobHandle.CombineDependencies(state.Dependency, deps);
             deps.Complete();
+            entities.Dispose();
             Debug.Log($"Converted {prefabQuery.CalculateEntityCount()}");
 
             while (Hint.Unlikely(prefabQuery.CalculateEntityCount() == 0))
@@ -127,26 +128,6 @@ namespace Bserg.Model.Core.Systems
         }
     }
 
-    [WithAll(typeof(Planet.Tag))]
-    [WithNone(typeof(PlanetOrbit))]
-    [BurstCompile]
-    public partial struct OrbitSystemAdder : IJobEntity
-    {
 
-        public void Execute()
-        {
-            /*ParallelWriter.AddComponent(i, e, new PlanetOrbit { OrbitEntity = orbitID });
-            
-            float ticksF = 0;
-            if (orbit.OrbitEntity > -1)
-            {
-                ticksF = GameTick.ToTickF(OrbitalMechanics.GetOrbitalPeriod(
-                    new StandardGravitationalParameter(Game.Planets[Game.Planets[i].OrbitObject].Mass),
-                    Game.Planets[i].OrbitRadius));
-            }
-            ParallelWriter.AddComponent(i, e, new OrbitPeriod { TicksF =  ticksF});
-        */}
-        
-    }
 
 }

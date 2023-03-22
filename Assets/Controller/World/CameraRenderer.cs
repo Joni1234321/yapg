@@ -34,7 +34,7 @@ namespace Bserg.Controller.World
         {
             animationTime += Time.deltaTime;
             UpdateZoom();
-            Vector3 planetPosition = planetRenderer.GetPlanetPositionAtTickF(FocusPlanetID, ticks + dt);
+            Vector3 planetPosition = planetRenderer.GetLocalPlanetPositionAtTickF(FocusPlanetID, ticks + dt);
             
             UpdatePosition(planetPosition);
         }

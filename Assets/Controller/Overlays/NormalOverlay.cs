@@ -95,7 +95,7 @@ namespace Bserg.Controller.Overlays
             
             PlanetOld planetOld = game.GetPlanet(planetID);
             
-            selector.transform.position = planetRenderer.GetPlanetPositionAtTickF(planetID, game.Ticks + DeltaTick);;
+            selector.transform.position = planetRenderer.GetLocalPlanetPositionAtTickF(planetID, game.Ticks + DeltaTick);;
             //selector.transform.localScale = SystemGenerator.GetIconPlanetSize(planet.Size);
             selector.transform.localScale = SystemGenerator.GetRealPlanetSize(planetOld.Size) * .5f;
         }

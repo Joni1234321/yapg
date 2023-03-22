@@ -122,7 +122,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Colo: {r: 0, g: 0, b: 0, a: 0}
-    - _Color: {r: 0.36821365, g: 0, b: 1, a: 1}
+    - _Color: {r: 0, g: 0, b: 0, a: 0}
+    - _Emission: {r: 0.003921569, g: 0.003921569, b: 0, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Emmision: {r: 0, g: 0.24999997, b: 0.054077618, a: 1}
     - _Seed: {r: 21.02, g: 3, b: 0, a: 0}

@@ -13,6 +13,11 @@ namespace Bserg.Model.Space.Components
         public float TicksF;
     }
 
+    public struct OrbitRadius : IComponentData
+    {
+        public float RadiusAU;
+    }
+
     public struct StandardGravitationalParameter : IComponentData
     {
         public const double GRAVITATIONAL_CONSTANT = 0.000_000_000_066_743;
