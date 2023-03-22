@@ -11,6 +11,7 @@ using Bserg.Model.Political;
 using Bserg.Model.Space;
 using Unity.Entities;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core
@@ -47,8 +48,8 @@ namespace Bserg.Controller.Core
         private List<int> allPlanets, outerPlanets;
 
         public SystemGeneratorUpdated SystemGeneratorUpdated;
-        public Material material;
-        public Mesh mesh;
+        public Material planetMaterial, orbitMaterial;
+        public Mesh planetMesh, orbitMesh;
         private EntityQuery gameTicksFQuery;
         
         void Awake()
@@ -66,7 +67,7 @@ namespace Bserg.Controller.Core
             Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
             EntityManager entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
-            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, material, mesh);
+            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, planetMaterial, planetMesh, orbitMaterial, orbitMesh);
 
             entityManager.CreateSingleton(new GameTicksF() { });
             gameTicksFQuery = entityManager.CreateEntityQuery(typeof(GameTicksF));

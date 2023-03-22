@@ -6,7 +6,10 @@ using Bserg.Model.Space.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Jobs;
+using Unity.Mathematics;
 using Unity.Transforms;
+using UnityEngine;
 
 namespace Bserg.Controller.Systems
 {
@@ -24,11 +27,17 @@ namespace Bserg.Controller.Systems
         {
             float ticksF = SystemAPI.GetSingleton<GameTicksF>().TicksF;
 
-            state.Dependency = new PlanetRenderJob()
+            
+            var planetDeps = new PlanetRenderJob
             {
                 GameTicksF = ticksF,
             }.ScheduleParallel(state.Dependency);
-
+            var orbitDeps = new OrbitRenderJob
+            {
+                GameTicksF = ticksF,
+            }.ScheduleParallel(planetDeps); // For some reason it cant reason that withnone and with all that are opposite doesnt slice
+            
+            state.Dependency = JobHandle.CombineDependencies(planetDeps, orbitDeps);
             state.Dependency.Complete();
             
         }
@@ -43,6 +52,18 @@ namespace Bserg.Controller.Systems
             localTransform.Position = 
                 PlanetRenderer.GetLocalPlanetPositionAtTickF(orbitRadius.RadiusAU, orbitPeriod.TicksF, GameTicksF);
 
+        } 
+    }
+    
+    [BurstCompile]
+    [WithAll(typeof(OrbitRotateTag))]   
+    internal partial struct OrbitRenderJob : IJobEntity
+    {
+        [ReadOnly] public float GameTicksF;
+        public void Execute(ref LocalTransform localTransform, in OrbitPeriod orbitPeriod)
+        {
+            float angle = PlanetRenderer.GetPlanetAngleAtTicksF(orbitPeriod.TicksF, GameTicksF);
+            localTransform.Rotation = Quaternion.Euler(0, 0, 90 + math.degrees(angle));
         } 
     }
 }
