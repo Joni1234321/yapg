@@ -18,35 +18,43 @@ namespace Bserg.Controller.Core
     public class SystemGeneratorUpdated
     {
 
-        public SystemGeneratorUpdated (EntityManager entityManager, Material planetMaterial, Mesh planetMesh, Material orbitMaterial, Mesh orbitMesh) 
+        public SystemGeneratorUpdated (EntityManager entityManager, Material planetMaterial, Mesh planetMesh, Material orbitMaterial, Material circleMaterial, Mesh quad) 
         {
             GameObject.Find("System").SetActive(false);
             GameObject.Find("Orbits").SetActive(false);
         
-            RenderMeshArray planetMeshArray = new RenderMeshArray(new[] { planetMaterial }, new[] { planetMesh });
-            RenderMeshArray orbitMeshArray = new RenderMeshArray(new[] { orbitMaterial }, new[] { orbitMesh });
+            RenderMeshArray planetMeshArray = new RenderMeshArray(new[] { planetMaterial, orbitMaterial, circleMaterial }, new[] { planetMesh, quad });
             RenderMeshDescription desc = new RenderMeshDescription(
                 shadowCastingMode: ShadowCastingMode.Off,
                 receiveShadows: false);
 
 
+            // Get all planets without transforms and craete a gameobject for them
             EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Planet.Tag>().WithNone<LocalTransform>()
                 .Build(entityManager);
 
-            
 
+
+            
             NativeArray<Entity> entities = query.ToEntityArray(Allocator.Temp);
             foreach (Entity planet in entities)
             {
                 Entity parent = entityManager.GetComponentData<PlanetOrbit>(planet).OrbitEntity;
                 Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(planet);
+                float radius = SystemGenerator.AUToWorld((float)planetData.OrbitRadius.To(Length.UnitType.AstronomicalUnits));
                 RenderMeshUtility.AddComponents(planet, entityManager, desc, planetMeshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(0,0));
                 entityManager.AddComponent<DisableRendering>(planet);
                 entityManager.AddComponentData(planet, LocalTransform.FromScale(1f));
                 if (parent != Entity.Null)
                 {
                     entityManager.AddComponentData(planet, new Parent { Value = parent });
-                    CreateOrbit(entityManager, planet, parent, planetData, orbitMeshArray, desc);
+                    CreateOrbit(entityManager, planet, parent, planetData, planetMeshArray, desc);
+                    entityManager.AddComponentData(planet, new SpaceTransform.MoveOnCircle
+                    {
+                        PeriodTicksF = entityManager.GetComponentData<OrbitPeriod>(planet).TicksF,
+                        Radius = radius,
+                        OffsetAngle = 0,
+                    });
                 }
 
                 CreateModel(entityManager, planet, planetData, planetMeshArray, desc);
@@ -65,13 +73,24 @@ namespace Bserg.Controller.Core
 #if  UNITY_EDITOR
             entityManager.SetName(model, "Model " + entityManager.GetComponentData<Planet.Name>(planet).Text);
 #endif
-            RenderMeshUtility.AddComponents(model, entityManager, desc, meshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(0,0));
+            RenderMeshUtility.AddComponents(model, entityManager, desc, meshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(2,1));
             entityManager.AddComponentData(model, LocalTransform.FromScale(SystemGenerator.GetRealPlanetSize(planetData.Size).x));
+            //entityManager.AddComponentData(model, LocalTransform.FromScale(100));
             entityManager.AddComponentData(model, new Parent { Value = planet });
             entityManager.AddComponentData(model, new URPMaterialPropertyEmissionColor { Value = planetData.Color });
-
+            entityManager.AddComponentData(model, new URPMaterialPropertyBaseColor { Value = planetData.Color });
+            //entityManager.AddComponentData(model, new CircleScale { Value =  SystemGenerator.GetIconPlanetSize(planetData.Size).x });
+            entityManager.AddComponentData(model, new SpaceTransform.UIWorldTransition
+            {
+                WorldScale = SystemGenerator.GetRealPlanetSize(planetData.Size).x,
+                TransitionScale = SystemGenerator.GetIconPlanetSize(planetData.Size).x,
+                WorldMaterialIndex = 0,
+                WorldMeshIndex = 0,
+                UIMaterialIndex = 2,
+                UIMeshIndex = 1,
+            });
             return model;
-        }
+        } 
         
         Entity CreateOrbit(EntityManager entityManager, Entity planet, Entity parent, Planet.Data planetData, RenderMeshArray meshArray, RenderMeshDescription desc)
         {
@@ -80,12 +99,14 @@ namespace Bserg.Controller.Core
 #if  UNITY_EDITOR
             entityManager.SetName(orbit, "Orbit " + entityManager.GetComponentData<Planet.Name>(planet).Text);
 #endif
-            RenderMeshUtility.AddComponents(orbit, entityManager, desc, meshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(0,0));
-            float scale = SystemGenerator.AUToWorld((float)planetData.OrbitRadius.To(Length.UnitType.AstronomicalUnits)) * 4;
-            entityManager.AddComponentData(orbit, LocalTransform.FromScale(scale));
+            RenderMeshUtility.AddComponents(orbit, entityManager, desc, meshArray, MaterialMeshInfo.FromRenderMeshArrayIndices(1,1));
+            float radius = SystemGenerator.AUToWorld((float)planetData.OrbitRadius.To(Length.UnitType.AstronomicalUnits)) * 4;
+            entityManager.AddComponentData(orbit, LocalTransform.FromScale(radius));
             entityManager.AddComponentData(orbit, new Parent { Value = parent });
-            entityManager.AddComponent<OrbitRotateTag>(orbit);
-            entityManager.AddComponentData(orbit, entityManager.GetComponentData<OrbitPeriod>(planet));
+            entityManager.AddComponentData(orbit, new SpaceTransform.Rotate
+            {
+                PeriodTicksF = entityManager.GetComponentData<OrbitPeriod>(planet).TicksF
+            });
 
             return orbit;
         }

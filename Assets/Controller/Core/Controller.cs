@@ -48,9 +48,10 @@ namespace Bserg.Controller.Core
         private List<int> allPlanets, outerPlanets;
 
         public SystemGeneratorUpdated SystemGeneratorUpdated;
-        public Material planetMaterial, orbitMaterial;
+        public Material planetMaterial, orbitMaterial, circleMaterial;
         public Mesh planetMesh, orbitMesh;
         private EntityQuery gameTicksFQuery;
+        private EntityQuery cameraQuery;
         
         void Awake()
         {
@@ -67,10 +68,12 @@ namespace Bserg.Controller.Core
             Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
             EntityManager entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
-            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, planetMaterial, planetMesh, orbitMaterial, orbitMesh);
+            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, planetMaterial, planetMesh, orbitMaterial, circleMaterial, orbitMesh);
 
             entityManager.CreateSingleton(new GameTicksF() { });
+            entityManager.CreateSingleton(new Global.CameraComponent());
             gameTicksFQuery = entityManager.CreateEntityQuery(typeof(GameTicksF));
+            cameraQuery = entityManager.CreateEntityQuery(typeof(Global.CameraComponent));
 
 
             MouseController = new MouseController();
@@ -129,7 +132,7 @@ namespace Bserg.Controller.Core
             // TODO: Move this to system
             gameTicksFQuery.GetSingletonRW<GameTicksF>().ValueRW.TicksF = Game.Ticks + dt;
             gameTicksFQuery.GetSingletonRW<GameTicksF>().ValueRW.DeltaTick = dt;
-            
+            cameraQuery.GetSingletonRW<Global.CameraComponent>().ValueRW.Size = CameraRenderer.Camera.orthographicSize;
                 
             HandleInput();
             MouseController.OnUpdate(Game, activeOverlay, dt);

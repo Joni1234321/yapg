@@ -35,9 +35,9 @@ namespace Bserg.Controller.Overlays
 
         public override void OnTick(Game game, int hoverPlanetID, int selectedPlanetID)
         {
-            if (hoverPlanetID != -1)
-                UpdatePlanetData(game, hoverPlanetID);
-            else if (selectedPlanetID != -1)
+            //if (hoverPlanetID != -1)
+                //UpdatePlanetData(game, hoverPlanetID);
+            if (selectedPlanetID != -1)
                 UpdatePlanetData(game, selectedPlanetID);
         }
 
