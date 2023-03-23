@@ -42,13 +42,6 @@ namespace Bserg.Controller.VisualEntities
             AssignPosition(entityManager, model, orbitRadiusWorld);
             AssignModel(entityManager, model, planetData);
             AssignOrbit(entityManager, model, orbitRadiusWorld);
-            
-            /*
-            entityManager.AddComponentData(Main, new Parent { Value = Main });
-            entityManager.AddComponentData(Orbit, new Parent { Value = Main });
-*/
-            
-            // TODO: Make parent of sun
         }
 
         public PlanetVisual CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray)
