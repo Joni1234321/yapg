@@ -1,5 +1,4 @@
-﻿using TMPro;
-using Unity.Entities;
+﻿using Unity.Entities;
 
 namespace Bserg.Controller.Components
 {

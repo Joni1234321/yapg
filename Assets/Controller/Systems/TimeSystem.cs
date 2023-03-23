@@ -1,5 +1,4 @@
-﻿using Bserg.Controller.Components;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
 
 namespace Bserg.Controller.Systems

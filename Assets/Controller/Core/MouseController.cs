@@ -3,7 +3,6 @@ using Bserg.Controller.Overlays;
 using Bserg.Controller.World;
 using Bserg.Model.Core;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core

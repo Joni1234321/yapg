@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Core;
 using Bserg.Model.Space;
-using Bserg.View.Space;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

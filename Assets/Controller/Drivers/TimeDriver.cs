@@ -1,6 +1,5 @@
 ﻿using Bserg.Controller.Sensors;
 using Bserg.Model.Core;
-using Bserg.Model.Shared.SystemGroups;
 using Bserg.Model.Units;
 using UnityEngine.UIElements;
 

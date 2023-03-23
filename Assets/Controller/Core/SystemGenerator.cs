@@ -3,7 +3,6 @@ using Bserg.Model.Space;
 using Bserg.Model.Units;
 using Bserg.Model.Utilities;
 using Bserg.View.Space;
-using Model.Utilities;
 using UnityEngine;
 
 namespace Bserg.Controller.Core

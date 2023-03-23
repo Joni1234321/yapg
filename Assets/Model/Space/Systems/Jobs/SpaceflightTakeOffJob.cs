@@ -1,9 +1,7 @@
-﻿using Bserg.Model.Space.SpaceMovement;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine.Assertions;
 using Spacecraft = Bserg.Model.Space.Components.Spacecraft;
 
 namespace Bserg.Model.Space.Systems.Jobs

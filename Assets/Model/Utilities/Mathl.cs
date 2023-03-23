@@ -22,8 +22,8 @@ namespace Model.Utilities
         /// 0 = .50
         /// 1 = .73
         /// 2 = .88
-        ///
-        ///
+        /// 
+        /// 
         /// Steepness of 2 makes this become
         /// 0 = .50
         /// 1 = .62
@@ -31,7 +31,6 @@ namespace Model.Utilities
         /// 4 = .88
         /// </summary>
         /// <param name="x">x</param>
-        /// <param name="steepness">Multiplying x</param>
         /// <returns>Value beetween 0 and 1</returns>
         public static float Sigmoid(float x) => 1f / (1f + Mathf.Exp(x));
 

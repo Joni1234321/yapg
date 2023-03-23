@@ -1,12 +1,8 @@
 ﻿using Bserg.Controller.Components;
 using Bserg.Controller.Core;
-using Bserg.Controller.World;
-using Bserg.Model.Shared.SystemGroups;
-using Bserg.Model.Space.Components;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
@@ -97,7 +93,7 @@ namespace Bserg.Controller.Systems
             [ReadOnly] public float CameraSize;
             public void Execute(ref LocalTransform localTransform, ref MaterialMeshInfo meshInfo, in SpaceTransform.UIWorldTransition transition)
             {
-                float uiSize = transition.TransitionScale * CameraSize * .03f;
+                float uiSize = transition.UIScale * CameraSize * .03f;
                 
                 // Set mesh and material
                 if (transition.WorldScale > uiSize)

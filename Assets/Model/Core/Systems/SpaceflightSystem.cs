@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Utilities;
-using Model.Utilities;
-using UnityEngine;
 
 namespace Bserg.Model.Core.Systems
 {

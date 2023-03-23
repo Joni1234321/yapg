@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Bserg.Model.Space.SpaceMovement;
-using Unity.Collections;
-using Unity.Entities;
+﻿using Unity.Entities;
 
 namespace Bserg.Model.Space.Components
 {

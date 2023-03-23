@@ -11,7 +11,6 @@ using Bserg.Model.Political;
 using Bserg.Model.Space;
 using Unity.Entities;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Core

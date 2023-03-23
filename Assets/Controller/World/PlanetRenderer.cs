@@ -3,8 +3,6 @@ using Bserg.Controller.Core;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
-using Bserg.View.Space;
-using Unity.Burst;
 using UnityEngine;
 
 namespace Bserg.Controller.World

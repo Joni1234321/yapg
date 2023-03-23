@@ -4,7 +4,6 @@ using Bserg.Model.Shared.SystemGroups;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Bserg.Model.Population.Systems
 {

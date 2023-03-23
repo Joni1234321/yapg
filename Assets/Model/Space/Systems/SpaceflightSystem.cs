@@ -5,7 +5,6 @@ using Bserg.Model.Space.Systems.Jobs;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Bserg.Model.Space.Systems
 {

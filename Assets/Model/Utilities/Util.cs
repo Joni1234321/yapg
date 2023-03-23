@@ -1,6 +1,5 @@
 ﻿
 using Unity.Mathematics;
-using UnityEngine;
 
 namespace Bserg.Model.Utilities
 {

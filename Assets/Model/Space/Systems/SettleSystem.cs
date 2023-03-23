@@ -2,7 +2,6 @@
 using Bserg.Model.Shared.SystemGroups;
 using Bserg.Model.Space.Components;
 using Unity.Burst;
-using Unity.Burst.CompilerServices;
 using Unity.Collections;
 using Unity.Entities;
 

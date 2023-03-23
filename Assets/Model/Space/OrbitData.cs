@@ -4,7 +4,6 @@ using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
 using Unity.Collections;
 using Unity.Entities;
-using UnityEngine;
 using UnityEngine.Assertions;
 using Time = Bserg.Model.Units.Time;
 

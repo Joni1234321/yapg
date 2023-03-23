@@ -1,11 +1,9 @@
-﻿using Bserg.Model.Shared.Components;
-using Unity.Burst;
+﻿using Unity.Burst;
 using Unity.Entities;
-using UnityEngine;
 
 namespace Bserg.Model.Shared.SystemGroups
 {
-    public class TickSystemGroup : ComponentSystemGroup
+    public partial class TickSystemGroup : ComponentSystemGroup
     {
         [BurstCompile]
         protected override void OnCreate()
@@ -41,7 +39,7 @@ namespace Bserg.Model.Shared.SystemGroups
     }
     
     [UpdateInGroup(typeof(TickSystemGroup))]
-    public class TickMonthSystemGroup : ComponentSystemGroup
+    public partial class TickMonthSystemGroup : ComponentSystemGroup
     {
         private static int remainingTicks = 0;
         [BurstCompile]
@@ -64,7 +62,7 @@ namespace Bserg.Model.Shared.SystemGroups
     }
     
     [UpdateInGroup(typeof(TickSystemGroup))]
-    public class TickQuarterSystemGroup : ComponentSystemGroup
+    public partial class TickQuarterSystemGroup : ComponentSystemGroup
     {
         private static int remainingTicks = 0;
         [BurstCompile]
@@ -87,7 +85,7 @@ namespace Bserg.Model.Shared.SystemGroups
     }
     
     [UpdateInGroup(typeof(TickSystemGroup))]
-    public class TickYearSystemGroup : ComponentSystemGroup
+    public partial class TickYearSystemGroup : ComponentSystemGroup
     {
         private static int remainingTicks = 0;
         [BurstCompile]

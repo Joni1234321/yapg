@@ -1,6 +1,5 @@
 ﻿using Bserg.Model.Population.Components;
 using Bserg.Model.Shared.Components;
-using Bserg.Model.Space;
 using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
 

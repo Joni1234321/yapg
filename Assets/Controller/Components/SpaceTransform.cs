@@ -1,5 +1,4 @@
 ﻿using Unity.Entities;
-using Unity.Rendering;
 
 namespace Bserg.Controller.Components
 {
@@ -30,11 +29,16 @@ namespace Bserg.Controller.Components
         /// </summary>
         public struct UIWorldTransition : IComponentData
         {
+
             /// <summary>
-            /// What the scale needs to be in order for them to cut off
+            /// What the scale of the world object is
             /// </summary>
             public float WorldScale;
-            public float TransitionScale;
+            
+            /// <summary>
+            /// The fixed size of the ui object
+            /// </summary>
+            public float UIScale;
 
             public int WorldMaterialIndex, WorldMeshIndex;
             public int UIMaterialIndex, UIMeshIndex;
