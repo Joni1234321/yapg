@@ -26,6 +26,10 @@ namespace Bserg.Controller.Systems
             float ticksF = SystemAPI.GetSingleton<GameTicksF>().TicksF;
             float cameraSize = SystemAPI.GetSingleton<Global.CameraComponent>().Size; 
             
+            state.Dependency = new UIWorldTransitionJob
+            {
+                CameraSize = cameraSize,
+            }.ScheduleParallel(state.Dependency);
             state.Dependency = new MoveOnCircleJob
             {
                 GameTicksF = ticksF,
@@ -34,10 +38,7 @@ namespace Bserg.Controller.Systems
             {
                 GameTicksF = ticksF,
             }.ScheduleParallel(state.Dependency);
-            state.Dependency = new UIWorldTransitionJob
-            {
-                CameraSize = cameraSize,
-            }.ScheduleParallel(state.Dependency);
+
             state.Dependency.Complete();
         }
 

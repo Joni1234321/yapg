@@ -350,7 +350,7 @@ namespace Bserg.Model.Core
             {
                 Value = StandardGravitationalParameterOld.GRAVITATIONAL_CONSTANT *
                         mass.To(Mass.UnitType.KiloGrams) });
-            entityManager.AddComponentData(e, new PlanetOrbit { OrbitEntity = parent });
+            entityManager.AddComponentData(e, new OrbitPlanet { OrbitEntity = parent });
 
             Time orbitPeriod = Time.Zero();
             if (parent != Entity.Null)

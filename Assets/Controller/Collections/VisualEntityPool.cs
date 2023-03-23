@@ -11,33 +11,33 @@ namespace Bserg.Controller.Collections
         /// Guarantee that pool is sorted with enabled components first and disabled last
         /// </summary>
         private int activeElements;
-        private readonly List<T> pool;
+        public readonly List<T> List;
 
         public VisualEntityPool(EntityManager entityManager, RenderMeshArray meshArray, int count = 16)
         {
-            pool = CreateBiggerPool(entityManager, meshArray, count);
+            List = CreateBiggerPool(entityManager, meshArray, count);
             activeElements = 0;
         }
         
         /// <summary>
         /// Populates the pool with new entities
         /// </summary>
-        public void Populate(EntityManager entityManager, RenderMeshArray meshArray, List<Entity> entities)
+        public void Populate(EntityManager entityManager, RenderMeshArray meshArray, List<Entity> models)
         {
             // Double pool size
-            while (entities.Count > pool.Capacity)
-                pool.AddRange(CreateBiggerPool(entityManager, meshArray, pool.Capacity));
+            while (models.Count > List.Capacity)
+                List.AddRange(CreateBiggerPool(entityManager, meshArray, List.Capacity));
 
             // Make active elements fit
-            while (activeElements < entities.Count)
-                pool[activeElements++].Enable(entityManager);
+            while (activeElements < models.Count)
+                List[activeElements++].Enable(entityManager);
             
-            while (activeElements > entities.Count)
-                pool[activeElements--].Disable(entityManager);
+            while (activeElements > models.Count)
+                List[activeElements--].Disable(entityManager);
 
             // Set elements
-            for (int i = 0; i < entities.Count; i++)
-                pool[i].Assign(entityManager, entities[i]);
+            for (int i = 0; i < models.Count; i++)
+                List[i].Assign(entityManager, models[i]);
         }
         
 
@@ -57,7 +57,7 @@ namespace Bserg.Controller.Collections
                 return re;
 
             // This is wierd, but it is because we cant define constructor signatures in interfaces
-            T prototype = new T().CreatePrototype(entityManager, meshArray);
+            T prototype = new T().CreatePrototype(entityManager, meshArray);    
             prototype.Disable(entityManager);
 
             // Add all the objects except for prototype

@@ -1,4 +1,5 @@
-﻿using Bserg.Controller.Components;
+﻿using System;
+using Bserg.Controller.Components;
 using Bserg.Controller.Core;
 using Bserg.Controller.Interfaces;
 using Bserg.Model.Shared.Components;
@@ -12,49 +13,42 @@ using UnityEngine.Rendering;
 
 namespace Bserg.Controller.VisualEntities
 {
-    public struct PlanetVisual : IEntityVisual<PlanetVisual>, IEntityAssignable, IEntityEnableable
+    public struct EntityModel : IComponentData
+    {
+        public Entity Value;
+    }
+    public struct PlanetVisual : IComponentData, IEntityVisual<PlanetVisual>, IEntityAssignable, IEntityEnableable
     {
         public Entity Main;
-        public Entity Model;
+        public Entity Planet;
         public Entity Orbit;
 
-        public void Enable(EntityManager entityManager)
-        {
-            entityManager.RemoveComponent<DisableRendering>(Main);
-            entityManager.RemoveComponent<DisableRendering>(Orbit);
-            entityManager.RemoveComponent<DisableRendering>(Model);
-        }
 
-        public void Disable(EntityManager entityManager)
-        {
-            entityManager.AddComponent<DisableRendering>(Main);
-            entityManager.AddComponent<DisableRendering>(Orbit);
-            entityManager.AddComponent<DisableRendering>(Model);
-        }
-
-
-        public void Assign(EntityManager entityManager, Entity entity)
+        public void Assign(EntityManager entityManager, Entity model)
         {
 #if  UNITY_EDITOR
-            FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(entity).Text;
+            FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(model).Text;
             entityManager.SetName(Main, "View: " + name);
-            entityManager.SetName(Model, "Model: " + name);
+            entityManager.SetName(Planet, "Planet: " + name);
             entityManager.SetName(Orbit, "Orbit: " + name);
 #endif
             
-            Entity parent = entityManager.GetComponentData<PlanetOrbit>(entity).OrbitEntity;
-            
-            Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(entity);
+            Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(model);
             float orbitRadiusWorld = SystemGenerator.AUToWorld(
                 (float)planetData.OrbitRadius.To(Length.UnitType.AstronomicalUnits));
             
-            AssignPosition(entityManager, entity, orbitRadiusWorld);
-            AssignModel(entityManager, entity, planetData);
-            AssignOrbit(entityManager, entity, orbitRadiusWorld);
+            entityManager.SetComponentData(Main, new EntityModel { Value = model });
             
+            AssignPosition(entityManager, model, orbitRadiusWorld);
+            AssignModel(entityManager, model, planetData);
+            AssignOrbit(entityManager, model, orbitRadiusWorld);
+            
+            /*
+            entityManager.AddComponentData(Main, new Parent { Value = Main });
+            entityManager.AddComponentData(Orbit, new Parent { Value = Main });
+*/
             
             // TODO: Make parent of sun
-
         }
 
         public PlanetVisual CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray)
@@ -66,7 +60,7 @@ namespace Bserg.Controller.VisualEntities
             return new PlanetVisual
             {
                 Main = CreatePlanetPositionPrototype(entityManager),
-                Model = CreateModelPrototype(entityManager, desc, meshArray),
+                Planet = CreateModelPrototype(entityManager, desc, meshArray),
                 Orbit = CreateOrbitPrototype(entityManager, desc, meshArray),
             };
         }
@@ -77,20 +71,42 @@ namespace Bserg.Controller.VisualEntities
             return new PlanetVisual
             {
                 Main = entityManager.Instantiate(Main),
-                Model = entityManager.Instantiate(Model),
+                Planet = entityManager.Instantiate(Planet),
                 Orbit = entityManager.Instantiate(Orbit),
             };
+        }
+        
+        public void Enable(EntityManager entityManager)
+        {
+            entityManager.RemoveComponent<DisableRendering>(Main);
+            entityManager.RemoveComponent<DisableRendering>(Planet);
+            entityManager.RemoveComponent<DisableRendering>(Orbit);
+        }
+
+        public void Disable(EntityManager entityManager)
+        {
+            
+#if UNITY_EDITOR
+            FixedString32Bytes name = "Disabled";
+            entityManager.SetName(Main, "View: " + name);
+            entityManager.SetName(Planet, "Planet: " + name);
+            entityManager.SetName(Orbit, "Orbit: " + name);
+#endif
+            entityManager.AddComponent<DisableRendering>(Main);
+            entityManager.AddComponent<DisableRendering>(Planet);
+            entityManager.AddComponent<DisableRendering>(Orbit);
         }
 
         public void SetComponentData(EntityManager entityManager)
         {
-            entityManager.AddComponentData(Model, new Parent { Value = Main });
-            entityManager.AddComponentData(Orbit, new Parent { Value = Main });
+            entityManager.AddComponentData(Planet, new Parent { Value = Main });
+            entityManager.AddComponentData(Main, this);
         }
 
         #region Assign
         void AssignPosition(EntityManager entityManager, Entity planet, float orbitRadiusWorld)
         {
+            entityManager.SetComponentData(Main, LocalTransform.FromScale(1f));
             entityManager.SetComponentData(Main, new SpaceTransform.MoveOnCircle
             {
                 PeriodTicksF = entityManager.GetComponentData<OrbitPeriod>(planet).TicksF,
@@ -103,12 +119,12 @@ namespace Bserg.Controller.VisualEntities
         void AssignModel(EntityManager entityManager, Entity planet, Planet.Data planetData)
         {
             // Color
-            entityManager.SetComponentData(Model, new URPMaterialPropertyEmissionColor { Value = planetData.Color });
-            entityManager.SetComponentData(Model, new URPMaterialPropertyBaseColor { Value = planetData.Color });
+            entityManager.SetComponentData(Planet, new URPMaterialPropertyEmissionColor { Value = planetData.Color });
+            entityManager.SetComponentData(Planet, new URPMaterialPropertyBaseColor { Value = planetData.Color });
             
             // Scale
-            entityManager.SetComponentData(Model, LocalTransform.FromScale(SystemGenerator.GetRealPlanetSize(planetData.Size).x));
-            entityManager.SetComponentData(Model, new SpaceTransform.UIWorldTransition
+            entityManager.SetComponentData(Planet, LocalTransform.FromScale(SystemGenerator.GetRealPlanetSize(planetData.Size).x));
+            entityManager.SetComponentData(Planet, new SpaceTransform.UIWorldTransition
             {
                 WorldScale = SystemGenerator.GetRealPlanetSize(planetData.Size).x,
                 UIScale = SystemGenerator.GetIconPlanetSize(planetData.Size).x,
@@ -132,6 +148,7 @@ namespace Bserg.Controller.VisualEntities
         Entity CreatePlanetPositionPrototype(EntityManager entityManager)
         {
             Entity e = entityManager.CreateEntity();
+            entityManager.AddComponent<EntityModel>(e);
             entityManager.AddComponent<LocalTransform>(e);
             entityManager.AddComponent<LocalToWorld>(e);
             entityManager.AddComponent<SpaceTransform.MoveOnCircle>(e); 

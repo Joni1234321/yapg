@@ -31,6 +31,6 @@ namespace Bserg.Controller.Interfaces
     /// </summary>
     public interface IEntityAssignable
     {
-        void Assign(EntityManager entityManager, Entity entity);
+        void Assign(EntityManager entityManager, Entity model);
     }
 }

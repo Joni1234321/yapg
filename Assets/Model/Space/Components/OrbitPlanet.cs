@@ -3,7 +3,8 @@ using Unity.Entities;
 
 namespace Bserg.Model.Space.Components
 {
-    public struct PlanetOrbit : IComponentData
+    // Planet it orbits
+    public struct OrbitPlanet : IComponentData
     {
         public Entity OrbitEntity;
     }

@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Bserg.Controller.Collections;
 using Bserg.Controller.Components;
 using Bserg.Controller.VisualEntities;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
+using NUnit.Framework;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Rendering;
@@ -31,14 +33,26 @@ namespace Bserg.Controller.Core
 
 
             // Get all planets without transforms and craete a gameobject for them
-            EntityQuery query = new EntityQueryBuilder(Allocator.Temp).WithAll<Planet.Tag>().WithNone<LocalTransform>()
+            EntityQuery modelQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Planet.Tag, OrbitPlanet>().WithNone<LocalTransform>()
                 .Build(entityManager);
 
             planetPool = new (entityManager, meshArray, 2);
 
-            NativeArray<Entity> entities = query.ToEntityArray(Allocator.Temp);
-            planetPool.Populate(entityManager, meshArray, entities.ToList());
-/*
+            NativeArray<Entity> models = modelQuery.ToEntityArray(Allocator.Temp);
+            NativeArray<OrbitPlanet> orbits = modelQuery.ToComponentDataArray<OrbitPlanet>(Allocator.Temp);
+            planetPool.Populate(entityManager, meshArray, models.ToList());
+            
+            // Add parents afterwards
+            for (int i = 0; i < models.Length; i++)
+            {
+                int parentIndex = FindParentIndex(orbits[i].OrbitEntity, models);
+                if (parentIndex == -1) 
+                    continue;
+                Entity parentVisual = planetPool.List[parentIndex].Main;
+                entityManager.AddComponentData(planetPool.List[i].Main, new Parent { Value = parentVisual });
+                entityManager.AddComponentData(planetPool.List[i].Orbit, new Parent { Value = parentVisual });
+            }
+#if false
             foreach (Entity planet in entities)
             {
                 Entity parent = entityManager.GetComponentData<PlanetOrbit>(planet).OrbitEntity;
@@ -61,13 +75,21 @@ namespace Bserg.Controller.Core
                 }
                 
                 CreateModelEntity(entityManager, planet, planetData, desc, meshArray);
-            }*/
-            
-            query.Dispose();
-            entities.Dispose();
+            }
+#endif
+            modelQuery.Dispose();
+            models.Dispose();
         }
 
-        
+
+        int FindParentIndex(Entity targetModel, NativeArray<Entity> models)
+        {
+            for (int i = 0; i < models.Length; i++)
+                if (models[i] == targetModel)
+                    return i;
+
+            return -1;
+        }
         
         
         Entity CreatePlanetPosition(EntityManager entityManager,  Entity planet)
