@@ -1,4 +1,4 @@
-﻿namespace Bserg.Controller.World
+﻿namespace Bserg.Controller.WorldRenderer
 {
     
     /// <summary>

@@ -1,8 +1,8 @@
 ﻿using Bserg.Controller.UI;
 using Bserg.Model.Core;
+using Bserg.Model.Population;
 using Bserg.Model.Space;
 using Bserg.View.Custom.Counter;
-using Model.Population;
 using UnityEngine;
 using UnityEngine.UIElements;
 

@@ -4,24 +4,43 @@ using Unity.Rendering;
 namespace Bserg.Controller.Interfaces
 {
     /// <summary>
-    /// 
+    /// Used for visual entities
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public interface IEntityVisual<T>
+    public interface IEntityVisual<T> : IEntityAssignable, IEntityEnableable, IEntityCloneable<T>
     {
+        /// <summary>
+        /// Adds components one by one to the objects fields [SLOW]
+        /// Recommended only use AddComponent
+        /// </summary>
         T CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray);
-        T CloneEntity(EntityManager entityManager);
-        
-        void SetComponentData(EntityManager entityManager);
     }
-    
+
+    /// <summary>
+    /// Allows for the entities to be cloned
+    /// </summary>
+    public interface IEntityCloneable<T>
+    {
+        /// <summary>
+        /// Clones the current objects fields, by the use of instantiate [FAST]
+        /// REMEMBER TO SET THE HIERARCHY AGAIN
+        /// </summary>
+        T Clone(EntityManager entityManager);
+    }
     
     /// <summary>
     /// Allows for the visuals to be turned on and off
     /// </summary>
     public interface IEntityEnableable
     {
+        /// <summary>
+        /// Enables the visual entities
+        /// Recommended use of RemoveComponent DisableRendering on every field
+        /// </summary>
         void Enable(EntityManager entityManager);
+        /// <summary>
+        /// Disables the visual entities 
+        /// Recommended use of AddComponent DisableRendering on every field
+        /// </summary>
         void Disable(EntityManager entityManager);
     }
     
@@ -31,6 +50,9 @@ namespace Bserg.Controller.Interfaces
     /// </summary>
     public interface IEntityAssignable
     {
+        /// <summary>
+        /// Assigns values from the model to the struct's fields
+        /// </summary>
         void Assign(EntityManager entityManager, Entity model);
     }
 }

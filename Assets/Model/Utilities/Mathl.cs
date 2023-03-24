@@ -1,7 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using UnityEngine;
 
-namespace Model.Utilities
+namespace Bserg.Model.Utilities
 {
     [StructLayout(LayoutKind.Sequential, Size = 1)]
     public struct Mathl

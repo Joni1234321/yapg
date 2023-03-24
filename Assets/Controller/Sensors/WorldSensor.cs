@@ -1,4 +1,4 @@
-﻿using Bserg.Controller.World;
+﻿using Bserg.Controller.WorldRenderer;
 
 namespace Bserg.Controller.Sensors
 {

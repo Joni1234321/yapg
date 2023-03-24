@@ -23,7 +23,7 @@ namespace Bserg.Model.Space.Systems
         {
             state.RequireForUpdate<BeginSimulationEntityCommandBufferSystem.Singleton>();
             orderLookup = state.GetBufferLookup<Settle.Order>();
-            
+
 #if UNITY_EDITOR
             planetNameLookup = state.GetComponentLookup<Planet.Name>();
 #endif
@@ -85,6 +85,7 @@ namespace Bserg.Model.Space.Systems
                 for (int j = 0; j < shipCount; j++)
                 {
                     Entity ship = ParallelWriter.CreateEntity(index);
+                    ParallelWriter.AddComponent(index, ship, new Spacecraft.Tag());
                     ParallelWriter.AddComponent(index, ship, new Spacecraft.ProcessingTag());
                     ParallelWriter.AddComponent(index, ship, new Spacecraft.Cargo { Population = 0 });
                     ParallelWriter.AddComponent(index, ship, new Spacecraft.FlightPlan

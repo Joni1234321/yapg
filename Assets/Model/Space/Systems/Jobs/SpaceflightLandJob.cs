@@ -10,7 +10,7 @@ namespace Bserg.Model.Space.Systems.Jobs
     /// Land on planet
     /// </summary>
     [BurstCompile]
-    [WithNone(typeof(Spacecraft.DepartureTick))]
+    [WithAll(typeof(Spacecraft.FlyingTag))]
     internal partial struct SpaceflightLandJob : IJobEntity
     {
         public EntityCommandBuffer Ecb;
@@ -18,12 +18,16 @@ namespace Bserg.Model.Space.Systems.Jobs
 
         public void Execute(Entity e, in Spacecraft.ArrivalTick arrival)
         {
-            if (Hint.Likely(arrival.Tick != Ticks))
+            if (Hint.Likely((int)arrival.TickF != Ticks))
                 return;
 
             // Land ship
+            Ecb.RemoveComponent<Spacecraft.DepartureTick>(e);
             Ecb.RemoveComponent<Spacecraft.ArrivalTick>(e);
-            Ecb.AddComponent(e, new Spacecraft.ProcessingTag());
+            Ecb.RemoveComponent<Spacecraft.FlyingTag>(e);
+
+            // Process
+            Ecb.AddComponent<Spacecraft.ProcessingTag>(e);
         }
     }
 }

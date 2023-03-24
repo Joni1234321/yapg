@@ -5,7 +5,7 @@ using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Units;
 using UnityEngine;
 
-namespace Bserg.Controller.World
+namespace Bserg.Controller.WorldRenderer
 {
     /// <summary>
     /// Draws spaceflights and their orbits
@@ -108,7 +108,7 @@ namespace Bserg.Controller.World
                 // Calculate true anomaly
                 // https://en.wikipedia.org/wiki/True_anomaly
 
-                spaceflightParent.GetChild(i).transform.position = planetRenderer.SystemGenerator.GetPositionInOrbit(r1, r2, a, e, distanceTraveled, offsetAngle);
+                spaceflightParent.GetChild(i).transform.position = SystemGenerator.GetPositionInOrbit(r1, r2, a, e, distanceTraveled, offsetAngle);
                 
                 // Orbit
                 float diff = SystemGenerator.AUToWorld(r1 - a);
@@ -125,7 +125,7 @@ namespace Bserg.Controller.World
           /// <param name="semiMajorAxis">a</param>
           /// <param name="closestDistanceToOrbitingObject">distance to Focus point</param>
           /// <returns></returns>
-          float GetLinearEccentricity(float semiMajorAxis, float closestDistanceToOrbitingObject)
+          public static float GetLinearEccentricity(float semiMajorAxis, float closestDistanceToOrbitingObject)
           {
               //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
               return Mathf.Abs(semiMajorAxis - closestDistanceToOrbitingObject);
@@ -137,7 +137,7 @@ namespace Bserg.Controller.World
           /// <param name="semiMajorAxis">a</param>
           /// <param name="linearEccentricity">c</param>
           /// <returns></returns>
-          float GetSemiMinorAxis(float semiMajorAxis, float linearEccentricity)
+          public static float GetSemiMinorAxis(float semiMajorAxis, float linearEccentricity)
           {
               //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
               // b^2 = a^2 - c^2

@@ -147,7 +147,7 @@ namespace Bserg.Controller.Core
         /// <param name="offsetXAt0">in au</param>
         /// <param name="offsetAngle">in radians</param>
         /// <returns></returns>
-        public Vector3 GetPositionInOrbit(float trueAnomaly, float radius, float offsetXAt0 = 0, float offsetAngle = 0)
+        public static Vector3 GetPositionInOrbit(float trueAnomaly, float radius, float offsetXAt0 = 0, float offsetAngle = 0)
         {
             float r = AUToWorld(radius);
 
@@ -170,7 +170,7 @@ namespace Bserg.Controller.Core
         /// <param name="distanceTraveled"></param>
         /// <param name="offsetAngle"></param>
         /// <returns></returns>
-        public Vector3 GetPositionInOrbit(float radiusDeparture, float radiusDestination, float semiMajorAxis, float eccentricity, float distanceTraveled, float offsetAngle = 0)
+        public static Vector3 GetPositionInOrbit(float radiusDeparture, float radiusDestination, float semiMajorAxis, float eccentricity, float distanceTraveled, float offsetAngle = 0)
         {
             float offsetAtX0 = radiusDeparture - Mathf.Min(radiusDeparture, radiusDestination);
             float meanAnomaly = distanceTraveled * Mathf.PI;
@@ -188,6 +188,8 @@ namespace Bserg.Controller.Core
             
             return GetPositionInOrbit(nu, r, offsetAtX0 , offsetAngle);
         }
+        
+
 
         public static Vector3 GetPlanetPosition(float orbitRadiusAU, float angle) =>
             GetPlanetPosition(orbitRadiusAU, orbitRadiusAU, angle);

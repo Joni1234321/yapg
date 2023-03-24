@@ -1,26 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Bserg.Controller.Collections;
-using Bserg.Controller.Components;
 using Bserg.Controller.VisualEntities;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Space.Components;
-using Bserg.Model.Units;
-using NUnit.Framework;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Entity = Unity.Entities.Entity;
 
 namespace Bserg.Controller.Core
 {
     public class SystemGeneratorUpdated
     {
-        private VisualEntityPool<PlanetVisual> planetPool;
+        public VisualEntityPool<PlanetVisual> PlanetPool;
+        public VisualEntityPool<SpacecraftVisual> ShipPool;
 
+        private EntityQuery planetQuery, shipQuery;
         public SystemGeneratorUpdated (EntityManager entityManager, Material planetMaterial, Mesh planetMesh, Material orbitMaterial, Material circleMaterial, Mesh quad) 
         {
             GameObject.Find("System").SetActive(false);
@@ -28,15 +25,22 @@ namespace Bserg.Controller.Core
         
             RenderMeshArray meshArray = new RenderMeshArray(new[] { planetMaterial, orbitMaterial, circleMaterial }, new[] { planetMesh, quad });
 
-            // Get all planets without transforms and create a gameobject for them
-            EntityQuery modelQuery = new EntityQueryBuilder(Allocator.Temp).WithAll<Planet.Tag, OrbitPlanet>().WithNone<LocalTransform>()
+            // Get all planets without transforms and create a Visual for them
+            // Remember that EntityQueryBuilder disposes itself, and can always be ALLOCATE.TEMP
+            planetQuery = new EntityQueryBuilder(Allocator.Temp).
+                WithAll<Planet.Tag, OrbitPlanet>().WithNone<LocalTransform>()
+                .Build(entityManager);
+            shipQuery = new EntityQueryBuilder(Allocator.Temp).
+                WithAll<Spacecraft.Tag, Spacecraft.FlightPlan>().WithNone<LocalTransform>()
                 .Build(entityManager);
 
-            planetPool = new (entityManager, meshArray);
 
-            NativeArray<Entity> models = modelQuery.ToEntityArray(Allocator.Temp);
-            NativeArray<OrbitPlanet> orbits = modelQuery.ToComponentDataArray<OrbitPlanet>(Allocator.Temp);
-            planetPool.Populate(entityManager, models.ToList());
+            PlanetPool = new (entityManager, meshArray);
+            ShipPool = new (entityManager, meshArray);
+            
+            NativeArray<Entity> models = planetQuery.ToEntityArray(Allocator.Temp);
+            NativeArray<OrbitPlanet> orbits = planetQuery.ToComponentDataArray<OrbitPlanet>(Allocator.Temp);
+            PlanetPool.Populate(entityManager, models);
             
             // Add parents afterwards
             for (int i = 0; i < models.Length; i++)
@@ -45,17 +49,20 @@ namespace Bserg.Controller.Core
                 if (parentIndex == -1) 
                     continue; // none found
                 
-                Entity parentVisual = planetPool.List[parentIndex].Main;
-                entityManager.AddComponentData(planetPool.List[i].Main, new Parent { Value = parentVisual });
-                entityManager.AddComponentData(planetPool.List[i].Orbit, new Parent { Value = parentVisual });
+                Entity parentVisual = PlanetPool.List[parentIndex].Main;
+                entityManager.AddComponentData(PlanetPool.List[i].Main, new Parent { Value = parentVisual });
+                entityManager.AddComponentData(PlanetPool.List[i].Orbit, new Parent { Value = parentVisual });
             }
             
-            planetPool.Remove(entityManager, 1);
-            planetPool.Populate(entityManager, models.ToList());
-
-            modelQuery.Dispose();
             models.Dispose();
             orbits.Dispose();
+        }
+
+        public void UpdateShips(EntityManager entityManager)
+        {
+            NativeArray<Entity> models = shipQuery.ToEntityArray(Allocator.Temp);
+            ShipPool.Populate(entityManager, models);
+            models.Dispose();
         }
 
 

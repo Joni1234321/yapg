@@ -1,4 +1,4 @@
-﻿namespace Model.Population
+﻿namespace Bserg.Model.Population
 {
     public struct SettleOrder
     {

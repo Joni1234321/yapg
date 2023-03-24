@@ -5,7 +5,7 @@ using Bserg.Controller.Overlays;
 using Bserg.Controller.Sensors;
 using Bserg.Controller.UI;
 using Bserg.Controller.UI.Planet;
-using Bserg.Controller.World;
+using Bserg.Controller.WorldRenderer;
 using Bserg.Model.Core;
 using Bserg.Model.Political;
 using Bserg.Model.Space;
@@ -51,7 +51,7 @@ namespace Bserg.Controller.Core
         public Mesh planetMesh, orbitMesh;
         private EntityQuery gameTicksFQuery;
         private EntityQuery cameraQuery;
-        
+        private EntityManager entityManager;
         void Awake()
         {
             SelectionHelper.SelectedPlanetID = -1;
@@ -66,7 +66,7 @@ namespace Bserg.Controller.Core
                 
             Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
-            EntityManager entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
+            entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
             SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, planetMaterial, planetMesh, orbitMaterial, circleMaterial, orbitMesh);
 
             entityManager.CreateSingleton(new GameTicksF() { });
@@ -172,6 +172,7 @@ namespace Bserg.Controller.Core
                 PlanetRenderer.OnUpdate(ticks, dt);
             }
             SpaceFlightRenderer.OnUpdate(ticks, dt);
+            SystemGeneratorUpdated.UpdateShips(entityManager);
         }
         /// <summary>
         /// Activates the new overlay, and deactivates the old

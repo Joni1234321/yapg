@@ -6,11 +6,7 @@ namespace Bserg.Controller.Components
     {
         public Entity PlanetPrefab;
         public Entity PlanetUIPrefab;
+        public Entity TextMeshProPrefab;
+        public Entity TestLinkedPrefab;
     }
-
-    public class TextMeshProUGUI
-    {
-        public TMPro.TextMeshProUGUI Value;
-    } 
-
 }

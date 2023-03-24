@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Overlays;
-using Bserg.Controller.World;
+using Bserg.Controller.WorldRenderer;
 using Bserg.Model.Core;
 using UnityEngine;
 using UnityEngine.UIElements;

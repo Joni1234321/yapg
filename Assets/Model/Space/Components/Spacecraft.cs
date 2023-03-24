@@ -1,21 +1,24 @@
-﻿using Unity.Entities;
+﻿using System;
+using Unity.Entities;
 
 namespace Bserg.Model.Space.Components
 {
     public struct Spacecraft
     {
+        public struct Tag : IComponentData {}
+        
         /// <summary>
         /// Mutuably excluded with arrivaltick, shoudl probably make it a shared variable
         /// </summary>
         public struct DepartureTick : IComponentData
         {
-            public int Tick;
+            public float TickF;
         }    
         public struct ArrivalTick : IComponentData
         {
-            public int Tick;
+            public float TickF;
         }
-    
+
     
     
         /// <summary>
@@ -28,7 +31,9 @@ namespace Bserg.Model.Space.Components
 
         public struct ProcessingTag : IComponentData
         {
-        
+        }
+        public struct FlyingTag : IComponentData
+        {
         }
     
         /// <summary>
@@ -63,6 +68,7 @@ namespace Bserg.Model.Space.Components
                 return false;
             
             Entity ship = entityManager.CreateEntity();
+            entityManager.AddComponentData(ship, new Spacecraft.Tag());
             entityManager.AddComponentData(ship, new Spacecraft.ProcessingTag());
             entityManager.AddComponentData(ship, new Spacecraft.Cargo { Population = 0 });
             entityManager.AddComponentData(ship, new Spacecraft.FlightPlan

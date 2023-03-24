@@ -89,9 +89,9 @@ namespace Bserg.Model.Space.Systems.Jobs
             };
             HohmannTransfer transfer = TransferMap[key];
             float departureTick = GameTick.TickAtNextEventF(Ticks, transfer.Window, transfer.Offset);
-            float arrivalTick = (int)(departureTick + transfer.Window);
-            Ecb.AddComponent(e, new Spacecraft.DepartureTick { Tick = (int)departureTick });
-            Ecb.AddComponent(e, new Spacecraft.ArrivalTick { Tick =  (int)arrivalTick});
+            float arrivalTick = departureTick + transfer.Window;
+            Ecb.AddComponent(e, new Spacecraft.DepartureTick { TickF = departureTick });
+            Ecb.AddComponent(e, new Spacecraft.ArrivalTick { TickF =  arrivalTick});
             
             Assert.IsTrue(departureTick > Ticks);
             Assert.IsTrue(arrivalTick > departureTick);

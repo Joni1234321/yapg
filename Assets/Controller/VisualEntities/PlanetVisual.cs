@@ -1,5 +1,4 @@
-﻿using System;
-using Bserg.Controller.Components;
+﻿using Bserg.Controller.Components;
 using Bserg.Controller.Core;
 using Bserg.Controller.Interfaces;
 using Bserg.Model.Shared.Components;
@@ -13,11 +12,7 @@ using UnityEngine.Rendering;
 
 namespace Bserg.Controller.VisualEntities
 {
-    public struct EntityModel : IComponentData
-    {
-        public Entity Value;
-    }
-    public struct PlanetVisual : IComponentData, IEntityVisual<PlanetVisual>, IEntityAssignable, IEntityEnableable
+    public struct PlanetVisual : IComponentData, IEntityVisual<PlanetVisual>
     {
         public Entity Main;
         public Entity Planet;
@@ -28,11 +23,11 @@ namespace Bserg.Controller.VisualEntities
         {
 #if  UNITY_EDITOR
             FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(model).Text;
-            entityManager.SetName(Main, "View: " + name);
-            entityManager.SetName(Planet, "Planet: " + name);
+            entityManager.SetName(Main, "Planet: " + name);
+            entityManager.SetName(Planet, "Model: " + name);
             entityManager.SetName(Orbit, "Orbit: " + name);
+
 #endif
-            
             Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(model);
             float orbitRadiusWorld = SystemGenerator.AUToWorld(
                 (float)planetData.OrbitRadius.To(Length.UnitType.AstronomicalUnits));
@@ -44,30 +39,8 @@ namespace Bserg.Controller.VisualEntities
             AssignOrbit(entityManager, model, orbitRadiusWorld);
         }
 
-        public PlanetVisual CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray)
-        {
-            RenderMeshDescription desc = new RenderMeshDescription(
-                shadowCastingMode: ShadowCastingMode.Off,
-                receiveShadows: false);
-
-            return new PlanetVisual
-            {
-                Main = CreatePlanetPositionPrototype(entityManager),
-                Planet = CreateModelPrototype(entityManager, desc, meshArray),
-                Orbit = CreateOrbitPrototype(entityManager, desc, meshArray),
-            };
-        }
 
 
-        public PlanetVisual CloneEntity(EntityManager entityManager)
-        {
-            return new PlanetVisual
-            {
-                Main = entityManager.Instantiate(Main),
-                Planet = entityManager.Instantiate(Planet),
-                Orbit = entityManager.Instantiate(Orbit),
-            };
-        }
         
         public void Enable(EntityManager entityManager)
         {
@@ -89,12 +62,42 @@ namespace Bserg.Controller.VisualEntities
             entityManager.AddComponent<DisableRendering>(Planet);
             entityManager.AddComponent<DisableRendering>(Orbit);
         }
-
-        public void SetComponentData(EntityManager entityManager)
+        
+        public PlanetVisual Clone(EntityManager entityManager)
         {
-            entityManager.AddComponentData(Planet, new Parent { Value = Main });
-            entityManager.AddComponentData(Main, this);
+            var clone = new PlanetVisual
+            {
+                Main = entityManager.Instantiate(Main),
+                Planet = entityManager.Instantiate(Planet),
+                Orbit = entityManager.Instantiate(Orbit),
+            };
+
+            entityManager.SetComponentData(clone.Planet, new Parent { Value = clone.Main });
+
+            var buffer = entityManager.AddBuffer<LinkedEntityGroup>(clone.Main);
+            buffer.Add(new LinkedEntityGroup { Value = clone.Main });
+            buffer.Add(new LinkedEntityGroup { Value = clone.Planet });
+            buffer.Add(new LinkedEntityGroup { Value = clone.Orbit });
+
+            return clone;
         }
+
+        public PlanetVisual CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray)
+        {
+            RenderMeshDescription desc = new RenderMeshDescription(
+                shadowCastingMode: ShadowCastingMode.Off,
+                receiveShadows: false);
+
+            var prototype = new PlanetVisual
+            {
+                Main = CreatePlanetPositionPrototype(entityManager),
+                Planet = CreateModelPrototype(entityManager, desc, meshArray),
+                Orbit = CreateOrbitPrototype(entityManager, desc, meshArray),
+            };
+            
+            return prototype;
+        }
+
 
         #region Assign
         void AssignPosition(EntityManager entityManager, Entity planet, float orbitRadiusWorld)
@@ -156,6 +159,7 @@ namespace Bserg.Controller.VisualEntities
 
             RenderMeshUtility.AddComponents(e, entityManager, desc, meshArray,
                 MaterialMeshInfo.FromRenderMeshArrayIndices(2, 1));
+            entityManager.AddComponent<Parent>(e);
             entityManager.AddComponent<LocalTransform>(e);
             entityManager.AddComponent<URPMaterialPropertyEmissionColor>(e);
             entityManager.AddComponent<URPMaterialPropertyBaseColor>(e);

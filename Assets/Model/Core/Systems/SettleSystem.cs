@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using Bserg.Model.Population;
 using Bserg.Model.Space.SpaceMovement;
-using Model.Population;
 
 // Terraforming https://space.nss.org/space-settlement-roadmap-29-terraforming/
 namespace Bserg.Model.Core.Systems

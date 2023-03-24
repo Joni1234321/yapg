@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Bserg.Controller.World
+namespace Bserg.Controller.WorldRenderer
 {
     /// <summary>
     /// Renders the ui for the planets

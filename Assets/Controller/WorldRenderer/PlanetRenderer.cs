@@ -5,7 +5,7 @@ using Bserg.Model.Space;
 using Bserg.Model.Units;
 using UnityEngine;
 
-namespace Bserg.Controller.World
+namespace Bserg.Controller.WorldRenderer
 {
     /// <summary>
     /// Draws the ui of planets
@@ -99,14 +99,14 @@ namespace Bserg.Controller.World
         /// Return angles in radians
         /// </summary>
         /// <param name="planetID"></param>
-        /// <param name="ticks"></param>
+        /// <param name="ticksF"></param>
         /// <returns></returns>
-        public float GetPlanetAngleAtTicksF(int planetID, float ticks)
+        public float GetPlanetAngleAtTicksF(int planetID, float ticksF)
         {
             float orbitalPeriodsInTick = orbitalTransferSystem.OrbitalPeriodsInTicks[planetID];
             if (orbitalPeriodsInTick == 0)
                 return 0;
-            return 2 * Mathf.PI * ticks / orbitalPeriodsInTick;
+            return 2 * Mathf.PI * ticksF / orbitalPeriodsInTick;
         }
         
         
@@ -114,13 +114,13 @@ namespace Bserg.Controller.World
         /// Return angles in radians
         /// </summary>
         /// <param name="orbitPeriodTicksF"></param>
-        /// <param name="ticks"></param>
+        /// <param name="ticksF"></param>
         /// <returns></returns>
-        public static float GetPlanetAngleAtTicksF(float orbitPeriodTicksF, float ticks)
+        public static float GetPlanetAngleAtTicksF(float orbitPeriodTicksF, float ticksF)
         {
             if (orbitPeriodTicksF == 0)
                 return 0;
-            return 2 * Mathf.PI * ticks / orbitPeriodTicksF;
+            return 2 * Mathf.PI * ticksF / orbitPeriodTicksF;
         }
         
         /// <summary>
