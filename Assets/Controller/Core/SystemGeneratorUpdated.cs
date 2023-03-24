@@ -15,7 +15,7 @@ namespace Bserg.Controller.Core
     public class SystemGeneratorUpdated
     {
         public VisualEntityPool<PlanetVisual> PlanetPool;
-        public VisualEntityPool<SpacecraftVisual> ShipPool;
+        public VisualEntityPool<TravelingSpacecraftVisual> ShipPool;
 
         private EntityQuery planetQuery, shipQuery;
         public SystemGeneratorUpdated (EntityManager entityManager, Material planetMaterial, Mesh planetMesh, Material orbitMaterial, Material circleMaterial, Mesh quad) 
@@ -31,7 +31,7 @@ namespace Bserg.Controller.Core
                 WithAll<Planet.Tag, OrbitPlanet>().WithNone<LocalTransform>()
                 .Build(entityManager);
             shipQuery = new EntityQueryBuilder(Allocator.Temp).
-                WithAll<Spacecraft.Tag, Spacecraft.FlightPlan>().WithNone<LocalTransform>()
+                WithAll<Spacecraft.Tag, Spacecraft.TravelingTag, Spacecraft.FlightPlan>().WithNone<LocalTransform>()
                 .Build(entityManager);
 
 

@@ -11,7 +11,7 @@ namespace Bserg.Model.Space.Systems.Jobs
     /// ONLY RUN
     /// </summary>
     [BurstCompile]
-    [WithNone(typeof(Spacecraft.FlyingTag), typeof(Spacecraft.ProcessingTag))]
+    [WithNone(typeof(Spacecraft.TravelingTag), typeof(Spacecraft.ProcessingTag))]
     internal partial struct SpaceflightTakeOffJob : IJobEntity
     {
         public EntityCommandBuffer Ecb;
@@ -26,7 +26,7 @@ namespace Bserg.Model.Space.Systems.Jobs
                 return;
             
             // Launch ship
-            Ecb.AddComponent<Spacecraft.FlyingTag>(e);
+            Ecb.AddComponent<Spacecraft.TravelingTag>(e);
         }
     }
 }

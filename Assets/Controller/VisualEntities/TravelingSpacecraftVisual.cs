@@ -13,7 +13,7 @@ using UnityEngine.Rendering;
 
 namespace Bserg.Controller.VisualEntities
 {
-    public struct SpacecraftVisual : IEntityVisual<SpacecraftVisual>
+    public struct TravelingSpacecraftVisual : IEntityVisual<TravelingSpacecraftVisual>
     {
         public Entity Main;
         public Entity Orbit;
@@ -94,9 +94,9 @@ namespace Bserg.Controller.VisualEntities
             entityManager.AddComponent<DisableRendering>(Orbit);
         }
 
-        public SpacecraftVisual Clone(EntityManager entityManager)
+        public TravelingSpacecraftVisual Clone(EntityManager entityManager)
         {
-            var clone = new SpacecraftVisual
+            var clone = new TravelingSpacecraftVisual
             {
                 Main = entityManager.Instantiate(Main),
                 Orbit = entityManager.Instantiate(Orbit),
@@ -109,13 +109,13 @@ namespace Bserg.Controller.VisualEntities
             return clone;
         }
 
-        public SpacecraftVisual CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray)
+        public TravelingSpacecraftVisual CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray)
         {
             RenderMeshDescription desc = new RenderMeshDescription(
                 shadowCastingMode: ShadowCastingMode.Off,
                 receiveShadows: false);
 
-            var prototype = new SpacecraftVisual
+            var prototype = new TravelingSpacecraftVisual
             {
                 Main = CreatePositionPrototype(entityManager),
                 Orbit = CreateOrbitPrototype(entityManager, desc, meshArray),

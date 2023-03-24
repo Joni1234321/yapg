@@ -32,7 +32,7 @@ namespace Bserg.Model.Space.Components
         public struct ProcessingTag : IComponentData
         {
         }
-        public struct FlyingTag : IComponentData
+        public struct TravelingTag : IComponentData
         {
         }
     
