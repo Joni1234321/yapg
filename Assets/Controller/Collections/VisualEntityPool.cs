@@ -42,7 +42,7 @@ namespace Bserg.Controller.Collections
                 List[activeElements++].Enable(entityManager);
             
             while (activeElements > models.Length)
-                List[activeElements--].Disable(entityManager);
+                List[--activeElements].Disable(entityManager);
 
             // Set elements
             for (int i = 0; i < models.Length; i++)
