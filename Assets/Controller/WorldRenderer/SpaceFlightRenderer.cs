@@ -3,6 +3,7 @@ using Bserg.Controller.Core;
 using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Units;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Bserg.Controller.WorldRenderer
@@ -128,7 +129,7 @@ namespace Bserg.Controller.WorldRenderer
           public static float GetLinearEccentricity(float semiMajorAxis, float closestDistanceToOrbitingObject)
           {
               //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
-              return Mathf.Abs(semiMajorAxis - closestDistanceToOrbitingObject);
+              return math.abs(semiMajorAxis - closestDistanceToOrbitingObject);
           } 
         
           /// <summary>
@@ -141,7 +142,7 @@ namespace Bserg.Controller.WorldRenderer
           {
               //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
               // b^2 = a^2 - c^2
-              return Mathf.Sqrt(semiMajorAxis * semiMajorAxis - linearEccentricity * linearEccentricity);
+              return math.sqrt(semiMajorAxis * semiMajorAxis - linearEccentricity * linearEccentricity);
 
           }
 

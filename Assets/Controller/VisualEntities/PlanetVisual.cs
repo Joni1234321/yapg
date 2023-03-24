@@ -6,6 +6,7 @@ using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine.Rendering;
@@ -24,8 +25,8 @@ namespace Bserg.Controller.VisualEntities
 #if  UNITY_EDITOR
             FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(model).Text;
             entityManager.SetName(Main, "Planet: " + name);
-            entityManager.SetName(Planet, "Model: " + name);
-            entityManager.SetName(Orbit, "Orbit: " + name);
+            entityManager.SetName(Planet, "Planet Model: " + name);
+            entityManager.SetName(Orbit, "Planet Orbit: " + name);
 
 #endif
             Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(model);
@@ -39,9 +40,6 @@ namespace Bserg.Controller.VisualEntities
             AssignOrbit(entityManager, model, orbitRadiusWorld);
         }
 
-
-
-        
         public void Enable(EntityManager entityManager)
         {
             entityManager.RemoveComponent<DisableRendering>(Main);
@@ -147,7 +145,7 @@ namespace Bserg.Controller.VisualEntities
             entityManager.AddComponent<EntityModel>(e);
             entityManager.AddComponent<LocalTransform>(e);
             entityManager.AddComponent<LocalToWorld>(e);
-            entityManager.AddComponent<SpaceTransform.MoveOnCircle>(e); 
+            entityManager.AddComponent<SpaceTransform.MoveOnCircle>(e);
 
             return e;
         }

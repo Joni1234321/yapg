@@ -18,12 +18,12 @@ namespace Bserg.Controller.Core
         public VisualEntityPool<TravelingSpacecraftVisual> ShipPool;
 
         private EntityQuery planetQuery, shipQuery;
-        public SystemGeneratorUpdated (EntityManager entityManager, Material planetMaterial, Mesh planetMesh, Material orbitMaterial, Material circleMaterial, Mesh quad) 
+        public SystemGeneratorUpdated (EntityManager entityManager, Material planetMaterial, Mesh planetMesh, Material orbitMaterial, Material circleMaterial, Mesh quad, Material spacecraftOrbitMaterial) 
         {
             GameObject.Find("System").SetActive(false);
             GameObject.Find("Orbits").SetActive(false);
         
-            RenderMeshArray meshArray = new RenderMeshArray(new[] { planetMaterial, orbitMaterial, circleMaterial }, new[] { planetMesh, quad });
+            RenderMeshArray meshArray = new RenderMeshArray(new[] { planetMaterial, orbitMaterial, circleMaterial, spacecraftOrbitMaterial }, new[] { planetMesh, quad });
 
             // Get all planets without transforms and create a Visual for them
             // Remember that EntityQueryBuilder disposes itself, and can always be ALLOCATE.TEMP

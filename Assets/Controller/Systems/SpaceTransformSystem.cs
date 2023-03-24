@@ -81,7 +81,7 @@ namespace Bserg.Controller.Systems
             public void Execute(ref LocalTransform localTransform, in SpaceTransform.Rotate rotate)
             {
                 float angle = rotate.PeriodTicksF == 0 ? 0 : 2 * math.PI * GameTicksF / rotate.PeriodTicksF;
-                localTransform.Rotation = Quaternion.Euler(0, 0, 90 + math.degrees(angle));
+                localTransform.Rotation = quaternion.RotateZ(.5f * math.PI + angle);
             }
         }
         

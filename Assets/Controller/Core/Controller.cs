@@ -47,7 +47,7 @@ namespace Bserg.Controller.Core
         private List<int> allPlanets, outerPlanets;
 
         public SystemGeneratorUpdated SystemGeneratorUpdated;
-        public Material planetMaterial, orbitMaterial, circleMaterial;
+        public Material planetMaterial, orbitMaterial, circleMaterial, spacecraftOrbitMaterial;
         public Mesh planetMesh, orbitMesh;
         private EntityQuery gameTicksFQuery;
         private EntityQuery cameraQuery;
@@ -67,7 +67,9 @@ namespace Bserg.Controller.Core
             Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
             entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
-            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, planetMaterial, planetMesh, orbitMaterial, circleMaterial, orbitMesh);
+            SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, 
+                planetMaterial, planetMesh, orbitMaterial, circleMaterial, 
+                orbitMesh, spacecraftOrbitMaterial);
 
             entityManager.CreateSingleton(new GameTicksF() { });
             entityManager.CreateSingleton(new Global.CameraComponent());

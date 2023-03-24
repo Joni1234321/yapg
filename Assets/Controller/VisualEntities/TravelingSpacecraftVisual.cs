@@ -24,15 +24,16 @@ namespace Bserg.Controller.VisualEntities
             
             Spacecraft.FlightPlan flightPlan = entityManager.GetComponentData<Spacecraft.FlightPlan>(model);
 
-            Entity departurePlanet = flightPlan.CurrentFlightStep.DestinationPlanet;
-            Entity destinationPlanet = flightPlan.NextFlightStep.DestinationPlanet;
+            Entity departurePlanet = flightPlan.NextFlightStep.DestinationPlanet;
+            Entity destinationPlanet = flightPlan.CurrentFlightStep.DestinationPlanet;
 
             float departureTickF = entityManager.GetComponentData<Spacecraft.DepartureTick>(model).TickF;
             
 #if  UNITY_EDITOR
-            FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(departurePlanet).Text;
-            entityManager.SetName(Main, "Spaceflight: " + name);
-            entityManager.SetName(Orbit, "Orbit: " + name);
+            FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(departurePlanet).Text + " - " +
+                                      entityManager.GetComponentData<Planet.Name>(destinationPlanet).Text;
+            entityManager.SetName(Main, "Traveling Spacecraft: " + name);
+            entityManager.SetName(Orbit, "Traveling Spacecraft Orbit: " + name);
 #endif
 
             float distanceTraveled = .5f;//((ticks + dt) - flight.DepartureTick) / (flight.DestinationTick - flight.DepartureTick);
@@ -58,13 +59,14 @@ namespace Bserg.Controller.VisualEntities
             
                 
             float diff = SystemGenerator.AUToWorld(r1 - a);
-            float3 position = new float3(diff * math.cos(startAngle), diff * math.sin(startAngle), 0);
+            float3 position = new float3(diff * math.cos(offsetAngle), diff * math.sin(offsetAngle), 0);
             float3 scale = SystemGenerator.AUToWorld(4) * new float3(b, a, 1);
            
 #if true
             entityManager.SetComponentData(Orbit, LocalTransform.FromPositionRotation(
                 position,
-                quaternion.RotateZ(math.degrees(startAngle) - 90)
+                //quaternion.identity
+                quaternion.RotateZ(startAngle - .5f * math.PI)
                 ));
             entityManager.SetComponentData(Orbit, new PostTransformMatrix { Value = float4x4.Scale(scale)});
             
@@ -140,7 +142,7 @@ namespace Bserg.Controller.VisualEntities
             Entity e = entityManager.CreateEntity();
 
             RenderMeshUtility.AddComponents(e, entityManager, desc, meshArray,
-                MaterialMeshInfo.FromRenderMeshArrayIndices(1, 1));
+                MaterialMeshInfo.FromRenderMeshArrayIndices(3, 1));
             entityManager.AddComponent<LocalTransform>(e);
             entityManager.AddComponent<PostTransformMatrix>(e);
 

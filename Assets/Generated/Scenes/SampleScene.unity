@@ -1382,6 +1382,8 @@ MonoBehaviour:
   planetMaterial: {fileID: 2100000, guid: ad5c3a0805ba48348aa9ba0e1a429074, type: 2}
   orbitMaterial: {fileID: 2100000, guid: 83c5a3a03eb53744ea7a29ffa919db2f, type: 2}
   circleMaterial: {fileID: 2100000, guid: 6f90c2bcc187e0649bec4642368a0181, type: 2}
+  spacecraftOrbitMaterial: {fileID: 2100000, guid: 7edc3a3dc428c4544bf2545dde500c40,
+    type: 2}
   planetMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
   orbitMesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!4 &753041736
