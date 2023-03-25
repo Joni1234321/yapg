@@ -12,6 +12,7 @@ namespace Bserg.Model.Shared.SystemGroups
         {
             EntityManager.CreateSingleton<GameTicks>();
             EntityManager.CreateSingleton<ShouldTick>();
+            EntityManager.CreateSingleton<GameShouldTick>();
             base.OnCreate();
         }
 
@@ -21,6 +22,9 @@ namespace Bserg.Model.Shared.SystemGroups
             if (SystemAPI.GetSingleton<ShouldTick>().Value)
             {
                 SystemAPI.GetSingletonRW<GameTicks>().ValueRW.Ticks++;
+                // TODO: REMOVE THIS
+                SystemAPI.SetSingleton(new GameShouldTick { Value = true });
+
                 base.OnUpdate();
                 SystemAPI.SetSingleton(new ShouldTick { Value = false });
             }

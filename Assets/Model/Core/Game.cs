@@ -53,7 +53,7 @@ namespace Bserg.Model.Core
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
         
-        EntityQuery shouldTickQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(ShouldTick));
+        EntityQuery shouldTickQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameShouldTick));
 
         
         public Game(string[] planetNames,
@@ -191,8 +191,10 @@ namespace Bserg.Model.Core
         /// </summary>
         public void DoTick()
         {
-            if (!shouldTickQuery.GetSingleton<ShouldTick>().Value)
+            if (!shouldTickQuery.GetSingleton<GameShouldTick>().Value)
                 return;
+            
+            shouldTickQuery.SetSingleton(new GameShouldTick {Value = false});
             
             // Increment time
             Ticks++;
@@ -367,6 +369,5 @@ namespace Bserg.Model.Core
             return e;
         }
     }
-
 
 }

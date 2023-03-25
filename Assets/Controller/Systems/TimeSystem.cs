@@ -1,5 +1,6 @@
 ﻿using Bserg.Controller.Components;
 using Bserg.Controller.Drivers;
+using Bserg.Model.Core;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Shared.SystemGroups;
 using NUnit.Framework;

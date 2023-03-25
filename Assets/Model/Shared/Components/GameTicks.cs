@@ -11,4 +11,9 @@ namespace Bserg.Model.Shared.Components
     {
         public bool Value;
     }
+
+    public struct GameShouldTick : IComponentData
+    {
+        public bool Value;
+    }
 }
