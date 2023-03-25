@@ -3,6 +3,7 @@ using Bserg.Controller.Core;
 using Bserg.Model.Core.Systems;
 using Bserg.Model.Space;
 using Bserg.Model.Units;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Bserg.Controller.WorldRenderer
@@ -106,7 +107,7 @@ namespace Bserg.Controller.WorldRenderer
             float orbitalPeriodsInTick = orbitalTransferSystem.OrbitalPeriodsInTicks[planetID];
             if (orbitalPeriodsInTick == 0)
                 return 0;
-            return 2 * Mathf.PI * ticksF / orbitalPeriodsInTick;
+            return 2 * math.PI * ticksF / orbitalPeriodsInTick;
         }
         
         
@@ -120,7 +121,7 @@ namespace Bserg.Controller.WorldRenderer
         {
             if (orbitPeriodTicksF == 0)
                 return 0;
-            return 2 * Mathf.PI * ticksF / orbitPeriodTicksF;
+            return 2 * math.PI * ticksF / orbitPeriodTicksF;
         }
         
         /// <summary>

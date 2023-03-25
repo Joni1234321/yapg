@@ -94,14 +94,15 @@ namespace Bserg.Controller.Collections
             // This is wierd, but it is because we cant define constructor signatures in interfaces
             T prototype = new T().CreatePrototype(entityManager, meshArray);    
             prototype.Disable(entityManager);
-            List.Add(prototype);
 
             // Add all the objects except for prototype
-            for (int i = 1; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 T visualEntity = prototype.Clone(entityManager);
                 List.Add(visualEntity);
             }
+
+            prototype.Destroy(entityManager);
         }
 
         public void Dispose()

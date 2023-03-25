@@ -6,13 +6,8 @@ namespace Bserg.Controller.Interfaces
     /// <summary>
     /// Used for visual entities
     /// </summary>
-    public interface IEntityVisual<T> : IEntityAssignable, IEntityEnableable, IEntityCloneable<T>
+    public interface IEntityVisual<T> : IEntityAssignable, IEntityCloneable<T>, IEntityPrototypeable<T>, IEntityEnableable, IEntityDestroyable
     {
-        /// <summary>
-        /// Adds components one by one to the objects fields [SLOW]
-        /// Recommended only use AddComponent
-        /// </summary>
-        T CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray);
     }
 
     /// <summary>
@@ -43,7 +38,28 @@ namespace Bserg.Controller.Interfaces
         /// </summary>
         void Disable(EntityManager entityManager);
     }
-    
+
+    /// <summary>
+    /// Allows for its entities to be destroyed
+    /// </summary>
+    public interface IEntityDestroyable
+    {
+        /// <summary>
+        /// Destroys entities
+        /// </summary>
+        public void Destroy(EntityManager entityManager);
+    }
+
+
+    public interface IEntityPrototypeable<T>
+    {
+        /// <summary>
+        /// Adds components one by one to the objects fields [SLOW]
+        /// Recommended only use AddComponent
+        /// </summary>
+        T CreatePrototype(EntityManager entityManager, RenderMeshArray meshArray);
+
+    }
     
     /// <summary>
     /// Allows for its values to be assigned

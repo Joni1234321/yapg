@@ -47,7 +47,7 @@ namespace Bserg.Controller.Core
         private List<int> allPlanets, outerPlanets;
 
         public SystemGeneratorUpdated SystemGeneratorUpdated;
-        public Material planetMaterial, orbitMaterial, circleMaterial, spacecraftOrbitMaterial;
+        public Material planetMaterial, orbitMaterial, circleMaterial, spacecraftOrbitMaterial, spacecraftMaterial;
         public Mesh planetMesh, orbitMesh;
         private EntityQuery gameTicksFQuery;
         private EntityQuery cameraQuery;
@@ -69,7 +69,7 @@ namespace Bserg.Controller.Core
             entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
             SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, 
                 planetMaterial, planetMesh, orbitMaterial, circleMaterial, 
-                orbitMesh, spacecraftOrbitMaterial);
+                orbitMesh, spacecraftOrbitMaterial, spacecraftMaterial);
 
             entityManager.CreateSingleton(new GameTicksF() { });
             entityManager.CreateSingleton(new Global.CameraComponent());
@@ -173,7 +173,7 @@ namespace Bserg.Controller.Core
                 PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? visibleIds : outerPlanets);
                 PlanetRenderer.OnUpdate(ticks, dt);
             }
-            SpaceFlightRenderer.OnUpdate(ticks, dt);
+            SpaceFlightRenderer.OnUpdate(ticks, dt); 
             SystemGeneratorUpdated.UpdateShips(entityManager);
         }
         /// <summary>

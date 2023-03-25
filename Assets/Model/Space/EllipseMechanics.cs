@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Unity.Mathematics;
 using UnityEngine;
 
 namespace Bserg.Model.Space
@@ -28,16 +28,16 @@ namespace Bserg.Model.Space
         public static float MeanAnomalyToEccentricAnomaly(float meanAnomaly, float eccentricity)
         {
             float eNew = meanAnomaly + eccentricity;
-            if (meanAnomaly > Mathf.PI)
+            if (meanAnomaly > math.PI)
                 eNew = meanAnomaly - eccentricity;
             float eOld = eNew + 0.001f;
 
             int i = 0;
-            while (Mathf.Abs(eNew - eOld) > .00001f)
+            while (math.abs(eNew - eOld) > .00001f)
             {
                 eOld = eNew;
                 eNew = eOld + (meanAnomaly - eOld +
-                               eccentricity * Mathf.Sin(eOld)) / (1 - eccentricity * Mathf.Cos(eOld));
+                               eccentricity * math.sin(eOld)) / (1 - eccentricity * math.cos(eOld));
             }
             
             return eNew;
@@ -51,21 +51,21 @@ namespace Bserg.Model.Space
         /// <returns>nu</returns>
         public static float EccentricAnomalyToTrueAnomaly(float eccentricAnomaly, float eccentricity)
         {
-            float trueAnomaly = Mathf.Atan2(Mathf.Sin(eccentricAnomaly) * Mathf.Sqrt(1 - eccentricity * eccentricity),
-                Mathf.Cos(eccentricAnomaly) - eccentricity);
-            trueAnomaly %= (2 * Mathf.PI);
+            float trueAnomaly = math.atan2(math.sin(eccentricAnomaly) * math.sqrt(1 - eccentricity * eccentricity),
+                math.cos(eccentricAnomaly) - eccentricity);
+            trueAnomaly %= (2 * math.PI);
             if (trueAnomaly < 0)
-                trueAnomaly += 2 * Mathf.PI;
+                trueAnomaly += 2 * math.PI;
 
             return trueAnomaly;
         }
 
         public static float EccentricAnomalyToMeanAnomaly(float eccentricAnomaly, float eccentricity)
         {
-           float meanAnomaly = eccentricAnomaly - eccentricity * Mathf.Sin(eccentricAnomaly);
-            meanAnomaly %= 2*Mathf.PI;
+           float meanAnomaly = eccentricAnomaly - eccentricity * math.sin(eccentricAnomaly);
+            meanAnomaly %= 2*math.PI;
             if (meanAnomaly < 0)
-                meanAnomaly += 2*Mathf.PI;
+                meanAnomaly += 2*math.PI;
             return meanAnomaly;
         }
 
@@ -77,8 +77,8 @@ namespace Bserg.Model.Space
         /// <returns>E</returns>
         public static float TrueAnomalyToEccentricAnomaly(float trueAnomaly, float eccentricity)
         {
-            return Mathf.Atan2(Mathf.Sin(trueAnomaly) * Mathf.Sqrt(1 - eccentricity * eccentricity),
-                eccentricity + Mathf.Cos(trueAnomaly));
+            return math.atan2(math.sin(trueAnomaly) * math.sqrt(1 - eccentricity * eccentricity),
+                eccentricity + math.cos(trueAnomaly));
         }
 
         public static float TrueAnomalyToMeanAnomaly(float trueAnomaly, float eccentricity)
@@ -96,16 +96,16 @@ namespace Bserg.Model.Space
         /// <returns></returns>
         public static Vector2 GetPositionInOrbit(float eccentricAnomaly, float semiMajorAxis, float semiMinorAxis)
         {
-            float x = semiMajorAxis * Mathf.Cos(eccentricAnomaly);
-            float y = semiMinorAxis * Mathf.Sin(eccentricAnomaly);
+            float x = semiMajorAxis * math.cos(eccentricAnomaly);
+            float y = semiMinorAxis * math.sin(eccentricAnomaly);
             return new Vector2(x, y);
         } 
         
         public static double Sin(double d) {
-            d += Math.PI;
-            double x2 = Math.Floor(d*(1/(2*Math.PI)));
-            d -= x2*(2*Math.PI);
-            d-=Math.PI;
+            d += math.PI;
+            double x2 = math.floor(d*(1/(2*math.PI)));
+            d -= x2*(2*math.PI);
+            d-=math.PI;
    
             x2 = d * d;
    
@@ -119,10 +119,10 @@ namespace Bserg.Model.Space
 
 
         public static double Cos(double d) {
-            d += Math.PI;
-            double x2 = Math.Floor(d*(1/(2*Math.PI)));
-            d -= x2*(2*Math.PI);
-            d-=Math.PI;
+            d += math.PI;
+            double x2 = math.floor(d*(1/(2*math.PI)));
+            d -= x2*(2*math.PI);
+            d-=math.PI;
    
             d *= d;
    

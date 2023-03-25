@@ -3,6 +3,7 @@ using Bserg.Model.Space;
 using Bserg.Model.Units;
 using Bserg.Model.Utilities;
 using Bserg.View.Space;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Bserg.Controller.Core
@@ -147,16 +148,16 @@ namespace Bserg.Controller.Core
         /// <param name="offsetXAt0">in au</param>
         /// <param name="offsetAngle">in radians</param>
         /// <returns></returns>
-        public static Vector3 GetPositionInOrbit(float trueAnomaly, float radius, float offsetXAt0 = 0, float offsetAngle = 0)
+        public static float3 GetPositionInOrbit(float trueAnomaly, float radius, float offsetXAt0 = 0, float offsetAngle = 0)
         {
             float r = AUToWorld(radius);
 
-            float x = r * Mathf.Cos(trueAnomaly) * Mathf.Cos(offsetAngle) - r * Mathf.Sin(trueAnomaly) * Mathf.Sin(offsetAngle);
-            float y = r * Mathf.Cos(trueAnomaly) * Mathf.Sin(offsetAngle) + r * Mathf.Sin(trueAnomaly) * Mathf.Cos(offsetAngle);
-            float cx = AUToWorld(offsetXAt0) * Mathf.Cos(offsetAngle);
-            float cy = AUToWorld(offsetXAt0) * Mathf.Sin(offsetAngle);
+            float x = r * math.cos(trueAnomaly) * math.cos(offsetAngle) - r * math.sin(trueAnomaly) * math.sin(offsetAngle);
+            float y = r * math.cos(trueAnomaly) * math.sin(offsetAngle) + r * math.sin(trueAnomaly) * math.cos(offsetAngle);
+            float cx = AUToWorld(offsetXAt0) * math.cos(offsetAngle);
+            float cy = AUToWorld(offsetXAt0) * math.sin(offsetAngle);
             
-            return new Vector3(x + cx, y + cy, 0);
+            return new float3(x + cx, y + cy, 0);
 
         }
 
@@ -170,38 +171,38 @@ namespace Bserg.Controller.Core
         /// <param name="distanceTraveled"></param>
         /// <param name="offsetAngle"></param>
         /// <returns></returns>
-        public static Vector3 GetPositionInOrbit(float radiusDeparture, float radiusDestination, float semiMajorAxis, float eccentricity, float distanceTraveled, float offsetAngle = 0)
+        public static float3 GetPositionInOrbit(float radiusDeparture, float radiusDestination, float semiMajorAxis, float eccentricity, float distanceTraveled, float offsetAngle = 0)
         {
-            float offsetAtX0 = radiusDeparture - Mathf.Min(radiusDeparture, radiusDestination);
-            float meanAnomaly = distanceTraveled * Mathf.PI;
+            float offsetAtX0 = radiusDeparture - math.min(radiusDeparture, radiusDestination);
+            float meanAnomaly = distanceTraveled * math.PI;
                 
             // If the destination is closer to the sun, then invert 
             if (radiusDeparture > radiusDestination)
             {
-                meanAnomaly += Mathf.PI;
-                offsetAngle += Mathf.PI;
-                offsetAtX0 = radiusDestination - Mathf.Min(radiusDeparture, radiusDestination);
+                meanAnomaly += math.PI;
+                offsetAngle += math.PI;
+                offsetAtX0 = radiusDestination - math.min(radiusDeparture, radiusDestination);
             }
                 
             float nu = EllipseMechanics.MeanAnomalyToTrueAnomaly(meanAnomaly, eccentricity);
-            float r = semiMajorAxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * Mathf.Cos(nu));
+            float r = semiMajorAxis * (1 - eccentricity * eccentricity) / (1 + eccentricity * math.cos(nu));
             
             return GetPositionInOrbit(nu, r, offsetAtX0 , offsetAngle);
         }
         
 
 
-        public static Vector3 GetPlanetPosition(float orbitRadiusAU, float angle) =>
+        public static float3 GetPlanetPosition(float orbitRadiusAU, float angle) =>
             GetPlanetPosition(orbitRadiusAU, orbitRadiusAU, angle);
 
 
 
         const float EARTH_RADIUS_TO_AU = 4.26352E-5f;
         private const float OLD_SCALE = 0.005f;
-        public static Vector3 GetRealPlanetSize(float size) => Vector3.one * (AUToWorld(size) * EARTH_RADIUS_TO_AU * 10);
+        public static float3 GetRealPlanetSize(float size) => new float3(1,1,1) * (AUToWorld(size) * EARTH_RADIUS_TO_AU * 10);
 
-        public static Vector3 GetIconPlanetSize(float size) =>
-            Vector3.one * (2-1/(1+size));
+        public static float3 GetIconPlanetSize(float size) =>
+            new float3(1,1,1) * (2 - 1/(1 + size));
             
         
         public PlanetOld[] GetPlanets()

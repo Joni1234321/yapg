@@ -52,9 +52,9 @@ namespace Bserg.Controller.Authoring
         protected override void OnStartRunning()
         {
             Config config = SystemAPI.GetSingleton<Config>();
-            Entity e = EntityManager.Instantiate(config.TextMeshProPrefab);
+            //Entity e = EntityManager.Instantiate(config.TextMeshProPrefab);
             //EntityManager.Instantiate(config.TestLinkedPrefab);
-            Entity cool = EntityManager.Instantiate(config.TestLinkedPrefab);
+            //Entity cool = EntityManager.Instantiate(config.TestLinkedPrefab);
             //EntityManager.RemoveComponent<Parent>(EntityManager.GetBuffer<Child>(cool)[0].Value);
             //EntityManager.RemoveComponent<Child>(cool);
             Entities.ForEach((TextMeshPro tmp) =>

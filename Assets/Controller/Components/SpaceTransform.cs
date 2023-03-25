@@ -20,7 +20,32 @@ namespace Bserg.Controller.Components
         {
             public float PeriodTicksF;
             public float Radius;
-            public float OffsetAngle;
+            public float Angle0;
+        }
+        
+        /// <summary>
+        /// Will move the given object on an orbit
+        /// </summary>
+        public struct MoveOnEllipticalOrbit : IComponentData
+        {
+            public float DepartureTickF;
+            public float ArrivalTickF;
+
+            /// <summary>
+            /// AU
+            /// </summary>
+            public float DepartureRadius;
+            /// <summary>
+            /// AU
+            /// </summary>
+            public float DestinationRadius;
+
+            public float Eccentricity;
+            
+            /// <summary>
+            /// Radians
+            /// </summary>
+            public float Angle0;
         }
 
 

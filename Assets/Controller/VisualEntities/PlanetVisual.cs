@@ -100,12 +100,11 @@ namespace Bserg.Controller.VisualEntities
         #region Assign
         void AssignPosition(EntityManager entityManager, Entity planet, float orbitRadiusWorld)
         {
-            entityManager.SetComponentData(Main, LocalTransform.FromScale(1f));
             entityManager.SetComponentData(Main, new SpaceTransform.MoveOnCircle
             {
                 PeriodTicksF = entityManager.GetComponentData<OrbitPeriod>(planet).TicksF,
                 Radius = orbitRadiusWorld,
-                OffsetAngle = 0,
+                Angle0 = 0,
             });
         }
 
@@ -143,7 +142,7 @@ namespace Bserg.Controller.VisualEntities
         {
             Entity e = entityManager.CreateEntity();
             entityManager.AddComponent<EntityModel>(e);
-            entityManager.AddComponent<LocalTransform>(e);
+            entityManager.AddComponentData(e, LocalTransform.FromScale(1f));
             entityManager.AddComponent<LocalToWorld>(e);
             entityManager.AddComponent<SpaceTransform.MoveOnCircle>(e);
 
@@ -180,5 +179,11 @@ namespace Bserg.Controller.VisualEntities
         }
         #endregion
        
+        public void Destroy(EntityManager entityManager)
+        {
+            entityManager.DestroyEntity(Main);
+            entityManager.DestroyEntity(Planet);
+            entityManager.DestroyEntity(Orbit);
+        }
     }
 }

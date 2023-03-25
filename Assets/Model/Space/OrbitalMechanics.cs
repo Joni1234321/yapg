@@ -1,5 +1,6 @@
 ﻿using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
+using Unity.Mathematics;
 using Math = System.Math;
 using Time = Bserg.Model.Units.Time;
 
@@ -22,13 +23,13 @@ namespace Bserg.Model.Space
 
         public static Time GetOrbitalPeriod(StandardGravitationalParameter mu, Length radius)
         {
-            const double TWO_PI = 2 * Math.PI;
+            const double TWO_PI = 2 * math.PI;
             
             // Maybe make fast inverse sqr root
-            double k = TWO_PI / Math.Sqrt(mu.Value);
+            double k = TWO_PI / math.sqrt(mu.Value);
 
             double r = radius.To(Length.UnitType.Meters);
-            return new Time(k * r * Math.Sqrt(r), Time.UnitType.Seconds);
+            return new Time(k * r * math.sqrt(r), Time.UnitType.Seconds);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Bserg.Model.Space
             // This is rewritten as T = (T1 X T2) / (T2 - T1)
             double t1 = orbitPeriod1.To(Time.UnitType.Seconds);
             double t2 = orbitPeriod2.To(Time.UnitType.Seconds);
-            return new Time((t1 * t2) / Math.Abs(t2 - t1), Time.UnitType.Seconds);
+            return new Time((t1 * t2) / math.abs(t2 - t1), Time.UnitType.Seconds);
         }
 
         /// <summary>
@@ -82,7 +83,7 @@ namespace Bserg.Model.Space
             if (tDuration == 0 || tOrbit == 0)
                 return 0;
             double ratio = tDuration / tOrbit;
-            return ( .5 - ratio) * 2 * Math.PI;
+            return ( .5 - ratio) * 2 * math.PI;
         }
 
         /// <summary>
@@ -107,7 +108,7 @@ namespace Bserg.Model.Space
             double t2 = destinationOrbitalPeriod.To(Time.UnitType.Seconds);
             double a1 = departureOffsetAngle;
             double a2 = destinationOffsetAngle;
-            double seconds = (angle + a1 - a2) * t1 * t2 / (2 * Math.PI * (t1 - t2));
+            double seconds = (angle + a1 - a2) * t1 * t2 / (2 * math.PI * (t1 - t2));
             return new Time(seconds, Time.UnitType.Seconds);
         }
 
@@ -116,9 +117,9 @@ namespace Bserg.Model.Space
         {
             double r1 = departureRadius.To(Length.UnitType.Meters);
             double r2 = destinationRadius.To(Length.UnitType.Meters);
-            double delta1 = Math.Sqrt(1 /r1) * (Math.Sqrt(2 * r2 / (r1 + r2)) - 1);
-            double delta2 = Math.Sqrt(1 /r2) * (1 - Math.Sqrt(2 * r1 / (r1 + r2)));
-            return Math.Sqrt(mu.val) * (Math.Abs(delta1) + Math.Abs(delta2));
+            double delta1 = math.sqrt(1 / r1) * (math.sqrt(2 * r2 / (r1 + r2)) - 1);
+            double delta2 = math.sqrt(1 / r2) * (1 - math.sqrt(2 * r1 / (r1 + r2)));
+            return math.sqrt(mu.val) * (math.abs(delta1) + math.abs(delta2));
         }
     }
 
