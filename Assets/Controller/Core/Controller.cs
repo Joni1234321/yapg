@@ -135,7 +135,7 @@ namespace Bserg.Controller.Core
             UpdateRenderers(Game.Ticks, dt);
 
             // No need to update if paused, unless one time
-            if (!gameTicksFQuery.GetSingleton<GameSpeed>().Running)
+            if (!gameSpeedQuery.GetSingleton<GameSpeed>().Running)
             {
                 if (!firstTickAfterPause)
                     return;
