@@ -17,14 +17,14 @@ namespace Bserg.Controller.Systems
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<GameTicksF>();
-            state.RequireForUpdate<Global.CameraComponent>();
+            state.RequireForUpdate<Global.CameraSizeComponent>();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
             float ticksF = SystemAPI.GetSingleton<GameTicksF>().TicksF;
-            float cameraSize = SystemAPI.GetSingleton<Global.CameraComponent>().Size; 
+            float cameraSize = SystemAPI.GetSingleton<Global.CameraSizeComponent>().Size; 
             
             state.Dependency = new UIWorldTransitionJob
             {

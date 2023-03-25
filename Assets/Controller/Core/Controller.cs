@@ -71,11 +71,6 @@ namespace Bserg.Controller.Core
                 planetMaterial, planetMesh, orbitMaterial, circleMaterial, 
                 orbitMesh, spacecraftOrbitMaterial, spacecraftMaterial);
 
-            entityManager.CreateSingleton(new GameTicksF() { });
-            entityManager.CreateSingleton(new Global.CameraComponent());
-            gameTicksFQuery = entityManager.CreateEntityQuery(typeof(GameTicksF));
-            cameraQuery = entityManager.CreateEntityQuery(typeof(Global.CameraComponent));
-
 
             MouseController = new MouseController();
             
@@ -130,11 +125,6 @@ namespace Bserg.Controller.Core
             }
             
             float dt = TimeDriver.DeltaTick;
-            // TODO: Move this to system
-            gameTicksFQuery.GetSingletonRW<GameTicksF>().ValueRW.TicksF = Game.Ticks + dt;
-            gameTicksFQuery.GetSingletonRW<GameTicksF>().ValueRW.DeltaTick = dt;
-            cameraQuery.GetSingletonRW<Global.CameraComponent>().ValueRW.Size = CameraRenderer.Camera.orthographicSize;
-                
             HandleInput();
             MouseController.OnUpdate(Game, activeOverlay, dt);
 

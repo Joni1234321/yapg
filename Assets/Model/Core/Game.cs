@@ -53,7 +53,7 @@ namespace Bserg.Model.Core
         public SettleSystem SettleSystem;
         public SpaceflightSystem SpaceflightSystem;
         
-        EntityQuery gameTicksQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicks));
+        EntityQuery shouldTickQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(ShouldTick));
 
         
         public Game(string[] planetNames,
@@ -177,7 +177,6 @@ namespace Bserg.Model.Core
             
             
             // Dude
-            EntityManager.CreateSingleton(new GameTicks { Ticks = Ticks });
             EntityManager.CreateSingleton(new HohmannTransferMap { Map = map.AsReadOnly() });
             OnTickMonth += TickMonth;
             OnTickYear += TickYear;
@@ -192,14 +191,11 @@ namespace Bserg.Model.Core
         /// </summary>
         public void DoTick()
         {
-            if (!TickSystemGroup.CanTick())
+            if (!shouldTickQuery.GetSingleton<ShouldTick>().Value)
                 return;
             
             // Increment time
             Ticks++;
-            gameTicksQuery.GetSingletonRW<GameTicks>().ValueRW.Ticks = Ticks;
-            bool r = TickSystemGroup.TryTick();
-            Assert.IsTrue(r);
             
             OnTick?.Invoke();
             if (Ticks % GameTick.TICKS_PER_MONTH == 0)

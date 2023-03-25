@@ -6,4 +6,9 @@ namespace Bserg.Model.Shared.Components
     {
         public int Ticks;
     }
+
+    public struct ShouldTick : IComponentData
+    {
+        public bool Value;
+    }
 }

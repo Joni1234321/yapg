@@ -1,6 +1,8 @@
-﻿using Bserg.Controller.Sensors;
+﻿using Bserg.Controller.Components;
+using Bserg.Controller.Sensors;
 using Bserg.Model.Core;
 using Bserg.Model.Units;
+using Unity.Entities;
 using UnityEngine.UIElements;
 
 namespace Bserg.Controller.Drivers
@@ -16,7 +18,7 @@ namespace Bserg.Controller.Drivers
         public int GameSpeed { private set; get; }
         public bool Running { private set; get; }
         
-        private static readonly float[] TICK_TIME = { 100f / GameTick.TICKS_PER_MONTH, 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
+        public static readonly float[] TICK_TIME = { 100f / GameTick.TICKS_PER_MONTH, 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
 
 
         public TimeDriver (TimeSensor sensor)
@@ -25,14 +27,19 @@ namespace Bserg.Controller.Drivers
             Sensor.UI.GameSpeedButton.RegisterCallback<ClickEvent>(_ => ToggleGameRunning());
         }
         
+        EntityQuery gameSpeedQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameSpeed));
+
         public void ToggleGameRunning()
         {
             Running = !Running;
+            gameSpeedQuery.GetSingletonRW<GameSpeed>().ValueRW.Running = Running;
             Sensor.OnGameSpeedChange(Running, GameSpeed);
         }
         public void IncreaseGameSpeed(int deltaSpeed)
         {
             GameSpeed = UnityEngine.Mathf.Clamp(GameSpeed + deltaSpeed, 0, TICK_TIME.Length - 1);
+            gameSpeedQuery.GetSingletonRW<GameSpeed>().ValueRW.Speed = GameSpeed;
+
             Sensor.OnGameSpeedChange(Running, GameSpeed);
         }
         
