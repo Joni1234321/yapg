@@ -109,6 +109,11 @@ namespace Bserg.Controller.VisualEntities
 
             entityManager.AddComponentData(clone.Spacecraft, new Parent { Value = clone.Main });
             
+#if UNITY_EDITOR
+            entityManager.SetName(Main, "~Spacecraft");
+            entityManager.SetName(Spacecraft, "~Spacecraft View");
+            entityManager.SetName(Orbit, "~Spacecraft Orbit");
+#endif
             /*var buffer = entityManager.AddBuffer<LinkedEntityGroup>(clone.Main);
             buffer.Add(new LinkedEntityGroup { Value = clone.Main });
             buffer.Add(new LinkedEntityGroup { Value = clone.Spacecraft });
@@ -129,11 +134,7 @@ namespace Bserg.Controller.VisualEntities
                 Spacecraft = CreateSpacecraftPrototype(entityManager, desc, meshArray),
                 Orbit = CreateOrbitPrototype(entityManager, desc, meshArray),
             };
-#if UNITY_EDITOR
-            entityManager.SetName(Main, "~Spacecraft");
-            entityManager.SetName(Spacecraft, "~Spacecraft View");
-            entityManager.SetName(Orbit, "~Spacecraft Orbit");
-#endif
+
             return prototype;
         }
 

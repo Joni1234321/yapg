@@ -33,22 +33,45 @@ namespace Bserg.Controller.Collections
         /// </summary>
         public void Populate(EntityManager entityManager, NativeArray<Entity> models)
         {
-            // Double pool size
-            while (models.Length > List.Length)
-                DoublePool(entityManager);
-                    
-            // Make active elements fit
-            while (activeElements < models.Length)
-                List[activeElements++].Enable(entityManager);
-            
-            while (activeElements > models.Length)
-                List[--activeElements].Disable(entityManager);
+            int n = models.Length - activeElements;
 
-            // Set elements
+            // Stabilize
+            if (n > 0)
+                Enable(entityManager, n);
+            else if (n < 0)
+                Disable(entityManager, -n);
+
+            // Assign
             for (int i = 0; i < models.Length; i++)
                 List[i].Assign(entityManager, models[i]);
+        }
+
+
+        /// <summary>
+        /// Enables n elements
+        /// </summary>
+        public void Enable(EntityManager entityManager, int n)
+        {
+            while (n + activeElements > List.Length)
+                DoublePool(entityManager);
+
+            for (int i = 0; i < n; i++)
+                List[activeElements++].Enable(entityManager);
 
         }
+        /// <summary>
+        /// Disables n elements
+        /// </summary>
+        public void Disable(EntityManager entityManager, int n)
+        {
+            for (int i = 0; i < n; i++)
+                List[--activeElements].Disable(entityManager);
+        }
+
+        /// <summary>
+        /// Disables all
+        /// </summary>
+        public void DisableAll(EntityManager entityManager) => Disable(entityManager, activeElements);
 
         /// <summary>
         /// Disable element at index, and swap with last element

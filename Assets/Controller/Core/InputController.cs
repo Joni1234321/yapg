@@ -42,8 +42,10 @@ namespace Bserg.Controller.Core
                     CreateSpacecraft();
 
 
-            SpaceFlightRenderer.SetActive(Input.GetKey(KeyCode.Tab));
+            //SpaceFlightRenderer.SetActive(Input.GetKey(KeyCode.Tab));
 
+            if (Input.GetKeyDown(KeyCode.Tab))
+                ToggleSpacecraftsView();
         }
 
 

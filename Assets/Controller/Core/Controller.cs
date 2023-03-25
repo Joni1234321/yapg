@@ -155,6 +155,16 @@ namespace Bserg.Controller.Core
         }
 
 
+        private bool showSpacecrafts = true;
+
+        public void ToggleSpacecraftsView()
+        {
+            showSpacecrafts = !showSpacecrafts;
+            if (!showSpacecrafts)
+                SystemGeneratorUpdated.ShipPool.DisableAll(entityManager);
+        }
+        
+        
         private void UpdateRenderers(int ticks, float dt)
         {
             CameraRenderer.OnUpdate(ticks, dt);
@@ -173,9 +183,13 @@ namespace Bserg.Controller.Core
                 PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? visibleIds : outerPlanets);
                 PlanetRenderer.OnUpdate(ticks, dt);
             }
-            SpaceFlightRenderer.OnUpdate(ticks, dt); 
-            SystemGeneratorUpdated.UpdateShips(entityManager);
+            //SpaceFlightRenderer.OnUpdate(ticks, dt); 
+            if (showSpacecrafts)
+                SystemGeneratorUpdated.UpdateShips(entityManager);
         }
+        
+        
+        
         /// <summary>
         /// Activates the new overlay, and deactivates the old
         /// </summary>
