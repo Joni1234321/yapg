@@ -1,5 +1,8 @@
-﻿using Bserg.Controller.UI.Planet;
+﻿using Bserg.Controller.Components;
+using Bserg.Controller.UI.Planet;
 using Bserg.Model.Core;
+using Bserg.Model.Units;
+using Unity.Entities;
 
 namespace Bserg.Controller.Sensors
 {
@@ -10,6 +13,7 @@ namespace Bserg.Controller.Sensors
     {
         public TimeUI UI;        
         private Game game;
+        EntityQuery gameSpeedQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameSpeed));
 
         public TimeSensor(Game game, TimeUI timeUI)
         {
@@ -22,9 +26,14 @@ namespace Bserg.Controller.Sensors
             UI.DrawGameTime(game.Ticks);
         }
 
-        public void OnGameSpeedChange(bool running, int gameSpeed)
+        public void OnGameSpeedChange()
         {
-            UI.DrawGameSpeed(running, gameSpeed);
+            GameSpeed gameSpeed = gameSpeedQuery.GetSingleton<GameSpeed>();
+
+            UI.DrawGameSpeed(gameSpeed.Running, gameSpeed.Speed);
         }
+        
+        public static readonly float[] TICK_TIME = { 100f / GameTick.TICKS_PER_MONTH, 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
+
     }
 }

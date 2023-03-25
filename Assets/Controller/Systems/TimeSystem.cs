@@ -1,8 +1,10 @@
 ﻿using Bserg.Controller.Components;
 using Bserg.Controller.Drivers;
+using Bserg.Controller.Sensors;
 using Bserg.Model.Core;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Shared.SystemGroups;
+using Bserg.Model.Units;
 using NUnit.Framework;
 using Unity.Burst;
 using Unity.Entities;
@@ -12,7 +14,6 @@ namespace Bserg.Controller.Systems
     [UpdateBefore(typeof(TickSystemGroup))]
     internal partial struct TimeSystem : ISystem
     {
-        
         [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
@@ -36,7 +37,7 @@ namespace Bserg.Controller.Systems
                 return;
             
             // proceed if overflow then add next tick
-            float deltaTick = gameTicksF.DeltaTick + (SystemAPI.Time.DeltaTime / TimeDriver.TICK_TIME[gameSpeed.Speed]);
+            float deltaTick = gameTicksF.DeltaTick + (SystemAPI.Time.DeltaTime / TimeSensor.TICK_TIME[gameSpeed.Speed]);
             if (deltaTick >= 1)
             {
                 

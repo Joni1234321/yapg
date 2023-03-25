@@ -1,4 +1,5 @@
 ﻿using Bserg.Model.Shared.Components;
+using Bserg.Model.Units;
 using NUnit.Framework;
 using Unity.Burst;
 using Unity.Entities;
@@ -22,11 +23,10 @@ namespace Bserg.Model.Shared.SystemGroups
             if (SystemAPI.GetSingleton<ShouldTick>().Value)
             {
                 SystemAPI.GetSingletonRW<GameTicks>().ValueRW.Ticks++;
+                SystemAPI.SetSingleton(new ShouldTick { Value = false });
                 // TODO: REMOVE THIS
                 SystemAPI.SetSingleton(new GameShouldTick { Value = true });
-
                 base.OnUpdate();
-                SystemAPI.SetSingleton(new ShouldTick { Value = false });
             }
         }
     }
@@ -34,70 +34,37 @@ namespace Bserg.Model.Shared.SystemGroups
     [UpdateInGroup(typeof(TickSystemGroup))]
     public partial class TickMonthSystemGroup : ComponentSystemGroup
     {
-        private static int remainingTicks = 0;
         [BurstCompile]
         protected override void OnUpdate()
         {
-            if (remainingTicks == 0)
-                return;
-
-            while (remainingTicks > 0)
-            {
+            int ticks = SystemAPI.GetSingleton<GameTicks>().Ticks;   
+            if (ticks % GameTick.TICKS_PER_MONTH == 0)
                 base.OnUpdate();
-                remainingTicks--;
-            }
         }
-
-        public static void Tick()
-        {
-            remainingTicks++;
-        } 
     }
     
     [UpdateInGroup(typeof(TickSystemGroup))]
     public partial class TickQuarterSystemGroup : ComponentSystemGroup
     {
-        private static int remainingTicks = 0;
         [BurstCompile]
         protected override void OnUpdate()
         {
-            if (remainingTicks == 0)
-                return;
-
-            while (remainingTicks > 0)
-            {
+            int ticks = SystemAPI.GetSingleton<GameTicks>().Ticks;   
+            if (ticks % GameTick.TICKS_PER_QUARTER == 0)
                 base.OnUpdate();
-                remainingTicks--;
-            }
         }
-
-        public static void Tick()
-        {
-            remainingTicks++;
-        } 
     }
     
     [UpdateInGroup(typeof(TickSystemGroup))]
     public partial class TickYearSystemGroup : ComponentSystemGroup
     {
-        private static int remainingTicks = 0;
         [BurstCompile]
         protected override void OnUpdate()
         {
-            if (remainingTicks == 0)
-                return;
-
-            while (remainingTicks > 0)
-            {
+            int ticks = SystemAPI.GetSingleton<GameTicks>().Ticks;   
+            if (ticks % GameTick.TICKS_PER_YEAR == 0)
                 base.OnUpdate();
-                remainingTicks--;
-            }
         }
-
-        public static void Tick()
-        {
-            remainingTicks++;
-        } 
     }
 
 }

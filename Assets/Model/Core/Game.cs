@@ -189,10 +189,10 @@ namespace Bserg.Model.Core
         /// <summary>
         /// Game progresses through ticks
         /// </summary>
-        public void DoTick()
+        public bool DoTick()
         {
             if (!shouldTickQuery.GetSingleton<GameShouldTick>().Value)
-                return;
+                return false;
             
             shouldTickQuery.SetSingleton(new GameShouldTick {Value = false});
             
@@ -202,21 +202,18 @@ namespace Bserg.Model.Core
             OnTick?.Invoke();
             if (Ticks % GameTick.TICKS_PER_MONTH == 0)
             {
-                TickMonthSystemGroup.Tick();
                 OnTickMonth?.Invoke();
                 if (Ticks % GameTick.TICKS_PER_QUARTER == 0)
                 {
-                    TickQuarterSystemGroup.Tick();
                     OnTickQuarter?.Invoke();
                     if (Ticks % GameTick.TICKS_PER_YEAR == 0)
                     {
-                        TickYearSystemGroup.Tick();
                         OnTickYear?.Invoke();
                     }
                 }
             }
             
-            //SpaceflightSystem.System();
+            return true;
             
         }
 

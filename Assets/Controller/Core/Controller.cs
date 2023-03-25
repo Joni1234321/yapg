@@ -49,8 +49,9 @@ namespace Bserg.Controller.Core
         public SystemGeneratorUpdated SystemGeneratorUpdated;
         public Material planetMaterial, orbitMaterial, circleMaterial, spacecraftOrbitMaterial, spacecraftMaterial;
         public Mesh planetMesh, orbitMesh;
-        private EntityQuery gameTicksFQuery;
-        private EntityQuery cameraQuery;
+        
+        private EntityQuery gameTicksFQuery, gameSpeedQuery;
+
         private EntityManager entityManager;
         void Awake()
         {
@@ -66,7 +67,7 @@ namespace Bserg.Controller.Core
                 
             Game = new Game(names, populationLevels, bodies, planets, systemGenerator.Orbits);
 
-            entityManager = Unity.Entities.World.DefaultGameObjectInjectionWorld.EntityManager;
+            entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             SystemGeneratorUpdated = new SystemGeneratorUpdated(entityManager, 
                 planetMaterial, planetMesh, orbitMaterial, circleMaterial, 
                 orbitMesh, spacecraftOrbitMaterial, spacecraftMaterial);
@@ -110,28 +111,31 @@ namespace Bserg.Controller.Core
             SetActiveOverlay(NormalOverlay);
             WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 80f ? allPlanets : outerPlanets);
 
+
+            gameTicksFQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicksF));
+            gameSpeedQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameSpeed));
         }
 
 
         private bool firstTickAfterPause = true;
         private void Update()
         {
-
-            if (TimeDriver.Update(Game))
+            if (Game.DoTick())
             {
                 activeOverlay.OnTick(Game, SelectionHelper.HoverPlanetID, SelectionHelper.SelectedPlanetID);
                 WorldSensor.OnTick();
                 TimeSensor.OnTick();
             }
             
-            float dt = TimeDriver.DeltaTick;
+            float dt = gameTicksFQuery.GetSingleton<GameTicksF>().DeltaTick;
+            
             HandleInput();
             MouseController.OnUpdate(Game, activeOverlay, dt);
 
             UpdateRenderers(Game.Ticks, dt);
 
             // No need to update if paused, unless one time
-            if (!TimeDriver.Running)
+            if (!gameTicksFQuery.GetSingleton<GameSpeed>().Running)
             {
                 if (!firstTickAfterPause)
                     return;
