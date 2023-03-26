@@ -1,4 +1,5 @@
-﻿using Bserg.Model.Space.Components;
+﻿using Bserg.Controller.Components;
+using Bserg.Model.Space.Components;
 using UnityEngine;
 
 namespace Bserg.Controller.Core
@@ -34,9 +35,9 @@ namespace Bserg.Controller.Core
             }
             
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
-                CameraRenderer.TargetSize *= 1.2f; 
+                cameraQuery.GetSingletonRW<Global.CameraAnimation>().ValueRW.TargetSize *= 1.2f;
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
-                CameraRenderer.TargetSize *= .80f;
+                cameraQuery.GetSingletonRW<Global.CameraAnimation>().ValueRW.TargetSize *= .8f;
 
             if (Input.GetKeyDown(KeyCode.H))
                     CreateSpacecraft();

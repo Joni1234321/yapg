@@ -37,8 +37,6 @@ namespace Bserg.Controller.Core
         
         public MouseController MouseController;
 
-        public SpaceFlightRenderer SpaceFlightRenderer;
-
         public PlanetRenderer PlanetRenderer;
         public WorldSensor WorldSensor;
         public UIDocument uiDocument;
@@ -51,6 +49,7 @@ namespace Bserg.Controller.Core
         public Mesh planetMesh, orbitMesh;
         
         private EntityQuery gameTicksFQuery, gameSpeedQuery;
+        private EntityQuery cameraQuery;
 
         private EntityManager entityManager;
         void Awake()
@@ -77,7 +76,6 @@ namespace Bserg.Controller.Core
             
             PlanetRenderer = new PlanetRenderer(Game.Planets, Game.OrbitalTransferSystem, systemGenerator);
             
-            SpaceFlightRenderer = new SpaceFlightRenderer(Game.Planets, Game.SpaceflightSystem.Spaceflights, PlanetRenderer);
 
             CameraRenderer = new CameraRenderer(PlanetRenderer);
             CameraDriver = new CameraDriver(CameraRenderer);
@@ -114,6 +112,7 @@ namespace Bserg.Controller.Core
 
             gameTicksFQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicksF));
             gameSpeedQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameSpeed));
+            cameraQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(Global.CameraAnimation));
         }
 
 

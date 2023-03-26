@@ -1,17 +1,19 @@
 ﻿using System.Collections.Generic;
 using Bserg.Controller.Core;
+using Bserg.Controller.WorldRenderer;
 using Bserg.Model.Space;
 using Bserg.Model.Space.SpaceMovement;
 using Bserg.Model.Units;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Bserg.Controller.WorldRenderer
+#if false
+namespace Bserg.Controller.OLD
 {
     /// <summary>
     /// Draws spaceflights and their orbits
     /// </summary>
-    public class SpaceFlightRenderer : WorldRenderer
+    public class SpaceFlightRenderer : WorldRenderer.WorldRenderer
     {
         
         private readonly PlanetOld[] planets;
@@ -148,3 +150,4 @@ namespace Bserg.Controller.WorldRenderer
 
     }
 }
+#endif

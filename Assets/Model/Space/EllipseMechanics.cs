@@ -88,6 +88,31 @@ namespace Bserg.Model.Space
         }
         
         /// <summary>
+        /// Returns the distance from center of ellipse to focus point
+        /// </summary>
+        /// <param name="semiMajorAxis">a</param>
+        /// <param name="closestDistanceToOrbitingObject">distance to Focus point</param>
+        /// <returns></returns>
+        public static float GetLinearEccentricity(float semiMajorAxis, float closestDistanceToOrbitingObject)
+        {
+            //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
+            return math.abs(semiMajorAxis - closestDistanceToOrbitingObject);
+        } 
+        
+        /// <summary>
+        /// Returns b of the ellipse
+        /// </summary>
+        /// <param name="semiMajorAxis">a</param>
+        /// <param name="linearEccentricity">c</param>
+        /// <returns></returns>
+        public static float GetSemiMinorAxis(float semiMajorAxis, float linearEccentricity)
+        {
+            //https://en.wikipedia.org/wiki/Ellipse Linear eccentricity
+            // b^2 = a^2 - c^2
+            return math.sqrt(semiMajorAxis * semiMajorAxis - linearEccentricity * linearEccentricity);
+        }
+        
+        /// <summary>
         /// Returns position on plane
         /// </summary>
         /// <param name="eccentricAnomaly"></param>
@@ -100,6 +125,7 @@ namespace Bserg.Model.Space
             float y = semiMinorAxis * math.sin(eccentricAnomaly);
             return new Vector2(x, y);
         } 
+        
         
         public static double Sin(double d) {
             d += math.PI;

@@ -4,6 +4,7 @@ using Bserg.Controller.Core;
 using Bserg.Controller.Interfaces;
 using Bserg.Controller.WorldRenderer;
 using Bserg.Model.Shared.Components;
+using Bserg.Model.Space;
 using Bserg.Model.Space.Components;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -50,8 +51,8 @@ namespace Bserg.Controller.VisualEntities
             float p1 = entityManager.GetComponentData<OrbitPeriod>(departurePlanet).TicksF;
             
             float a = (r1 + r2) * .5f;
-            float c = SpaceFlightRenderer.GetLinearEccentricity(a, math.min(r1, r2));
-            float b = SpaceFlightRenderer.GetSemiMinorAxis(a, c);
+            float c = EllipseMechanics.GetLinearEccentricity(a, math.min(r1, r2));
+            float b = EllipseMechanics.GetSemiMinorAxis(a, c);
             float e = c / a;
 
             
