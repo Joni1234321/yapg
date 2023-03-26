@@ -6,34 +6,34 @@ using Bserg.Model.Space.Components;
 using Bserg.Model.Units;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine.Rendering;
 
 namespace Bserg.Controller.VisualEntities
 {
-    public struct PlanetVisual : IComponentData, IEntityVisual<PlanetVisual>
+     public struct PlanetVisual : IEntityVisual<PlanetVisual>
     {
+        public struct Model : IComponentData { public Entity Value; }
+        
         public Entity Main;
         public Entity Planet;
         public Entity Orbit;
-
 
         public void Assign(EntityManager entityManager, Entity model)
         {
 #if  UNITY_EDITOR
             FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(model).Text;
-            entityManager.SetName(Main, "Planet: " + name);
-            entityManager.SetName(Planet, "Planet Model: " + name);
-            entityManager.SetName(Orbit, "Planet Orbit: " + name);
+            entityManager.SetName(Main, "~Planet: " + name);
+            entityManager.SetName(Planet, "~Planet Model: " + name);
+            entityManager.SetName(Orbit, "~Planet Orbit: " + name);
 
 #endif
             Planet.Data planetData = entityManager.GetComponentData<Planet.Data>(model);
             float orbitRadiusWorld = SystemGenerator.AUToWorld(
                 (float)planetData.OrbitRadius.To(Length.UnitType.AstronomicalUnits));
             
-            entityManager.SetComponentData(Main, new EntityModel { Value = model });
+            entityManager.SetComponentData(Main, new Model { Value = model });
             
             AssignPosition(entityManager, model, orbitRadiusWorld);
             AssignModel(entityManager, model, planetData);
@@ -52,9 +52,9 @@ namespace Bserg.Controller.VisualEntities
             
 #if UNITY_EDITOR
             FixedString32Bytes name = "Disabled";
-            entityManager.SetName(Main, "View: " + name);
-            entityManager.SetName(Planet, "Planet: " + name);
-            entityManager.SetName(Orbit, "Orbit: " + name);
+            entityManager.SetName(Main, "~View: " + name);
+            entityManager.SetName(Planet, "~Planet: " + name);
+            entityManager.SetName(Orbit, "~Orbit: " + name);
 #endif
             entityManager.AddComponent<DisableRendering>(Main);
             entityManager.AddComponent<DisableRendering>(Planet);
@@ -141,7 +141,7 @@ namespace Bserg.Controller.VisualEntities
         Entity CreatePlanetPositionPrototype(EntityManager entityManager)
         {
             Entity e = entityManager.CreateEntity();
-            entityManager.AddComponent<EntityModel>(e);
+            entityManager.AddComponent<Model>(e);
             entityManager.AddComponentData(e, LocalTransform.FromScale(1f));
             entityManager.AddComponent<LocalToWorld>(e);
             entityManager.AddComponent<SpaceTransform.MoveOnCircle>(e);
@@ -185,5 +185,8 @@ namespace Bserg.Controller.VisualEntities
             entityManager.DestroyEntity(Planet);
             entityManager.DestroyEntity(Orbit);
         }
+        
+        
+
     }
 }

@@ -5,7 +5,6 @@ using Bserg.Controller.Interfaces;
 using Bserg.Controller.WorldRenderer;
 using Bserg.Model.Shared.Components;
 using Bserg.Model.Space.Components;
-using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Rendering;
@@ -15,15 +14,19 @@ using UnityEngine.Rendering;
 
 namespace Bserg.Controller.VisualEntities
 {
+    
+
     public struct TravelingSpacecraftVisual : IEntityVisual<TravelingSpacecraftVisual>
     {
+        public struct Model : IComponentData { public Entity Value; }
+
         public Entity Main;
         public Entity Spacecraft;
         public Entity Orbit;
 
         public void Assign(EntityManager entityManager, Entity model)
         {
-            entityManager.SetComponentData(Main, new EntityModel { Value = model } );
+            entityManager.SetComponentData(Main, new Model { Value = model } );
             
 #if  UNITY_EDITOR && FALSE
             FixedString32Bytes name = entityManager.GetComponentData<Planet.Name>(departurePlanet).Text + " - " +
@@ -141,7 +144,7 @@ namespace Bserg.Controller.VisualEntities
         Entity CreatePositionPrototype(EntityManager entityManager)
         {
             Entity e = entityManager.CreateEntity();
-            entityManager.AddComponent<EntityModel>(e);
+            entityManager.AddComponent<Model>(e);
             entityManager.AddComponentData(e, LocalTransform.FromScale(1f));
             entityManager.AddComponent<LocalToWorld>(e);
             entityManager.AddComponent<SpaceTransform.MoveOnEllipticalOrbit>(e); 
