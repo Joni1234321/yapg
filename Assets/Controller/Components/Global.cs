@@ -23,8 +23,12 @@ namespace Bserg.Controller.Components
 
         public struct CameraAnimation : IComponentData
         {
-            public Entity FollowEntity;
             public float TargetSize;
+        }
+
+        public struct FocusedPlanet : IComponentData
+        {
+            public Entity Value;
         }
         
     }

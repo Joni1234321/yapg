@@ -2,6 +2,7 @@
 using Bserg.Controller.Core;
 using Bserg.Model.Space;
 using TMPro;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,7 +55,7 @@ namespace Bserg.Controller.WorldRenderer
         /// <param name="planetPositions"></param>
         /// <param name="planets"></param>
         /// <param name="ids"></param>
-        public void Draw(Vector3[] planetPositions, PlanetOld[] planets, List<int> ids)
+        public void Draw(float3[] planetPositions, PlanetOld[] planets, List<int> ids)
         {
             int n = ids.Count;
             AdjustPool(n);
@@ -66,7 +67,7 @@ namespace Bserg.Controller.WorldRenderer
                 idScripts[i].planetID = ids[i];
                 Vector3 position = new Vector3(planetPositions[i].x, planetPositions[i].y, 0);
                 Vector3 iconSize = SystemGenerator.GetIconPlanetSize(planetOld.Size);
-                pool[i].transform.position = CameraRenderer.Camera.WorldToScreenPoint(position);
+                pool[i].transform.position = Camera.main.WorldToScreenPoint(position);
                 labels[i].text = planetOld.Name;
                 icons[i].transform.localScale = iconSize;
                 icons[i].color = planetOld.Color;

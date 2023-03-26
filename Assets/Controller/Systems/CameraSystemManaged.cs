@@ -1,4 +1,5 @@
 ﻿using Bserg.Controller.Components;
+using Bserg.Controller.VisualEntities;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace Bserg.Controller.Systems
 {
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
-    partial struct CameraSystem : ISystem
+    internal partial struct CameraSystemManaged : ISystem
     {
         private EntityQuery managedCameraQuery;
         
@@ -22,6 +23,7 @@ namespace Bserg.Controller.Systems
             state.EntityManager.CreateSingleton<Global.CameraSizeComponent>();
             state.EntityManager.CreateSingleton<Global.CameraOptions>();
             state.EntityManager.CreateSingleton<Global.CameraAnimation>();
+            state.EntityManager.CreateSingleton<Global.FocusedPlanet>();
 
             SystemAPI.SetSingleton(new Global.CameraOptions
             {
@@ -29,7 +31,6 @@ namespace Bserg.Controller.Systems
                 FarthestZoom = 400f,
             });
             SystemAPI.SetSingleton(new Global.CameraAnimation { TargetSize = 10f });
-
         }
         
         public void OnUpdate(ref SystemState state)
@@ -37,13 +38,13 @@ namespace Bserg.Controller.Systems
             Camera camera = managedCameraQuery.GetSingleton<Global.CameraManagedComponent>().Camera;
             Global.CameraOptions options = SystemAPI.GetSingleton<Global.CameraOptions>();
             ref Global.CameraAnimation animation = ref SystemAPI.GetSingletonRW<Global.CameraAnimation>().ValueRW;
-            
+            Entity focusedEntity = SystemAPI.GetSingleton<Global.FocusedPlanet>().Value;
                 
-            // Clamp Components
+            // Clamp size
             animation.TargetSize = math.clamp(animation.TargetSize, options.ClosestZoom, options.FarthestZoom);
 
-            if (SystemAPI.Exists(animation.FollowEntity))
-                FollowEntity(camera, SystemAPI.GetComponent<LocalToWorld>(animation.FollowEntity).Value.Translation());
+            if (SystemAPI.Exists(focusedEntity))
+                FollowEntity(camera, SystemAPI.GetComponent<LocalToWorld>(focusedEntity).Value.Translation());
 
             UpdateZoom(camera, animation, options, SystemAPI.Time.DeltaTime);
             
@@ -90,5 +91,20 @@ namespace Bserg.Controller.Systems
             float smooth = SPEED * deltaTime * math.clamp(deltaPercent, -MAX_DIFF, MAX_DIFF);
             return current * (1 + smooth);
         }
+    }
+    
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    internal partial struct PlanetUIRenderSystemManaged : ISystem
+    {
+        public void OnCreate(ref SystemState state)
+        {
+                
+        }
+        
+        public void OnUpdate(ref SystemState state)
+        {
+
+        }
+        
     }
 }

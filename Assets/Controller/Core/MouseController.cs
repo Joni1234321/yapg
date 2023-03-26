@@ -103,7 +103,7 @@ namespace Bserg.Controller.Core
         {
             int layerMask = (1 << Controller.CLICKABLE_LAYER) | (1 << Controller.UI_LAYER);
 
-            if (Physics.Raycast(CameraRenderer.Camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity,
                     layerMask))
             {
                 if (hit.collider.gameObject.layer == Controller.UI_LAYER)

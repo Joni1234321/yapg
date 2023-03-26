@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Entities;
 using UnityEngine;
 
+#if false
 namespace Bserg.Controller.WorldRenderer
 {
     /// <summary>
@@ -83,3 +84,4 @@ namespace Bserg.Controller.WorldRenderer
 
     }
 }
+#endif

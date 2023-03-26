@@ -5,11 +5,15 @@ using Bserg.Controller.Overlays;
 using Bserg.Controller.Sensors;
 using Bserg.Controller.UI;
 using Bserg.Controller.UI.Planet;
+using Bserg.Controller.VisualEntities;
 using Bserg.Controller.WorldRenderer;
 using Bserg.Model.Core;
 using Bserg.Model.Political;
 using Bserg.Model.Space;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -22,7 +26,6 @@ namespace Bserg.Controller.Core
         public SystemGenerator systemGenerator;
         public Game Game;
 
-        public CameraRenderer CameraRenderer;
         public CameraDriver CameraDriver;
 
         // Overlays
@@ -37,7 +40,8 @@ namespace Bserg.Controller.Core
         
         public MouseController MouseController;
 
-        public PlanetRenderer PlanetRenderer;
+        public PlanetUIDrawer PlanetUIDrawer;
+
         public WorldSensor WorldSensor;
         public UIDocument uiDocument;
 
@@ -50,6 +54,7 @@ namespace Bserg.Controller.Core
         
         private EntityQuery gameTicksFQuery, gameSpeedQuery;
         private EntityQuery cameraQuery;
+        private EntityQuery planetTransformsQuery;
 
         private EntityManager entityManager;
         void Awake()
@@ -74,11 +79,9 @@ namespace Bserg.Controller.Core
 
             MouseController = new MouseController();
             
-            PlanetRenderer = new PlanetRenderer(Game.Planets, Game.OrbitalTransferSystem, systemGenerator);
-            
+            PlanetUIDrawer = new PlanetUIDrawer();
 
-            CameraRenderer = new CameraRenderer(PlanetRenderer);
-            CameraDriver = new CameraDriver(CameraRenderer);
+            CameraDriver = new CameraDriver();
             
             allPlanets = new();
             outerPlanets = new();
@@ -95,7 +98,7 @@ namespace Bserg.Controller.Core
         void Start()
         {
             // UI
-            WorldSensor = new WorldSensor(PlanetRenderer);
+            WorldSensor = new WorldSensor();
             TimeSensor = new TimeSensor(Game, new TimeUI(uiDocument.rootVisualElement.Q<VisualElement>("time-view")));
             TimeDriver = new TimeDriver(TimeSensor);
             UIPlanetController = new UIPlanetController(uiDocument, Game);
@@ -104,15 +107,18 @@ namespace Bserg.Controller.Core
             UIPlanetController.SetFocusedPlanet(3);
             
             // Overlays
-            NormalOverlay = new NormalOverlay(UIPlanetController, PlanetRenderer);
+            NormalOverlay = new NormalOverlay(UIPlanetController);
             TradeOverlay = new TradeOverlay(Game, this, UIPlanetController);
             SetActiveOverlay(NormalOverlay);
-            WorldSensor.PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 80f ? allPlanets : outerPlanets);
 
 
             gameTicksFQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameTicksF));
             gameSpeedQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameSpeed));
             cameraQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(Global.CameraAnimation));
+            planetTransformsQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(
+                typeof(LocalToWorld), typeof(PlanetVisual.Model));
+
+            
         }
 
 
@@ -156,13 +162,19 @@ namespace Bserg.Controller.Core
             if (!showSpacecrafts)
                 SystemGeneratorUpdated.ShipPool.DisableAll(entityManager);
         }
-        
-        
+
         private void UpdateRenderers(int ticks, float dt)
         {
-            CameraRenderer.OnUpdate(ticks, dt);
+            var localToWorlds = planetTransformsQuery.ToComponentDataArray<LocalToWorld>(Allocator.Temp);
+            float3[] planetPositions = new float3[localToWorlds.Length];
 
-            if (systemGenerator.Orbits.Get(CameraRenderer.FocusPlanetID, out OrbitData orbitData))
+            for (int i = 0; i < localToWorlds.Length; i++)
+                planetPositions[i] = localToWorlds[i].Value.Translation();
+
+            PlanetUIDrawer.Draw(planetPositions, Game.Planets, allPlanets);
+
+/*
+            if (systemGenerator.Orbits.Get(CameraDriver.FocusedPlanetQuery.GetSingleton<Global.FocusedPlanet>().Value, out OrbitData orbitData))
             {
                 List<int> visibleIds = new(orbitData.Children.Count + 1);
                 for (int i = 0; i < orbitData.Children.Count; i++)
@@ -173,10 +185,8 @@ namespace Bserg.Controller.Core
                     visibleIds.Add(Game.Planets[visibleIds[^1]].OrbitObject); 
                 
                 //CameraRenderer.Camera.orthographicSize < 40f ? allPlanets : outerPlanets
-                PlanetRenderer.SetVisiblePlanets(CameraRenderer.Camera.orthographicSize < 40f ? visibleIds : outerPlanets);
-                PlanetRenderer.OnUpdate(ticks, dt);
-            }
-            //SpaceFlightRenderer.OnUpdate(ticks, dt); 
+                PlanetRenderer.SetVisiblePlanets(Camera.main.orthographicSize < 40f ? visibleIds : outerPlanets);
+            }*/
             if (showSpacecrafts)
                 SystemGeneratorUpdated.UpdateShips(entityManager);
         }
