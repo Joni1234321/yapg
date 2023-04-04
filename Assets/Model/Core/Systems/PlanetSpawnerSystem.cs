@@ -18,6 +18,7 @@ namespace Bserg.Model.Core.Systems
     /// <summary>
     /// Converts all PlanetPrefabData into Planets
     /// </summary>
+    [RequireMatchingQueriesForUpdate]
     internal partial struct PlanetSpawnerSystem : ISystem
     {
         private EntityQuery prefabQuery;
@@ -35,9 +36,6 @@ namespace Bserg.Model.Core.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            if (Hint.Likely(prefabQuery.CalculateEntityCount() == 0))
-                return;
-            
             int n = prefabQuery.CalculateEntityCount();
             var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             EntityCommandBuffer ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);

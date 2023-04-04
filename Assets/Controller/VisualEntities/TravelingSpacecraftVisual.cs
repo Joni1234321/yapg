@@ -56,7 +56,7 @@ namespace Bserg.Controller.VisualEntities
             float e = c / a;
 
             
-            float startAngle = PlanetRenderer.GetPlanetAngleAtTicksF(p1, departureTickF);
+            float startAngle = CircleMechanics.GetAngleAfterTime(p1, departureTickF);
 
             entityManager.SetComponentData(Main, new SpaceTransform.MoveOnEllipticalOrbit
             {

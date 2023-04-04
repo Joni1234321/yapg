@@ -24,7 +24,7 @@ namespace Bserg.Model.Shared.SystemGroups
             {
                 SystemAPI.GetSingletonRW<GameTicks>().ValueRW.Ticks++;
                 SystemAPI.SetSingleton(new ShouldTick { Value = false });
-                // TODO: REMOVE THIS
+                // TODO: REMOVE THE NEED FOR GAME TO DO A TICK AS WELL AS THIS TIMEGROUP
                 SystemAPI.SetSingleton(new GameShouldTick { Value = true });
                 base.OnUpdate();
             }

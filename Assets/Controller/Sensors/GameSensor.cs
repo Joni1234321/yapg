@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 namespace Bserg.Controller.Sensors
 {
     /// <summary>
-    /// Reads information from systems, and calls the UI function when the data changes
+    /// Reads information from components, and calls the UI function when the data changes
     /// Contains an OnTick that gets called every tick, (since that is when data often is changed)
     /// </summary>
     public abstract class GameSensor : UIClass

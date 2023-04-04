@@ -92,19 +92,4 @@ namespace Bserg.Controller.Systems
             return current * (1 + smooth);
         }
     }
-    
-    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
-    internal partial struct PlanetUIRenderSystemManaged : ISystem
-    {
-        public void OnCreate(ref SystemState state)
-        {
-                
-        }
-        
-        public void OnUpdate(ref SystemState state)
-        {
-
-        }
-        
-    }
 }

@@ -37,7 +37,7 @@ namespace Bserg.Controller.Systems
                 return;
             
             // proceed if overflow then add next tick
-            float deltaTick = gameTicksF.DeltaTick + (SystemAPI.Time.DeltaTime / TimeSensor.TICK_TIME[gameSpeed.Speed]);
+            float deltaTick = gameTicksF.DeltaTick + (SystemAPI.Time.DeltaTime / TimeDriver.TICK_TIME[gameSpeed.Speed]);
             if (deltaTick >= 1)
             {
                 

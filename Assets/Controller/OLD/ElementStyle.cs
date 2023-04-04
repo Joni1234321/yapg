@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Bserg.Controller.Core
+namespace Bserg.Controller.OLD
 {
     public struct ElementStyle
     {

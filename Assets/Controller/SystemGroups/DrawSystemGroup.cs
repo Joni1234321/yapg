@@ -3,7 +3,7 @@ using Bserg.Model.Shared.SystemGroups;
 using Unity.Entities;
 using Unity.Transforms;
 
-namespace Bserg.Controller.Core
+namespace Bserg.Controller.SystemGroups
 {
     [UpdateAfter(typeof(TickSystemGroup))]
     [UpdateBefore(typeof(TransformSystemGroup))]

@@ -1,5 +1,6 @@
 ﻿using Bserg.Controller.Components;
 using Bserg.Controller.Sensors;
+using Bserg.Model.Units;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine.UIElements;
@@ -12,6 +13,7 @@ namespace Bserg.Controller.Drivers
     public class TimeDriver
     {
         public readonly TimeSensor Sensor;
+        public static readonly float[] TICK_TIME = { 100f / GameTick.TICKS_PER_MONTH, 10f / GameTick.TICKS_PER_MONTH, 5f / GameTick.TICKS_PER_MONTH, 2f / GameTick.TICKS_PER_MONTH, 1f / GameTick.TICKS_PER_MONTH, .2f / GameTick.TICKS_PER_MONTH, .001f, .0001f };
 
         public TimeDriver (TimeSensor sensor)
         {
@@ -23,15 +25,16 @@ namespace Bserg.Controller.Drivers
 
         public void ToggleGameRunning()
         {
-            RefRW<GameSpeed> gameSeed = gameSpeedQuery.GetSingletonRW<GameSpeed>();
-            gameSeed.ValueRW.Running = !gameSeed.ValueRO.Running;
-            Sensor.OnGameSpeedChange();
+            /*
+            ref GameSpeed gameSpeed = ref gameSpeedQuery.GetSingletonRW<GameSpeed>().ValueRW;
+            gameSpeed.Running = !gameSpeed.Running;
+            UISensor.UI.DrawGameSpeed(gameSpeed.Running, gameSpeed.Speed);*/
         }
         public void IncreaseGameSpeed(int increase)
-        {
-            RefRW<GameSpeed> gameSpeedRW = gameSpeedQuery.GetSingletonRW<GameSpeed>();
-            gameSpeedRW.ValueRW.Speed = math.clamp(gameSpeedRW.ValueRO.Speed + increase, 0, TimeSensor.TICK_TIME.Length - 1);
-            Sensor.OnGameSpeedChange();
+        {/*
+           ref GameSpeed gameSpeed = ref gameSpeedQuery.GetSingletonRW<GameSpeed>().ValueRW;
+           gameSpeed.Speed = math.clamp(gameSpeed.Speed + increase, 0, TICK_TIME.Length - 1);
+           UISensor.UI.DrawGameSpeed(gameSpeed.Running, gameSpeed.Speed);*/
         }
         
         
