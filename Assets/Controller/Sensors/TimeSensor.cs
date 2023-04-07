@@ -13,6 +13,7 @@ namespace Bserg.Controller.Sensors
     {
         public TimeUI UI;        
         private Game game;
+        EntityQuery gameSpeedQuery = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntityQuery(typeof(GameSpeed));
 
         public TimeSensor(Game game, TimeUI timeUI)
         {
@@ -25,7 +26,13 @@ namespace Bserg.Controller.Sensors
             UI.DrawGameTime(game.Ticks);
         }
 
-        
+        public void OnGameSpeedChange()
+        {
+            GameSpeed gameSpeed = gameSpeedQuery.GetSingleton<GameSpeed>();
 
+            UI.DrawGameSpeed(gameSpeed.Running, gameSpeed.Speed);
+        }
+        
+    
     }
 }

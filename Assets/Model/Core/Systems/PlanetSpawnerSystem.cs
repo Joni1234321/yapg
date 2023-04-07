@@ -78,9 +78,6 @@ namespace Bserg.Model.Core.Systems
 
         public void Execute([EntityIndexInQuery] int i, Entity e, in Planet.PrefabData data)
         {
-            // TODO: Spawn GameObject
-            // Entity e = ParallelWriter.CreateEntity(i);
-
             Entities[i] = e;
             
             #if UNITY_EDITOR

@@ -25,16 +25,16 @@ namespace Bserg.Controller.Drivers
 
         public void ToggleGameRunning()
         {
-            /*
-            ref GameSpeed gameSpeed = ref gameSpeedQuery.GetSingletonRW<GameSpeed>().ValueRW;
-            gameSpeed.Running = !gameSpeed.Running;
-            UISensor.UI.DrawGameSpeed(gameSpeed.Running, gameSpeed.Speed);*/
+            RefRW<GameSpeed> gameSeed = gameSpeedQuery.GetSingletonRW<GameSpeed>();
+            gameSeed.ValueRW.Running = !gameSeed.ValueRO.Running;
+            Sensor.OnGameSpeedChange();
+            
         }
         public void IncreaseGameSpeed(int increase)
-        {/*
-           ref GameSpeed gameSpeed = ref gameSpeedQuery.GetSingletonRW<GameSpeed>().ValueRW;
-           gameSpeed.Speed = math.clamp(gameSpeed.Speed + increase, 0, TICK_TIME.Length - 1);
-           UISensor.UI.DrawGameSpeed(gameSpeed.Running, gameSpeed.Speed);*/
+        {
+            RefRW<GameSpeed> gameSpeedRW = gameSpeedQuery.GetSingletonRW<GameSpeed>();
+            gameSpeedRW.ValueRW.Speed = math.clamp(gameSpeedRW.ValueRO.Speed + increase, 0, TICK_TIME.Length - 1);
+            Sensor.OnGameSpeedChange();
         }
         
         
