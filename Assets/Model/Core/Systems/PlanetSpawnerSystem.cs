@@ -36,6 +36,10 @@ namespace Bserg.Model.Core.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
+            // Keep this otherwise crash
+            if (Hint.Likely(prefabQuery.CalculateEntityCount() == 0))
+                return;
+            
             int n = prefabQuery.CalculateEntityCount();
             var ecbSingleton = SystemAPI.GetSingleton<BeginSimulationEntityCommandBufferSystem.Singleton>();
             EntityCommandBuffer ecb = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged);
