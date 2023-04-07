@@ -57,7 +57,7 @@ namespace Bserg.Controller.VisualEntities
 
             
             float startAngle = CircleMechanics.GetAngleAfterTime(p1, departureTickF);
-
+            
             entityManager.SetComponentData(Main, new SpaceTransform.MoveOnEllipticalOrbit
             {
                 DepartureTickF = departureTickF,
